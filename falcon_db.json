@@ -1,0 +1,1698 @@
+{
+ "sections": [
+  {
+   "id": "s08dd647f",
+   "name": "Dati macchina base"
+  },
+  {
+   "id": "s68559f4b",
+   "name": "Tagliacuce"
+  },
+  {
+   "id": "s9ca237e1",
+   "name": "Gruppo ruote"
+  },
+  {
+   "id": "sad2be42c",
+   "name": "Convogliamento film"
+  },
+  {
+   "id": "s46551f90",
+   "name": "Tappeto uscita"
+  }
+ ],
+ "params": [
+  {
+   "id": "pb8ed88a6",
+   "sectionId": "s08dd647f",
+   "name": "Versione",
+   "values": [
+    "DX",
+    "SX"
+   ]
+  },
+  {
+   "id": "p6a8a8a3b",
+   "sectionId": "s08dd647f",
+   "name": "Materiale",
+   "values": [
+    "INOX",
+    "FE"
+   ]
+  },
+  {
+   "id": "p73b0116f",
+   "sectionId": "s08dd647f",
+   "name": "Altezza lavoro",
+   "values": [
+    "765",
+    "850",
+    "900"
+   ]
+  },
+  {
+   "id": "p8cc04cf3",
+   "sectionId": "s08dd647f",
+   "name": "Motorizzazione",
+   "values": [
+    "SIEMENS",
+    "AB",
+    "CMZ",
+    "NO MOT"
+   ]
+  },
+  {
+   "id": "pc528d7c0",
+   "sectionId": "s68559f4b",
+   "name": "Ø tagliacuce",
+   "values": [
+    "170",
+    "200"
+   ]
+  },
+  {
+   "id": "pda085593",
+   "sectionId": "s68559f4b",
+   "name": "Incavo",
+   "values": [
+    "SI",
+    "NO"
+   ]
+  },
+  {
+   "id": "p43fb4e2c",
+   "sectionId": "s68559f4b",
+   "name": "Ø spatole",
+   "values": [
+    "140",
+    "150",
+    "170",
+    "200"
+   ]
+  },
+  {
+   "id": "p4cb4a977",
+   "sectionId": "s68559f4b",
+   "name": "Numero spatole",
+   "values": [
+    "1",
+    "2"
+   ]
+  },
+  {
+   "id": "p0b77a632",
+   "sectionId": "s68559f4b",
+   "name": "Larghezza spatole",
+   "values": [
+    "190",
+    "250",
+    "350",
+    "400",
+    "420"
+   ]
+  },
+  {
+   "id": "p9fbd3fb9",
+   "sectionId": "s68559f4b",
+   "name": "Profilo saldatura",
+   "values": [
+    "2X90 10/5/10",
+    "1,5X90 10/5/10",
+    "1,5X90 6/5/6"
+   ]
+  },
+  {
+   "id": "pc31c2bef",
+   "sectionId": "s68559f4b",
+   "name": "Tipo coltello",
+   "values": [
+    "INCLINATA",
+    "ZIG-ZAG"
+   ]
+  },
+  {
+   "id": "p4a37d2e5",
+   "sectionId": "s68559f4b",
+   "name": "Altezza lama",
+   "values": [
+    "15",
+    "20"
+   ]
+  },
+  {
+   "id": "pa562b8d2",
+   "sectionId": "s68559f4b",
+   "name": "Nastro rullini",
+   "values": [
+    "SI",
+    "NO"
+   ]
+  },
+  {
+   "id": "pffd85499",
+   "sectionId": "s68559f4b",
+   "name": "Trasmissione movimenti",
+   "values": [
+    "CINGHIA",
+    "CATENA"
+   ]
+  },
+  {
+   "id": "p996e57f6",
+   "sectionId": "s9ca237e1",
+   "name": "Altezza sald. ruote",
+   "values": [
+    "10",
+    "12"
+   ]
+  },
+  {
+   "id": "p5eb663ba",
+   "sectionId": "s9ca237e1",
+   "name": "Altezza sald. pattini",
+   "values": [
+    "9",
+    "15"
+   ]
+  },
+  {
+   "id": "p1647d211",
+   "sectionId": "s9ca237e1",
+   "name": "Numero ruote",
+   "values": [
+    "3",
+    "4"
+   ]
+  },
+  {
+   "id": "p797b5d5e",
+   "sectionId": "s9ca237e1",
+   "name": "Materiale ruote",
+   "values": [
+    "INOX",
+    "FE"
+   ]
+  },
+  {
+   "id": "p346bc0e9",
+   "sectionId": "sad2be42c",
+   "name": "Stampatore",
+   "values": [
+    "SMARTDATE 5",
+    "VIDEOJET",
+    "DOMINO VX150I",
+    "DOMINO V300"
+   ]
+  },
+  {
+   "id": "p5d1be123",
+   "sectionId": "sad2be42c",
+   "name": "W rulli",
+   "values": [
+    "527",
+    "620",
+    "720"
+   ]
+  },
+  {
+   "id": "p89081cee",
+   "sectionId": "s46551f90",
+   "name": "Tensionamento tappeto",
+   "values": [
+    "PNEUMATICO",
+    "MANUALE"
+   ]
+  },
+  {
+   "id": "p5103eafa",
+   "sectionId": "s46551f90",
+   "name": "Colore tappeti",
+   "values": [
+    "BIANCO",
+    "BLU"
+   ]
+  }
+ ],
+ "groups": [
+  {
+   "id": "g65f9d739",
+   "name": "Assieme master",
+   "kind": "master",
+   "params": [
+    "pb8ed88a6"
+   ],
+   "mode": "one",
+   "required": true
+  },
+  {
+   "id": "g67e017a6",
+   "name": "Basamento",
+   "kind": "group",
+   "params": [
+    "p6a8a8a3b",
+    "pb8ed88a6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mhjeo2xfd"
+  },
+  {
+   "id": "gf6f0412d",
+   "name": "Gambe basamento",
+   "kind": "group",
+   "params": [
+    "p6a8a8a3b",
+    "p73b0116f"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mhjeo2xfd"
+  },
+  {
+   "id": "g003575b6",
+   "name": "Piastra principale",
+   "kind": "group",
+   "params": [
+    "pb8ed88a6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mhjeo2xfd",
+   "noInter": true
+  },
+  {
+   "id": "g0e57f2bb",
+   "name": "Gruppo tagliacuce",
+   "kind": "group",
+   "params": [
+    "pc528d7c0",
+    "pda085593",
+    "p8cc04cf3",
+    "pb8ed88a6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mmd1mf1vk"
+  },
+  {
+   "id": "g4c9be3e1",
+   "name": "Gruppo spatole",
+   "kind": "group",
+   "params": [
+    "pc528d7c0",
+    "p43fb4e2c",
+    "pda085593",
+    "p4cb4a977",
+    "p0b77a632",
+    "p9fbd3fb9"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mmd1mf1vk"
+  },
+  {
+   "id": "g50e5f8af",
+   "name": "Kit coltelli",
+   "kind": "group",
+   "params": [
+    "p0b77a632",
+    "pc31c2bef",
+    "p4a37d2e5"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mmd1mf1vk"
+  },
+  {
+   "id": "gfc36be2f",
+   "name": "Movimenti",
+   "kind": "group",
+   "params": [
+    "pb8ed88a6",
+    "pffd85499",
+    "p8cc04cf3",
+    "p1647d211"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mw7czjyug"
+  },
+  {
+   "id": "g48ae8456",
+   "name": "Ruote traino",
+   "kind": "group",
+   "params": [
+    "p797b5d5e",
+    "pb8ed88a6",
+    "p996e57f6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mys1ajlk0"
+  },
+  {
+   "id": "g4d524fe2",
+   "name": "Ruote saldanti",
+   "kind": "group",
+   "params": [
+    "p797b5d5e",
+    "pb8ed88a6",
+    "p996e57f6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mys1ajlk0"
+  },
+  {
+   "id": "g053ec840",
+   "name": "Ruote piegatrici",
+   "kind": "group",
+   "params": [
+    "pb8ed88a6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mys1ajlk0"
+  },
+  {
+   "id": "g53502d1d",
+   "name": "Saldatura a pattini",
+   "kind": "group",
+   "params": [
+    "pb8ed88a6",
+    "p5eb663ba"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mys1ajlk0"
+  },
+  {
+   "id": "g08b8246f",
+   "name": "Gruppo colonna",
+   "kind": "group",
+   "params": [
+    "p6a8a8a3b",
+    "pb8ed88a6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mnxce1bx9"
+  },
+  {
+   "id": "g964602a2",
+   "name": "Braccio formatore",
+   "kind": "group",
+   "params": [
+    "pb8ed88a6"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mnxce1bx9"
+  },
+  {
+   "id": "g66b226f5",
+   "name": "Calandra stampatore",
+   "kind": "group",
+   "params": [
+    "pb8ed88a6",
+    "p346bc0e9",
+    "p5d1be123"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mnxce1bx9"
+  },
+  {
+   "id": "g73f3ea8b",
+   "name": "Motorizzazione convogliamento film",
+   "kind": "group",
+   "params": [
+    "p8cc04cf3"
+   ],
+   "mode": "all",
+   "required": true,
+   "macroId": "mnxce1bx9"
+  },
+  {
+   "id": "g93e7dc63",
+   "name": "Tappeto uscita",
+   "kind": "group",
+   "params": [
+    "p6a8a8a3b",
+    "p89081cee",
+    "p5103eafa"
+   ],
+   "mode": "all",
+   "required": false,
+   "macroId": "ma7pemzzo"
+  }
+ ],
+ "items": [
+  {
+   "id": "i43a8cc30",
+   "groupId": "g65f9d739",
+   "code": "CS1XD0DXXX",
+   "desc": "Assieme master Falcon DX",
+   "qty": 1,
+   "note": "",
+   "cond": {
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "i18cb7389",
+   "groupId": "g65f9d739",
+   "code": "CS1XD0SXXX",
+   "desc": "Assieme master Falcon SX",
+   "qty": 1,
+   "note": "",
+   "cond": {
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "i4c743ff1",
+   "groupId": "g67e017a6",
+   "code": "BS18CSH008",
+   "desc": "BASAMENTO FALCON INOX DX",
+   "qty": 1,
+   "note": "BS1XD0XXX r2",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "ifecf62a0",
+   "groupId": "g67e017a6",
+   "code": "BS18CSH009",
+   "desc": "BASAMENTO FALCON INOX SX",
+   "qty": 1,
+   "note": "BS1XD0XXX r3",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "iab3dea0f",
+   "groupId": "g67e017a6",
+   "code": "BS17CSH047",
+   "desc": "BASAMENTO FALCON DX FE",
+   "qty": 1,
+   "note": "BS1XD0XXX r12",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "if73b98f2",
+   "groupId": "g67e017a6",
+   "code": "BS17CSH061",
+   "desc": "BASAMENTO FALCON SX FE",
+   "qty": 1,
+   "note": "BS1XD0XXX r13",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "if64d0be6",
+   "groupId": "gf6f0412d",
+   "code": "DA FARE",
+   "desc": "GAMBA BASAMENTO H=765 INOX (DA FARE)",
+   "qty": 1,
+   "note": "BS1XD0XXX r5: codice DA FARE",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "p73b0116f": "765"
+   }
+  },
+  {
+   "id": "i45527697",
+   "groupId": "gf6f0412d",
+   "code": "8194015",
+   "desc": "GAMBA BASAMENTO H=850 INOX",
+   "qty": 1,
+   "note": "BS1XD0XXX r6",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "p73b0116f": "850"
+   }
+  },
+  {
+   "id": "ibd469377",
+   "groupId": "gf6f0412d",
+   "code": "BS17CS0529",
+   "desc": "GAMBE BASAMENTO H=900 +-50 INOX",
+   "qty": 1,
+   "note": "BS1XD0XXX r7",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "p73b0116f": "900"
+   }
+  },
+  {
+   "id": "ie3080d12",
+   "groupId": "gf6f0412d",
+   "code": "8182201",
+   "desc": "GAMBA BASAMENTO H=765",
+   "qty": 1,
+   "note": "BS1XD0XXX r15",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "p73b0116f": "765"
+   }
+  },
+  {
+   "id": "i7c0cbde6",
+   "groupId": "gf6f0412d",
+   "code": "BS19CS0517",
+   "desc": "GAMBA BASAMENTO H=900",
+   "qty": 1,
+   "note": "BS1XD0XXX r16: attributo 850 ma descrizione H=900, da verificare",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "p73b0116f": "900"
+   },
+   "review": false
+  },
+  {
+   "id": "i1030f6aa",
+   "groupId": "gf6f0412d",
+   "code": "8192500",
+   "desc": "GAMBA BASAMENTO H=900 FE",
+   "qty": 1,
+   "note": "BS1XD0XXX r17",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "p73b0116f": "900"
+   }
+  },
+  {
+   "id": "i23837bad",
+   "groupId": "g003575b6",
+   "code": "8194444",
+   "desc": "PIASTRA VERTICALE DX",
+   "qty": 1,
+   "note": "BS1XD0XXX r22 (AL)",
+   "cond": {
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "ib73e413f",
+   "groupId": "g003575b6",
+   "code": "8194017",
+   "desc": "PIASTRA VERTICALE SX",
+   "qty": 1,
+   "note": "BS1XD0XXX r23 (AL)",
+   "cond": {
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "i3dcb3691",
+   "groupId": "g0e57f2bb",
+   "code": "ST17CSG079",
+   "desc": "TC. FALCON D=170 1 SP I=265 DX SIEMENS",
+   "qty": 1,
+   "note": "TS1XD0XXX r3",
+   "cond": {
+    "pc528d7c0": "170",
+    "pda085593": "NO",
+    "p8cc04cf3": "SIEMENS",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "if48f96ef",
+   "groupId": "g0e57f2bb",
+   "code": "ST17CSG073",
+   "desc": "TC. FALCON D=170 SP I=265 SIEMENS DX",
+   "qty": 1,
+   "note": "TS1XD0XXX r4",
+   "cond": {
+    "pc528d7c0": "170",
+    "pda085593": "SI",
+    "p8cc04cf3": "SIEMENS",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "i7b3a5828",
+   "groupId": "g0e57f2bb",
+   "code": "ST17CSG074",
+   "desc": "TC. FALCON D=170 SP I=265 SIEMENS SX",
+   "qty": 1,
+   "note": "TS1XD0XXX r5",
+   "cond": {
+    "pc528d7c0": "170",
+    "pda085593": "SI",
+    "p8cc04cf3": "SIEMENS",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "i0d738481",
+   "groupId": "g0e57f2bb",
+   "code": "ST17CSG078",
+   "desc": "SUP.TC.FALCON D=170 2SP I=265 SX NO MOT",
+   "qty": 1,
+   "note": "TS1XD0XXX r6: senza motore, motorizzazione da definire",
+   "cond": {
+    "pc528d7c0": "170",
+    "pda085593": "NO",
+    "pb8ed88a6": "SX",
+    "p8cc04cf3": "NO MOT"
+   },
+   "review": false
+  },
+  {
+   "id": "ic7c42470",
+   "groupId": "g0e57f2bb",
+   "code": "ST17CSG076",
+   "desc": "TC.FALCON D=200 SP I=265 SIEMENS DX",
+   "qty": 1,
+   "note": "TS1XD0XXX r17",
+   "cond": {
+    "pc528d7c0": "200",
+    "pda085593": "SI",
+    "p8cc04cf3": "SIEMENS",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "ic8a32c41",
+   "groupId": "g0e57f2bb",
+   "code": "ST17CS0118",
+   "desc": "TC. FALCON SERVO I=265 SIEMENS DX",
+   "qty": 1,
+   "note": "TS1XD0XXX r18: incavo \"?\"",
+   "cond": {
+    "pc528d7c0": "200",
+    "pda085593": "NO",
+    "p8cc04cf3": "SIEMENS",
+    "pb8ed88a6": "DX"
+   },
+   "review": false
+  },
+  {
+   "id": "i4480c65f",
+   "groupId": "g4c9be3e1",
+   "code": "TC15B14021",
+   "desc": "SPATOLE D=140X250 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r8",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "140",
+    "pda085593": "NO",
+    "p4cb4a977": "1",
+    "p0b77a632": "250",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "i7a6debfc",
+   "groupId": "g4c9be3e1",
+   "code": "TC17CSH070",
+   "desc": "SPATOLE D=150X190 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r9",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "150",
+    "pda085593": "NO",
+    "p4cb4a977": "1",
+    "p0b77a632": "190",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "i72f722a8",
+   "groupId": "g4c9be3e1",
+   "code": "TC17CSH071",
+   "desc": "SPATOLE D=170X250 TRASV. 1,5X90 10/5/10",
+   "qty": 1,
+   "note": "TS1XD0XXX r10",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "170",
+    "pda085593": "NO",
+    "p4cb4a977": "1",
+    "p0b77a632": "250",
+    "p9fbd3fb9": "1,5X90 10/5/10"
+   }
+  },
+  {
+   "id": "i53294953",
+   "groupId": "g4c9be3e1",
+   "code": "TC15B17021",
+   "desc": "SPATOLE D=170X250 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r11",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "170",
+    "pda085593": "NO",
+    "p4cb4a977": "1",
+    "p0b77a632": "250",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "i8d3fc2f0",
+   "groupId": "g4c9be3e1",
+   "code": "TC15B17019",
+   "desc": "SPATOLE D=170X250 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r12",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "170",
+    "pda085593": "NO",
+    "p4cb4a977": "2",
+    "p0b77a632": "250",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "i45770107",
+   "groupId": "g4c9be3e1",
+   "code": "TC17CSH030",
+   "desc": "SPATOLE D=170X350 TRAS 2X90° 10/5/10",
+   "qty": 1,
+   "note": "TS1XD0XXX r13",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "170",
+    "pda085593": "NO",
+    "p4cb4a977": "1",
+    "p0b77a632": "350",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "i0be8463f",
+   "groupId": "g4c9be3e1",
+   "code": "TC15B17040",
+   "desc": "SPATOLE D=170X350 TRAS 2X90° 10/5/10",
+   "qty": 1,
+   "note": "TS1XD0XXX r14",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "170",
+    "pda085593": "NO",
+    "p4cb4a977": "2",
+    "p0b77a632": "350",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "ibb5281e9",
+   "groupId": "g4c9be3e1",
+   "code": "TC15Z17011",
+   "desc": "SPATOLE D=170X400 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r15: profilo 1,5X90 in tabella ma 2X90 in descrizione",
+   "cond": {
+    "pc528d7c0": "170",
+    "p43fb4e2c": "170",
+    "pda085593": "SI",
+    "p4cb4a977": "1",
+    "p0b77a632": "400",
+    "p9fbd3fb9": "1,5X90 10/5/10"
+   },
+   "review": true
+  },
+  {
+   "id": "icb9b908a",
+   "groupId": "g4c9be3e1",
+   "code": "TC15A20014",
+   "desc": "SPATOLE D=200X350 TRAS 2X90° 10/5/10",
+   "qty": 1,
+   "note": "TS1XD0XXX r20",
+   "cond": {
+    "pc528d7c0": "200",
+    "p43fb4e2c": "200",
+    "pda085593": "NO",
+    "p4cb4a977": "1",
+    "p0b77a632": "350",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "i5f3f14a0",
+   "groupId": "g4c9be3e1",
+   "code": "TC15Z200016",
+   "desc": "SPATOLE D=200X420 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r21: codice con uno 0 in più? verificare",
+   "cond": {
+    "pc528d7c0": "200",
+    "p43fb4e2c": "200",
+    "pda085593": "SI",
+    "p4cb4a977": "1",
+    "p0b77a632": "420",
+    "p9fbd3fb9": "2X90 10/5/10"
+   },
+   "review": true
+  },
+  {
+   "id": "if67ac959",
+   "groupId": "g4c9be3e1",
+   "code": "SP17CSH007",
+   "desc": "BARRE SALDANTI D=200X400 1.5X90° 6/5/6*",
+   "qty": 1,
+   "note": "TS1XD0XXX r22",
+   "cond": {
+    "pc528d7c0": "200",
+    "p43fb4e2c": "200",
+    "pda085593": "SI",
+    "p4cb4a977": "1",
+    "p0b77a632": "400",
+    "p9fbd3fb9": "1,5X90 6/5/6"
+   }
+  },
+  {
+   "id": "i8328e50e",
+   "groupId": "g4c9be3e1",
+   "code": "TC15Z20008",
+   "desc": "SPATOLE D=200X400 TRAS 2X90° 10/5/10*",
+   "qty": 1,
+   "note": "TS1XD0XXX r23",
+   "cond": {
+    "pc528d7c0": "200",
+    "p43fb4e2c": "200",
+    "pda085593": "SI",
+    "p4cb4a977": "1",
+    "p0b77a632": "400",
+    "p9fbd3fb9": "2X90 10/5/10"
+   }
+  },
+  {
+   "id": "ib8a8cc23",
+   "groupId": "g50e5f8af",
+   "code": "LM04191550",
+   "desc": "KIT LAMA INCLINATA 190X15X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r25",
+   "cond": {
+    "p0b77a632": "190",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "15"
+   }
+  },
+  {
+   "id": "ibb021f3e",
+   "groupId": "g50e5f8af",
+   "code": "LM04251550",
+   "desc": "KIT LAMA INCLINATA 250X15X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r26",
+   "cond": {
+    "p0b77a632": "250",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "15"
+   }
+  },
+  {
+   "id": "i7b4b571f",
+   "groupId": "g50e5f8af",
+   "code": "LM04252050",
+   "desc": "KIT LAMA INCLINATA 250X20X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r27",
+   "cond": {
+    "p0b77a632": "250",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "20"
+   }
+  },
+  {
+   "id": "i5e824114",
+   "groupId": "g50e5f8af",
+   "code": "LM04351550",
+   "desc": "KIT LAMA INCLINATA 350X15X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r28",
+   "cond": {
+    "p0b77a632": "350",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "15"
+   }
+  },
+  {
+   "id": "ie280039c",
+   "groupId": "g50e5f8af",
+   "code": "LM04352050",
+   "desc": "KIT LAMA INCLINATA 350X20X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r29",
+   "cond": {
+    "p0b77a632": "350",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "20"
+   }
+  },
+  {
+   "id": "if40ead7c",
+   "groupId": "g50e5f8af",
+   "code": "LM06252052",
+   "desc": "KIT LAMA ZIG-ZAG D=70 250X20X5 SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r30",
+   "cond": {
+    "p0b77a632": "250",
+    "pc31c2bef": "ZIG-ZAG",
+    "p4a37d2e5": "20"
+   }
+  },
+  {
+   "id": "i7f571769",
+   "groupId": "g50e5f8af",
+   "code": "LM04402050",
+   "desc": "KIT LAMA INCLINATA 400X20X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r31",
+   "cond": {
+    "p0b77a632": "400",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "20"
+   }
+  },
+  {
+   "id": "i6a9cb5d7",
+   "groupId": "g50e5f8af",
+   "code": "LM04422050",
+   "desc": "KIT LAMA INCLINATA 420X20X5 A SPESSORE",
+   "qty": 1,
+   "note": "TS1XD0XXX r32",
+   "cond": {
+    "p0b77a632": "420",
+    "pc31c2bef": "INCLINATA",
+    "p4a37d2e5": "20"
+   }
+  },
+  {
+   "id": "i4c6170b0",
+   "groupId": "gfc36be2f",
+   "code": "MV17CSH020",
+   "desc": "MOVIM. 3 RUOTE T.S. SIEMENS CINGHIA DX",
+   "qty": 1,
+   "note": "MV1XD0XXX r2",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "pffd85499": "CINGHIA",
+    "p8cc04cf3": "SIEMENS",
+    "p1647d211": "3"
+   }
+  },
+  {
+   "id": "i8a6dcd1a",
+   "groupId": "gfc36be2f",
+   "code": "MV17CSH020-SX",
+   "desc": "MOVIM. 3 RUOTE T.S. SIEMENS CINGHIA SX",
+   "qty": 1,
+   "note": "MV1XD0XXX r3",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "pffd85499": "CINGHIA",
+    "p8cc04cf3": "SIEMENS",
+    "p1647d211": "3"
+   }
+  },
+  {
+   "id": "i78c9e84d",
+   "groupId": "gfc36be2f",
+   "code": "MV17KT0107",
+   "desc": "MOVIMENTO RUOTE T.S. SERVO SIEMENS",
+   "qty": 1,
+   "note": "MV1XD0XXX r5",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "pffd85499": "CATENA",
+    "p8cc04cf3": "SIEMENS",
+    "p1647d211": "3"
+   }
+  },
+  {
+   "id": "ie86d6c47",
+   "groupId": "gfc36be2f",
+   "code": "MV17KT0107-SX",
+   "desc": "MOVIMENTO RUOTE T.S. SERVO SIEMENS",
+   "qty": 1,
+   "note": "MV1XD0XXX r6",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "pffd85499": "CATENA",
+    "p8cc04cf3": "SIEMENS",
+    "p1647d211": "3"
+   }
+  },
+  {
+   "id": "iabd1d635",
+   "groupId": "gfc36be2f",
+   "code": "MV17KT0109",
+   "desc": "MOVIM. 4 RUOTE T.S.SIEMENS CINGHIA DX",
+   "qty": 1,
+   "note": "MV1XD0XXX r8",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "pffd85499": "CINGHIA",
+    "p8cc04cf3": "SIEMENS",
+    "p1647d211": "4"
+   }
+  },
+  {
+   "id": "i89362069",
+   "groupId": "gfc36be2f",
+   "code": "MV17CSH013",
+   "desc": "MOVIM. 4 RUOTE T.S. A.B. CINGHIA SX",
+   "qty": 1,
+   "note": "MV1XD0XXX r10",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "pffd85499": "CINGHIA",
+    "p8cc04cf3": "AB",
+    "p1647d211": "4"
+   }
+  },
+  {
+   "id": "ib1482efa",
+   "groupId": "g48ae8456",
+   "code": "BRT2621540",
+   "desc": "TRAI.IN.INOX 1,5X90° H=10 I=265 1AP.P",
+   "qty": 1,
+   "note": "LS1XD0XXX r2",
+   "cond": {
+    "p797b5d5e": "INOX",
+    "pb8ed88a6": "DX",
+    "p996e57f6": "10"
+   }
+  },
+  {
+   "id": "ie5486085",
+   "groupId": "g48ae8456",
+   "code": "BRT2621540",
+   "desc": "TRAI.IN.INOX 1,5X90° H=10 I=265 1AP.P",
+   "qty": 1,
+   "note": "LS1XD0XXX r3",
+   "cond": {
+    "p797b5d5e": "INOX",
+    "pb8ed88a6": "SX",
+    "p996e57f6": "10"
+   }
+  },
+  {
+   "id": "ia7d0c98c",
+   "groupId": "g48ae8456",
+   "code": "BRT00MG0003",
+   "desc": "RUOTE TRAINO FE 1.5X90° H=10 I=265 DX",
+   "qty": 1,
+   "note": "LS1XD0XXX r4",
+   "cond": {
+    "p797b5d5e": "FE",
+    "pb8ed88a6": "DX",
+    "p996e57f6": "10"
+   }
+  },
+  {
+   "id": "ib69c67f3",
+   "groupId": "g48ae8456",
+   "code": "BRT00MG0033",
+   "desc": "RUOTE TRAINO FE 1.5X90° H=12 I=265 DX",
+   "qty": 1,
+   "note": "LS1XD0XXX r5",
+   "cond": {
+    "p797b5d5e": "FE",
+    "pb8ed88a6": "DX",
+    "p996e57f6": "12"
+   }
+  },
+  {
+   "id": "iccc05187",
+   "groupId": "g4d524fe2",
+   "code": "BRS00MG0033",
+   "desc": "RUOTE SALD. INOX 1.5X90° H=10 I=265 2AP",
+   "qty": 1,
+   "note": "LS1XD0XXX r6",
+   "cond": {
+    "p797b5d5e": "INOX",
+    "pb8ed88a6": "DX",
+    "p996e57f6": "10"
+   }
+  },
+  {
+   "id": "i7e477fce",
+   "groupId": "g4d524fe2",
+   "code": "BRS00MG0033",
+   "desc": "RUOTE SALD. INOX 1.5X90° H=10 I=265 2AP",
+   "qty": 1,
+   "note": "LS1XD0XXX r7",
+   "cond": {
+    "p797b5d5e": "INOX",
+    "pb8ed88a6": "SX",
+    "p996e57f6": "10"
+   }
+  },
+  {
+   "id": "i0663784f",
+   "groupId": "g4d524fe2",
+   "code": "BRS00MG0062",
+   "desc": "RUOTE SALD. FE 1.5X90° H=10 I=265 DX",
+   "qty": 1,
+   "note": "LS1XD0XXX r9",
+   "cond": {
+    "p797b5d5e": "FE",
+    "pb8ed88a6": "DX",
+    "p996e57f6": "10"
+   }
+  },
+  {
+   "id": "i713e4f56",
+   "groupId": "g4d524fe2",
+   "code": "BRS00MG0053",
+   "desc": "RUOTE SALD. FE 1.5X90° H=12 I=265 DX",
+   "qty": 1,
+   "note": "LS1XD0XXX r10",
+   "cond": {
+    "p797b5d5e": "FE",
+    "pb8ed88a6": "DX",
+    "p996e57f6": "12"
+   }
+  },
+  {
+   "id": "i3260ec57",
+   "groupId": "g053ec840",
+   "code": "RP261A2021",
+   "desc": "GR. RUOTE PIEGATORI I=265 AL86,5X2 DX FP",
+   "qty": 1,
+   "note": "LS1XD0XXX r11",
+   "cond": {
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "i1b14bc1d",
+   "groupId": "g053ec840",
+   "code": "RP265A2020",
+   "desc": "GR.RUOTE PIEGATORI I=265 AL86.5X2 SX FP SX",
+   "qty": 1,
+   "note": "LS1XD0XXX r12",
+   "cond": {
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "i4312d7b8",
+   "groupId": "g53502d1d",
+   "code": "SL00CSG002-SX",
+   "desc": "SALDATURA LONG.A PATTINI L=85 SMC H=9 SX",
+   "qty": 1,
+   "note": "LS1XD0XXX r14",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "p5eb663ba": "9"
+   }
+  },
+  {
+   "id": "i58070ff4",
+   "groupId": "g53502d1d",
+   "code": "SL00CSG002",
+   "desc": "SALDATURA LONG.A PATTINI L=85 SMC H=9 DX",
+   "qty": 1,
+   "note": "LS1XD0XXX r15",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p5eb663ba": "9"
+   }
+  },
+  {
+   "id": "id7579320",
+   "groupId": "g53502d1d",
+   "code": "SL15CS0002",
+   "desc": "SALDATURA LONG.A PATTINI L=85 SMC H=15 DX",
+   "qty": 1,
+   "note": "LS1XD0XXX r16",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p5eb663ba": "15"
+   }
+  },
+  {
+   "id": "i2f34bbce",
+   "groupId": "g08b8246f",
+   "code": "PB18CSG002",
+   "desc": "GR. COLONNA CON PORTA LEXAN DX",
+   "qty": 1,
+   "note": "CF1XD0XXX r2",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "i472e7841",
+   "groupId": "g08b8246f",
+   "code": "PB18CSG003",
+   "desc": "GR. COLONNA CON PORTA LEXAN SX",
+   "qty": 1,
+   "note": "CF1XD0XXX r3",
+   "cond": {
+    "p6a8a8a3b": "INOX",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "iad0cdf76",
+   "groupId": "g08b8246f",
+   "code": "PB17CSG048",
+   "desc": "GR. COLONNA FE DX",
+   "qty": 1,
+   "note": "CF1XD0XXX r5",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "i26714612",
+   "groupId": "g08b8246f",
+   "code": "PB17CSG049",
+   "desc": "GR. COLONNA FE SX",
+   "qty": 1,
+   "note": "CF1XD0XXX r6",
+   "cond": {
+    "p6a8a8a3b": "FE",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "i3328446c",
+   "groupId": "g964602a2",
+   "code": "CL17CSH065",
+   "desc": "BRACCIO FORMATORE REGOLAB. DX",
+   "qty": 1,
+   "note": "CF1XD0XXX r8",
+   "cond": {
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "ifb02b0f7",
+   "groupId": "g964602a2",
+   "code": "CL17CSH066",
+   "desc": "BRACCIO FORMATORE REGOLAB. SX",
+   "qty": 1,
+   "note": "CF1XD0XXX r9",
+   "cond": {
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "i8f6e0bb7",
+   "groupId": "g66b226f5",
+   "code": "CL17CSG028",
+   "desc": "CALANDRA PRED STAMPATORE VIDEOJET DX",
+   "qty": 1,
+   "note": "CF1XD0XXX r11",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p346bc0e9": "VIDEOJET",
+    "p5d1be123": "720"
+   }
+  },
+  {
+   "id": "i2fd39182",
+   "groupId": "g66b226f5",
+   "code": "CL17CSG028-SX",
+   "desc": "CALANDRA PRED STAMPATORE VIDEOJET SX",
+   "qty": 1,
+   "note": "CF1XD0XXX r12",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "p346bc0e9": "VIDEOJET",
+    "p5d1be123": "720"
+   }
+  },
+  {
+   "id": "i948ef6e1",
+   "groupId": "g66b226f5",
+   "code": "CL17CS0016",
+   "desc": "CALANDRA PRED STAMP NIMAX DOMINO V300* DX",
+   "qty": 1,
+   "note": "CF1XD0XXX r13",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p346bc0e9": "DOMINO V300",
+    "p5d1be123": "527"
+   }
+  },
+  {
+   "id": "i3d119564",
+   "groupId": "g66b226f5",
+   "code": "CL17CSH008",
+   "desc": "CALANDRA DOMINO VX150I DX",
+   "qty": 1,
+   "note": "CF1XD0XXX r14",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p346bc0e9": "DOMINO VX150I",
+    "p5d1be123": "620"
+   }
+  },
+  {
+   "id": "i4ba0a6d5",
+   "groupId": "g66b226f5",
+   "code": "CL17CSH008-SX",
+   "desc": "CALANDRA DOMINO VX150I SX",
+   "qty": 1,
+   "note": "CF1XD0XXX r15",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "p346bc0e9": "DOMINO VX150I",
+    "p5d1be123": "620"
+   }
+  },
+  {
+   "id": "i54e40cd1",
+   "groupId": "g66b226f5",
+   "code": "CL17CSG013",
+   "desc": "CALANDRA STAMPATORE SMARTDATE 5 DX W620",
+   "qty": 1,
+   "note": "CF1XD0XXX r16",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p346bc0e9": "SMARTDATE 5",
+    "p5d1be123": "620"
+   }
+  },
+  {
+   "id": "i9c3f936e",
+   "groupId": "g66b226f5",
+   "code": "CL17CS0037",
+   "desc": "CALANDRA STAMPATORE SMARTDATE 5 DX W720",
+   "qty": 1,
+   "note": "CF1XD0XXX r17",
+   "cond": {
+    "pb8ed88a6": "DX",
+    "p346bc0e9": "SMARTDATE 5",
+    "p5d1be123": "720"
+   }
+  },
+  {
+   "id": "i6f32fdd7",
+   "groupId": "g66b226f5",
+   "code": "CL17CSG013-SX",
+   "desc": "CALANDRA STAMPATORE SMARTDATE 5 SX W720",
+   "qty": 1,
+   "note": "CF1XD0XXX r18",
+   "cond": {
+    "pb8ed88a6": "SX",
+    "p346bc0e9": "SMARTDATE 5",
+    "p5d1be123": "720"
+   }
+  },
+  {
+   "id": "i967f188f",
+   "groupId": "g73f3ea8b",
+   "code": "CB18CSH001",
+   "desc": "GR. MOT. C.B. MP060 TECNOING-SIEMENS",
+   "qty": 1,
+   "note": "CF1XD0XXX r20",
+   "cond": {
+    "p8cc04cf3": "SIEMENS"
+   }
+  },
+  {
+   "id": "ibc2bd6f2",
+   "groupId": "g73f3ea8b",
+   "code": "CB17CSH020",
+   "desc": "KIT MOTORIZZAZIONE CB CMZ",
+   "qty": 1,
+   "note": "CF1XD0XXX r21",
+   "cond": {
+    "p8cc04cf3": "CMZ"
+   }
+  },
+  {
+   "id": "ia72d4c7e",
+   "groupId": "g73f3ea8b",
+   "code": "CB17CSH002",
+   "desc": "KIT MOTORIZZAZIONE CB TECNOING-AB VPL",
+   "qty": 1,
+   "note": "CF1XD0XXX r22",
+   "cond": {
+    "p8cc04cf3": "AB"
+   }
+  }
+ ],
+ "inter": [
+  {
+   "id": "xde20dfdf",
+   "groupId": "g67e017a6",
+   "code": "BASAMENTO_FALCON_DX.ASM",
+   "desc": "Interscambio basamento DX",
+   "cond": {
+    "pb8ed88a6": "DX"
+   },
+   "link": "https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6036509170&u8=1"
+  },
+  {
+   "id": "xacc9f7de",
+   "groupId": "gf6f0412d",
+   "code": "GAMBE_BASAMENTO_FALCON.ASM",
+   "desc": "Interscambio gambe basamento",
+   "cond": {},
+   "link": "https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6036650652&u8=1"
+  },
+  {
+   "id": "x6241154d",
+   "groupId": "g08b8246f",
+   "code": "CONV_FILM_FALCON_DX.ASM",
+   "desc": "Interscambio convogliamento film DX",
+   "cond": {
+    "pb8ed88a6": "DX"
+   },
+   "link": "https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6039712830&u8=1"
+  },
+  {
+   "id": "x1b3949be",
+   "groupId": "g66b226f5",
+   "code": "CALANDRA_STAMP_FALCON_DX.ASM",
+   "desc": "Interscambio calandra stampatore DX",
+   "cond": {
+    "pb8ed88a6": "DX"
+   },
+   "link": "https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6040049946&u8=1"
+  },
+  {
+   "id": "xc595515d",
+   "groupId": "g66b226f5",
+   "code": "CALANDRA_STAMP_FALCON_SX.ASM",
+   "desc": "Interscambio calandra stampatore SX",
+   "cond": {
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "xf0a83145",
+   "groupId": "g73f3ea8b",
+   "code": "MOTORIZZ_CONV_FILM.ASM",
+   "desc": "Interscambio motorizzazione convogliamento film",
+   "cond": {},
+   "link": "https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6039866767&u8=1"
+  }
+ ],
+ "acc": [
+  {
+   "id": "a49b827ab",
+   "groupId": "gf6f0412d",
+   "name": "Prolunga gambe",
+   "values": [
+    "H=50",
+    "H=125",
+    "H=150"
+   ],
+   "params": [
+    "p6a8a8a3b"
+   ],
+   "required": false
+  },
+  {
+   "id": "a5aa541a5",
+   "groupId": "g0e57f2bb",
+   "name": "Sollevamento",
+   "values": [
+    "MANUALE",
+    "PNEUMATICO"
+   ],
+   "params": [
+    "pb8ed88a6"
+   ],
+   "required": true
+  }
+ ],
+ "accItems": [
+  {
+   "id": "c45ec5f2a",
+   "groupId": "a49b827ab",
+   "code": "8194492",
+   "desc": "PROLUNGA PIEDE H=50 INOX",
+   "qty": 1,
+   "note": "BS1XD0XXX r9",
+   "cond": {
+    "a49b827ab": "H=50",
+    "p6a8a8a3b": "INOX"
+   }
+  },
+  {
+   "id": "c563b62e6",
+   "groupId": "a49b827ab",
+   "code": "8195616",
+   "desc": "PROLUNGA PIEDI H=125 INOX",
+   "qty": 1,
+   "note": "BS1XD0XXX r10",
+   "cond": {
+    "a49b827ab": "H=125",
+    "p6a8a8a3b": "INOX"
+   }
+  },
+  {
+   "id": "c12f6c19a",
+   "groupId": "a49b827ab",
+   "code": "8121279",
+   "desc": "PROLUNGA PIEDE H=50 FE",
+   "qty": 1,
+   "note": "BS1XD0XXX r19",
+   "cond": {
+    "a49b827ab": "H=50",
+    "p6a8a8a3b": "FE"
+   }
+  },
+  {
+   "id": "cf7c90dca",
+   "groupId": "a49b827ab",
+   "code": "BS15CS0557",
+   "desc": "PROLUNGA PIEDI H=150 FE",
+   "qty": 1,
+   "note": "BS1XD0XXX r20",
+   "cond": {
+    "a49b827ab": "H=150",
+    "p6a8a8a3b": "FE"
+   }
+  },
+  {
+   "id": "c0c5abcbb",
+   "groupId": "a5aa541a5",
+   "code": "ST17KT0006",
+   "desc": "REGOLAZIONE VERT.TC SERVO E EL.CON PLC",
+   "qty": 1,
+   "note": "TS1XD0XXX r34",
+   "cond": {
+    "a5aa541a5": "PNEUMATICO",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "c525bfeff",
+   "groupId": "a5aa541a5",
+   "code": "ST17KT0006-SX",
+   "desc": "REGOLAZIONE VERT.TC SERVO E EL.CON PLC",
+   "qty": 1,
+   "note": "TS1XD0XXX r35",
+   "cond": {
+    "a5aa541a5": "PNEUMATICO",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "cbcec57b1",
+   "groupId": "a5aa541a5",
+   "code": "ST17CS0003",
+   "desc": "CONTROLLO REGOLAZIONE AUTOMATICA T.C.",
+   "qty": 1,
+   "note": "TS1XD0XXX r36",
+   "cond": {
+    "a5aa541a5": "PNEUMATICO",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "c6d84d26e",
+   "groupId": "a5aa541a5",
+   "code": "ST17CS0003",
+   "desc": "CONTROLLO REGOLAZIONE AUTOMATICA T.C.",
+   "qty": 1,
+   "note": "TS1XD0XXX r36",
+   "cond": {
+    "a5aa541a5": "PNEUMATICO",
+    "pb8ed88a6": "SX"
+   }
+  },
+  {
+   "id": "c0aa55ae8",
+   "groupId": "a5aa541a5",
+   "code": "RV15CS0001-DX",
+   "desc": "REGOLAZIONE VERTICALE TC MANUALE",
+   "qty": 1,
+   "note": "TS1XD0XXX r38",
+   "cond": {
+    "a5aa541a5": "MANUALE",
+    "pb8ed88a6": "DX"
+   }
+  },
+  {
+   "id": "c8d102124",
+   "groupId": "a5aa541a5",
+   "code": "RV15CS0001",
+   "desc": "REGOLAZIONE VERTICALE TC MANUALE",
+   "qty": 1,
+   "note": "TS1XD0XXX r37",
+   "cond": {
+    "a5aa541a5": "MANUALE",
+    "pb8ed88a6": "SX"
+   }
+  }
+ ],
+ "configs": [],
+ "version": 4,
+ "source": "configuratore-prelim.xlsx",
+ "macros": [
+  {
+   "id": "mhjeo2xfd",
+   "name": "Basamento",
+   "code": "BS1XD0XXX"
+  },
+  {
+   "id": "mmd1mf1vk",
+   "name": "Tagliacuce",
+   "code": "TS1XD0XXX"
+  },
+  {
+   "id": "mys1ajlk0",
+   "name": "Gruppo ruote",
+   "code": "LS1XD0XXX"
+  },
+  {
+   "id": "mnxce1bx9",
+   "name": "Convogliamento film",
+   "code": "CF1XD0XXX"
+  },
+  {
+   "id": "mw7czjyug",
+   "name": "Movimenti",
+   "code": "MV1XD0XXX"
+  },
+  {
+   "id": "ma7pemzzo",
+   "name": "Tappeto uscita",
+   "code": "TP1XD0XXX"
+  }
+ ],
+ "macrosInit": true
+}

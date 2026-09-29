@@ -1,0 +1,2188 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Configuratore Falcon</title>
+<style>
+:root{
+  --bg:#eceff2;--surface:#f8f9fa;--surface-2:#f1f3f5;--surface-3:#e8ebef;--field:#fff;
+  --tx:#222a33;--tx-2:#46505c;--mut:#5f6975;--bd:#dfe3e8;--bd-2:#c3cad2;
+  --ac:#3558a8;--ac-h:#2c4b91;--ac-s:#e6ecf7;--ac-tx:#2c4b91;
+  --ok:#2a7349;--ok-s:#e5f2ea;--wa:#8a5410;--wa-s:#fbf3e4;--er:#a63b2b;--er-s:#f9e8e5;
+  --r:10px;--r-s:7px;--sh:0 1px 2px rgba(34,42,51,.04),0 0 0 1px rgba(34,42,51,.02);
+  --ring:0 0 0 3px rgba(53,88,168,.18);--ease:cubic-bezier(.2,.7,.2,1);--ease-out:cubic-bezier(.16,1,.3,1);--t1:120ms;--t2:180ms;--t3:260ms}
+*{box-sizing:border-box}
+html{scrollbar-gutter:stable}
+body{margin:0;font:14px/1.5 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
+::selection{background:var(--ac-s)}
+/* ---------- app bar ---------- */
+header{display:flex;align-items:center;gap:28px;overflow:hidden;padding:0 24px;height:58px;background:rgba(248,249,250,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.brand b{font-size:15px;font-weight:650;letter-spacing:-.01em}
+nav{display:flex;gap:2px;height:100%;overflow:visible;flex-wrap:nowrap;min-width:0}
+nav::-webkit-scrollbar{display:none}
+
+nav button{background:none;border:0;padding:0 14px;color:var(--mut);cursor:pointer;font:inherit;font-weight:500;position:relative;white-space:nowrap;transition:color .15s}
+nav button:hover{color:var(--tx)}
+nav button.on{color:var(--ac-tx)}
+nav button::after{content:"";position:absolute;left:12px;right:12px;bottom:0;height:2px;border-radius:2px;background:var(--ac);transform:scaleX(0);transition:transform .25s var(--ease)}
+nav button.on::after{transform:scaleX(1)}
+.savestate{margin-left:auto;color:var(--mut);font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.savestate i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block;transition:transform .3s}
+.savestate.pulse i{animation:pulse .6s var(--ease)}
+main{max-width:1440px;margin:0 auto;padding:22px 24px 40px}
+.view{animation:viewIn var(--t2) var(--ease-out)}
+.pagehead{margin-bottom:16px}
+.pagehead h1{font-size:20px;font-weight:650;margin:0;letter-spacing:-.01em}
+.pagehead p{margin:3px 0 0;color:var(--mut);font-size:13px;max-width:780px}
+/* ---------- surfaces ---------- */
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:16px;box-shadow:var(--sh)}
+.card h2{font-size:14px;font-weight:650;margin:0}
+.card h3{font-size:14px;font-weight:650;margin:0}
+.cardhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mut)}
+.sec{display:flex;align-items:center;gap:10px;margin:20px 0 10px}
+.sec::after{content:"";flex:1;height:1px;background:var(--bd)}
+.sec:first-child{margin-top:4px}
+/* ---------- form ---------- */
+label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:500;color:var(--tx-2)}
+input,select{font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd-2);border-radius:var(--r-s);padding:7px 10px;min-width:0;height:36px;transition:border-color .15s,box-shadow .15s,background .15s}
+input::placeholder{color:var(--mut);opacity:.75}
+input:hover,select:hover{border-color:#aab2bc}
+input:focus,select:focus{outline:none;border-color:var(--ac);box-shadow:var(--ring)}
+select{cursor:pointer}
+select.unset{background:var(--surface-2)}
+select.unset.req{border-color:#d9b77e}
+input[type=checkbox]{accent-color:var(--ac);width:16px;height:16px;margin:0}
+.ghost{background:transparent;border-color:transparent;height:32px;padding:5px 8px}
+.ghost:hover{border-color:var(--bd-2);background:#fff}
+.ghost:focus{background:#fff}
+.ghost.title{font-size:18px;font-weight:650;height:40px;margin-left:-8px}
+.ghost.h3{font-size:14px;font-weight:650;margin-left:-8px}
+/* ---------- segmented ---------- */
+.seg{display:inline-flex;flex-wrap:wrap;gap:3px;padding:3px;background:var(--surface-3);border-radius:9px}
+.seg button{font:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--tx-2);padding:0 12px;height:30px;border-radius:6px;cursor:pointer;transition:background .18s var(--ease),color .18s,box-shadow .18s;white-space:nowrap}
+.seg button:hover{color:var(--tx);background:rgba(255,255,255,.55)}
+.seg button.on{background:#fff;color:var(--ac-tx);box-shadow:0 1px 2px rgba(40,49,60,.12),0 0 0 1px rgba(59,98,184,.25);font-weight:600}
+.seg.unset{background:var(--surface-3)}
+.seg.unset.req{box-shadow:inset 0 0 0 1px #d9b77e}
+.pfield.unused{opacity:.55}
+.pfield.unused:hover{opacity:1}
+.seg.sm{padding:2px;gap:2px;border-radius:7px}
+.seg.sm button{height:26px;padding:0 9px;font-size:12px;border-radius:5px}
+.seg.sm button.none{color:var(--mut);padding:0 8px}
+.seg.sm button.none.on{background:transparent;box-shadow:none;color:var(--mut);font-weight:500}
+.seg.sm:has(button.none.on){background:transparent;box-shadow:inset 0 0 0 1px var(--bd)}
+/* ---------- buttons ---------- */
+.b{font:inherit;font-weight:500;height:36px;padding:0 14px;border-radius:var(--r-s);border:1px solid var(--bd-2);background:#fff;color:var(--tx);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;transition:background .15s,border-color .15s,transform .1s}
+.b:hover{background:var(--surface-2);border-color:#aab2bc}
+.b:active{transform:translateY(1px)}
+.b:focus-visible,.ib:focus-visible,.seg button:focus-visible,nav button:focus-visible{outline:none;box-shadow:var(--ring)}
+.b.p{background:var(--ac);border-color:var(--ac);color:#fff}
+.b.p:hover{background:var(--ac-h);border-color:var(--ac-h)}
+.b.s{height:30px;padding:0 10px;font-size:13px}
+.b.dz{color:var(--er);border-color:transparent;background:transparent}
+.b.dz:hover{background:var(--er-s)}
+.ib{width:32px;height:32px;border-radius:var(--r-s);border:1px solid transparent;background:transparent;color:var(--mut);cursor:pointer;display:inline-grid;place-items:center;transition:background .15s,color .15s}
+.ib:hover{background:var(--surface-3);color:var(--tx)}
+.ib.del:hover{background:var(--er-s);color:var(--er)}
+svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none;flex:none}
+.acts{display:flex;gap:2px;justify-content:flex-end;opacity:0;transition:opacity var(--t2)}
+tr:hover .acts,.gitem:hover .acts,.acts:focus-within{opacity:1}
+/* ---------- tables ---------- */
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:600;white-space:nowrap;background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+.mx td{padding:6px 8px}.mx th{padding:8px}
+.mx tbody tr:nth-child(even){background:#f6f7f9}
+.mx .seg.sm button.none{width:24px;padding:0}
+.mx tbody tr{transition:background .15s}
+.mx tbody tr:hover{background:var(--surface-2)}
+.num{text-align:right;font-variant-numeric:tabular-nums;width:56px}
+.code{font-family:"Cascadia Mono",Consolas,ui-monospace,monospace;font-size:13px;letter-spacing:.01em}
+.tag{display:inline-flex;gap:4px;align-items:center;padding:1px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--bd);color:var(--tx-2);font-size:12px;margin:2px 4px 2px 0;white-space:nowrap}
+.tag em{font-style:normal;color:var(--mut)}
+.tag b{font-weight:600}
+.tag.unset{border-style:dashed;color:var(--mut)}
+.chip{display:inline-flex;align-items:center;height:28px;padding:0 11px;border-radius:999px;border:1px solid var(--bd-2);font-size:12px;font-weight:500;margin:2px 4px 2px 0;cursor:pointer;user-select:none;color:var(--tx-2);background:#fff;transition:all .15s var(--ease)}
+.chip:hover{border-color:var(--ac);color:var(--ac-tx)}
+.chip.on{background:var(--ac-s);border-color:var(--ac);color:var(--ac-tx)}
+.mut{color:var(--mut);font-size:12px}
+.warn{color:var(--wa)}.err{color:var(--er)}.ok{color:var(--ok)}
+/* ---------- callouts / status ---------- */
+.callout{padding:9px 12px;border-radius:var(--r-s);font-size:13px;line-height:1.45}
+.callout.flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.callout.wa{background:var(--wa-s);color:var(--wa)}
+.callout.er{background:var(--er-s);color:var(--er)}
+.callout.ok{background:var(--ok-s);color:var(--ok)}
+.callout.ne{background:var(--surface-2);color:var(--mut)}
+.callout ul{margin:0;padding-left:16px}
+.st{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;flex:none;font-size:12px;font-weight:700;transition:background .2s,color .2s}
+.st.ok{background:var(--ok-s);color:var(--ok)}.st.wa{background:var(--wa-s);color:var(--wa)}.st.er{background:var(--er-s);color:var(--er)}.st.ne{background:var(--surface-3);color:var(--mut)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--bd-2)}
+.dot.ok{background:var(--ok)}.dot.wa{background:var(--wa)}
+.progress{height:4px;border-radius:6px;background:var(--surface-3);overflow:hidden}
+.progress>i{display:block;height:100%;background:var(--ok);border-radius:6px;transition:width var(--t3) var(--ease-out),background var(--t2)}
+.progress.wa>i{background:#c9a15c}
+/* ---------- configuratore ---------- */
+.conf{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
+.inputs{padding:16px 18px}
+.pfield{margin-bottom:14px}
+.pfield>.lbl{display:flex;justify-content:space-between;font-size:12px;font-weight:500;color:var(--tx-2);margin-bottom:6px}
+.pfield select{width:100%}
+.hero{display:grid;grid-template-columns:1fr auto;gap:14px 24px;align-items:center;padding:18px 20px}
+.hero .master{display:flex;align-items:center;gap:14px}
+.hero .mcode{font-family:"Cascadia Mono",Consolas,monospace;font-size:24px;font-weight:600;letter-spacing:.02em;line-height:1.2}
+.hero .mdesc{color:var(--mut);font-size:13px}
+.hero .meta{grid-column:1/-1;display:flex;align-items:center;gap:14px}
+.hero .meta .progress{flex:1;max-width:360px}
+.hero input#cfgName{width:280px}
+.toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;margin:0 0 12px;flex-wrap:wrap}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px}
+@media (max-width:1100px){.ggrid{grid-template-columns:1fr}}
+.gcard{margin:0;padding:0;overflow:hidden;display:flex;flex-direction:column;transition:border-color var(--t2),box-shadow var(--t2)}
+.gcard.hl{border-color:var(--ac);box-shadow:var(--ring)}
+.gcard .gh{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--bd)}
+.gcard .gh h3{flex:1}
+.gcard .deps{padding:8px 16px 0}
+.gcard .inter{display:flex;align-items:center;gap:10px;margin:10px 16px 4px;padding:8px 10px;border-radius:var(--r-s);background:var(--surface-2);border:1px solid var(--bd)}
+.gcard .inter .lab{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);flex:none;margin-right:4px}
+.gcard .body{padding:6px 16px 14px}
+.gcard table td{padding:7px 4px}
+.gcard .callout{margin-top:6px}
+.enter{animation:cardIn 240ms var(--ease-out) both}
+.flash td,.inter.flash{animation:flash 900ms var(--ease)}
+.bomt td{padding:7px 10px}
+.bomt tr.l0 td{background:var(--surface-2);font-weight:650;border-bottom:1px solid var(--bd-2)}
+.bomt tr.l0 td:nth-child(2){box-shadow:inset 3px 0 0 var(--ac)}
+.bomt tr.l1 td{font-weight:600}
+.bomt tr.l2 td{color:var(--tx-2)}
+.bomt tr.l2 td:nth-child(2){padding-left:34px;background:linear-gradient(var(--bd-2),var(--bd-2)) 22px 0/1px 100% no-repeat}
+.bomt tr.l1 td:nth-child(2){padding-left:18px}
+.lvl{display:inline-block;min-width:18px;font-size:11px;color:var(--mut);font-variant-numeric:tabular-nums}
+/* ---------- gruppi ---------- */
+.gcols{display:grid;grid-template-columns:260px minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:980px){.conf,.gcols{grid-template-columns:1fr}}
+.glist{position:sticky;top:76px;padding:10px}
+.gitem{padding:8px 10px;border-radius:var(--r-s);cursor:pointer;display:flex;gap:10px;align-items:center;color:var(--tx-2);transition:background .15s,color .15s}
+.gitem:hover{background:var(--surface-2)}
+.gitem.on{background:var(--ac-s);color:var(--ac-tx);font-weight:600}
+.gitem .n{margin-left:auto;font-size:12px;color:var(--mut);font-weight:400;font-variant-numeric:tabular-nums}
+.gitem.master{margin-bottom:6px;border-bottom:1px solid var(--bd);border-radius:var(--r-s) var(--r-s) 0 0;padding-bottom:10px}
+.subhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px}
+.subhead h3{display:flex;align-items:center;gap:8px}
+.empty{padding:26px 12px;text-align:center;color:var(--mut);font-size:13px}
+.hint{font-size:12px;color:var(--mut);margin:10px 2px 0}
+.section-card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:6px 18px 14px;margin-bottom:16px;box-shadow:var(--sh)}
+.section-card .cardhead{margin:10px 0 6px}
+.addrow{display:flex;gap:8px;margin-top:10px;padding-top:12px;border-top:1px dashed var(--bd)}
+.hide{display:none!important}
+.issuebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px;min-height:36px;padding:6px 12px}
+.issuebar a{color:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.issuebar details{width:100%}
+.issuebar summary{cursor:pointer;font-size:12px;opacity:.85}
+.startcard{padding:48px 24px;text-align:center;color:var(--mut)}
+.startcard .ic{width:56px;height:56px;border-radius:14px;background:var(--ac-s);color:var(--ac);display:inline-grid;place-items:center;margin-bottom:12px}
+.startcard .ic svg{width:28px;height:28px}
+.startcard b{display:block;color:var(--tx);font-size:15px;margin-bottom:4px}
+.gitem .ib{opacity:0;transition:opacity var(--t2)}
+.gitem:hover .ib{opacity:1}
+.addrow input{height:32px}
+.scroll{overflow-x:auto}
+/* ---------- v4: dialoghi, bozze, revisione, editor valori ---------- */
+.dlg{border:0;border-radius:12px;padding:20px 22px;width:min(520px,92vw);background:var(--surface);color:var(--tx);box-shadow:0 12px 40px rgba(34,42,51,.18);animation:dlgIn 160ms var(--ease-out)}
+.dlg.wide{width:min(780px,94vw)}
+.dlg::backdrop{background:rgba(34,42,51,.28);animation:fadeIn 160ms}
+.dlg.closing{animation:dlgOut 120ms ease-in forwards}
+.dlg h3{margin:0 0 8px;font-size:16px;font-weight:650}
+.dlg .dbody{font-size:13px;color:var(--tx-2)}
+.dlg .dbody p{margin:0 0 8px}
+.dlg .dacts{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+.dlg table td,.dlg table th{padding:6px 8px}
+.counters{display:flex;gap:10px;margin:6px 0 12px}
+.counters div{flex:1;background:var(--surface-2);border:1px solid var(--bd);border-radius:8px;padding:8px 12px}
+.counters b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.counters .wa b{color:var(--wa)}
+.hb{min-width:18px;height:18px;border-radius:9px;font-size:11px;font-weight:700;display:inline-grid;place-items:center;padding:0 5px;flex:none}
+.hb.ok{background:var(--ok-s);color:var(--ok)}.hb.wa{background:var(--wa-s);color:var(--wa)}.hb.er{background:var(--er-s);color:var(--er)}
+.vlist{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.vchip{display:inline-flex;align-items:center;height:28px;padding:0 2px 0 0;border:1px solid var(--bd-2);border-radius:6px;background:var(--field);font-size:13px;transition:opacity 150ms,transform 150ms,box-shadow 150ms}
+.vchip .grip{cursor:grab;color:#9aa3ad;font-size:11px;padding:0 3px 0 5px;letter-spacing:-2px;user-select:none}
+.vchip .vl{padding:0 4px;cursor:text}
+.vchip .vx{border:0;background:none;color:var(--mut);cursor:pointer;width:20px;height:20px;border-radius:4px;font-size:15px;line-height:1;display:grid;place-items:center}
+.vchip .vx:hover{background:var(--er-s);color:var(--er)}
+.vchip.dragging{opacity:.35}
+.vchip.over{box-shadow:-3px 0 0 var(--ac)}
+.vchip.gone{opacity:0;transform:scale(.8)}
+.vchip input{height:22px;width:110px;padding:0 4px;font-size:13px}
+input.vadd{height:28px;width:120px;font-size:13px;border-style:dashed;background:transparent}
+.seg.sm button.q{color:var(--wa);font-weight:700}
+.seg.sm button.q.on{background:var(--wa-s);color:var(--wa);box-shadow:inset 0 0 0 1px #d9b77e}
+select.sm{height:26px;padding:0 6px;font-size:12px}
+select.sm.q{background:var(--wa-s);border-color:#d9b77e;color:var(--wa)}
+.mx td{padding:4px 8px;height:38px}
+.mx .seg.sm{flex-wrap:nowrap}
+.acts{opacity:.35}
+tr.review td:first-child{box-shadow:inset 3px 0 0 var(--wa)}
+input.draftcode{border:1px dashed #d9b77e!important;background:var(--wa-s)!important}
+.flashok td{animation:flashok 700ms var(--ease)}
+.pfield .lbl .clr{border:0;background:none;color:var(--mut);cursor:pointer;font-size:15px;line-height:1;padding:0 4px;border-radius:4px}
+.pfield .lbl .clr:hover{background:var(--surface-3);color:var(--tx)}
+.pfield .reqby{font-size:11px;color:var(--mut);margin-top:4px}
+.pfield{border-radius:8px;transition:box-shadow 200ms}
+.pfield.hit{box-shadow:0 0 0 3px rgba(53,88,168,.18),0 0 0 8px rgba(53,88,168,.06)}
+.openchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx-2);background:var(--surface-2);border:1px solid var(--bd);border-radius:999px;padding:3px 10px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.openchip i{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:none}
+.openchip.dirty i{background:#c9a15c}
+tr.openrow td:first-child{box-shadow:inset 3px 0 0 var(--ac)}
+.tag.wa{background:var(--wa-s);border-color:#e7cf9f;color:var(--wa)}
+.tag.btn{cursor:pointer}
+.tag.alt{background:var(--ac-s);border-color:transparent;color:var(--ac-tx)}
+.tag.er{background:var(--er-s);border-color:transparent;color:var(--er)}
+.bomt tr.unres td{color:var(--wa);font-style:italic}
+.fchip{height:30px}
+.accs{margin:0 16px 14px;padding-top:10px;border-top:1px dashed var(--bd)}
+.accrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0}
+.accrow .an{font-weight:600;font-size:13px;min-width:110px;color:var(--tx-2)}
+.accbody{margin:2px 0 8px}
+.accbody table td{padding:6px 4px}
+.acccard{border:1px solid var(--bd);background:var(--surface-2);border-radius:var(--r-s);padding:12px 14px;margin-top:10px;animation:cardIn 240ms var(--ease-out)}
+.acccard .mx tbody tr:nth-child(even){background:transparent}
+.accgrid{display:grid;grid-template-columns:130px 1fr;gap:8px 12px;align-items:center}
+.tlink{color:var(--ac-tx);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.callout .tlink{color:inherit;font-weight:600}
+.mseg{margin-top:6px}
+.diff li.minus{color:var(--er)}.diff li.plus{color:var(--ok)}
+/* =====================================================================
+   v5 — layout compatto (solo presentazione; logica e dati invariati)
+   ===================================================================== */
+main{max-width:1880px}
+.conf{grid-template-columns:360px minmax(0,1fr);gap:16px}
+/* ---- pannello parametri: righe etichetta|controllo, sezioni comprimibili ---- */
+.inputs{padding:10px 14px 12px;position:sticky;top:70px;max-height:calc(100vh - 84px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.inputs .cardhead{position:sticky;top:-10px;background:var(--surface);z-index:2;margin:-10px -14px 0!important;padding:10px 14px 6px}
+.inputs .cardhead .mut{font-weight:400}
+.psec{border-top:1px solid var(--bd)}
+.psec:first-child{border-top:0}
+.gdeps .sep{white-space:normal}
+.sech{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;font:inherit;color:inherit;padding:8px 2px 6px;cursor:pointer;text-align:left;border-radius:6px}
+.sech:hover .eyebrow{color:var(--tx-2)}
+.sech:focus-visible{outline:none;box-shadow:var(--ring)}
+.sech .chev{width:14px;height:14px;color:var(--mut);transition:transform var(--t2) var(--ease);flex:none}
+.psec.closed .sech .chev{transform:rotate(-90deg)}
+.sech .cnt{margin-left:auto;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;padding:1px 7px;border-radius:999px;background:var(--surface-3);color:var(--mut)}
+.sech .cnt.ok{background:var(--ok-s);color:var(--ok)}.sech .cnt.wa{background:var(--wa-s);color:var(--wa)}
+.psum{display:none;font-size:11.5px;color:var(--tx-2);padding:0 2px 8px 22px;line-height:1.4}
+.psec.closed .psum{display:block}
+.psec.closed .pbody{display:none}
+.pbody{padding-bottom:6px}
+.pfield{display:grid;grid-template-columns:128px minmax(0,1fr) 18px;align-items:center;gap:2px 8px;margin:0;padding:3px 0;border-radius:6px}
+.pfield>.lbl{margin:0;display:flex;align-items:center;gap:5px;font-size:12px;line-height:1.25;color:var(--tx-2);min-width:0}
+.pfield>.lbl>span{min-width:0;hyphens:auto}
+.pfield .seg{padding:2px;gap:2px;border-radius:7px;justify-self:start}
+.pfield .seg button{height:26px;padding:0 7px;font-size:12.5px;border-radius:5px}
+.pfield select{height:30px;padding:3px 8px;font-size:13px}
+.pfield .clr{border:0;background:none;color:var(--mut);cursor:pointer;font-size:15px;line-height:1;padding:0;width:18px;height:22px;border-radius:4px}
+.pfield .clr:hover{background:var(--surface-3);color:var(--tx)}
+.pfield .clr:focus-visible,.rq:focus-visible{outline:none;box-shadow:var(--ring)}
+.rq{flex:none;border:1px solid var(--bd);background:var(--field);color:var(--mut);font:inherit;font-size:10.5px;font-weight:600;line-height:1;min-width:20px;height:17px;padding:0 5px;border-radius:999px;cursor:pointer;font-variant-numeric:tabular-nums}
+.rq:hover,.rq[aria-expanded=true]{border-color:var(--ac);color:var(--ac-tx);background:var(--ac-s)}
+.rq.none{border-style:dashed}
+.pfield .reqby{grid-column:1/-1;margin:2px 0 4px;padding:5px 8px;background:var(--surface-2);border-radius:6px;font-size:11.5px;line-height:1.45}
+.pfield.unused{opacity:.6}
+/* ---- toolbar + hero compatti ---- */
+.hero{padding:12px 16px;gap:8px 20px}
+.hero .master{gap:12px}
+.hero .mcode{font-size:20px}
+.toolbar{margin-bottom:10px}
+.toolbar .seg button .n{font-variant-numeric:tabular-nums;opacity:.8;margin-left:3px}
+.issuebar{padding:6px 12px;min-height:0;font-size:12.5px;margin-bottom:10px}
+/* ---- schede tipologia: colonne dense (masonry via CSS columns) ---- */
+.ggrid{display:block;columns:420px;column-gap:12px}
+.ggrid>.startcard,.ggrid>.empty{column-span:all}
+.gcard{break-inside:avoid;margin:0 0 12px;display:block}
+.gcard.hide{display:none!important}
+.gcard .gh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:start;gap:8px;padding:8px 12px 7px;border-bottom:1px solid var(--bd)}
+.gcard .gh .st{width:20px;height:20px;font-size:11px;margin-top:1px}
+.gcard .gh h3{font-size:13.5px;line-height:1.35}
+.gdeps{font-size:11.5px;line-height:1.4;color:var(--mut);margin-top:1px}
+.gdeps>span:not(.sep){white-space:nowrap}
+.gdeps b{color:var(--tx-2);font-weight:600}
+.gdeps .un{color:var(--wa);text-decoration:underline dotted;text-underline-offset:2px;cursor:pointer;background:none;border:0;font:inherit;padding:0}
+.gdeps .sep{margin:0 1px;opacity:.6}
+.schip{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap;margin-top:1px;background:var(--surface-3);color:var(--mut)}
+.schip.ok{background:var(--ok-s);color:var(--ok)}.schip.wa{background:var(--wa-s);color:var(--wa)}.schip.er{background:var(--er-s);color:var(--er)}
+.gcard .body{padding:4px 12px 8px}
+.gcard .body:empty{display:none}
+.gcard .gx{display:block;padding:5px 0 4px;font-size:12.5px;line-height:1.4;border-bottom:1px dashed var(--bd)}
+.gcard .gx svg.i{width:14px;height:14px;color:var(--mut);vertical-align:-2px;margin-right:5px}
+.gcard .gx .code{margin-right:6px}
+.gcard .gx .code{font-weight:600;overflow-wrap:anywhere;font-size:12px}
+.gcard .gx .xd{color:var(--tx-2)}
+.gcard .gx.wa{color:var(--wa)}.gcard .gx.er{color:var(--er)}
+.gcard .gx.wa svg.i,.gcard .gx.er svg.i{color:currentColor}
+.gcard table{table-layout:auto}
+.gcard table td{padding:5px 4px;vertical-align:top;font-size:13px;line-height:1.35;border-bottom:1px solid var(--bd)}
+.gcard table tr:last-child td{border-bottom:0}
+.gcard td.code{white-space:nowrap;width:1%;padding-right:12px;font-size:12px;padding-top:6px}
+.gcard td.ds{overflow-wrap:anywhere;hyphens:auto}
+.gcard td.ds .mut{font-size:11px;line-height:1.3}
+.gcard td.num{width:28px;padding-top:6px}
+.gcard .callout{margin:6px 0 2px;padding:5px 9px;font-size:12.5px;line-height:1.4}
+.gcard .accs{margin:0 12px 8px;padding-top:6px}
+.gcard .accrow{gap:8px;margin:2px 0}
+.gcard .accrow .an{min-width:0;font-size:12.5px}
+.gcard .accrow .an small{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.gcard .accbody{margin:2px 0 2px}
+/* ---- distinta ---- */
+#cfgBom .scroll{overflow-x:auto}
+.bomt{min-width:780px}
+.bomt td{padding:6px 10px;vertical-align:top}
+.bomt td.code{white-space:nowrap}
+.bomt tr.l1 td{background:#f3f5f8;border-top:1px solid var(--bd-2)}
+.bomt tr.unres td{font-style:normal}
+.bomt tr.unres td:nth-child(3){color:var(--wa);font-weight:500}
+.bomt tbody tr:hover td{background:var(--ac-s)}
+/* ---- editor ---- */
+.tagmore{cursor:help;border-style:dashed}
+/* ---- responsive ---- */
+@media (max-width:980px){
+  .conf{grid-template-columns:minmax(0,1fr)}
+  .inputs{position:static;max-height:none;overflow:visible}
+  .inputs .cardhead{position:static}
+}
+@media (max-width:720px){
+  header{gap:10px;padding:0 12px}
+  .brand b{display:none}
+  nav{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;flex:1}
+  nav button{padding:0 10px}
+  .savestate{display:none}
+  main{padding:14px 12px 32px}
+  .hero{grid-template-columns:minmax(0,1fr);padding:12px}
+  .hero>div[style*="text-align:right"]{text-align:left!important}
+  .toolbar .row{width:100%}
+  .toolbar #cfgName{flex:1 1 100%;width:auto!important}
+  .ggrid{columns:1}
+  .pfield{grid-template-columns:108px minmax(0,1fr) 18px}
+}
+/* ---------- toast ---------- */
+#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,14px);background:#2d3640;color:#f3f5f7;padding:9px 10px 9px 16px;border-radius:9px;opacity:0;transition:opacity .2s,transform .25s var(--ease);pointer-events:none;z-index:30;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:flex;align-items:center;gap:12px}
+#toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#toast button{font:inherit;font-weight:600;background:transparent;border:0;color:#9db7f0;cursor:pointer;padding:4px 8px;border-radius:5px}
+#toast button:hover{background:rgba(255,255,255,.08)}
+/* ---------- animazioni ---------- */
+@keyframes viewIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes flash{0%{background:rgba(53,88,168,.12)}100%{background:transparent}}
+::view-transition-group(*){animation-duration:200ms;animation-timing-function:cubic-bezier(.16,1,.3,1)}
+@keyframes dlgIn{from{opacity:0;transform:scale(.98)}to{opacity:1;transform:none}}
+@keyframes dlgOut{to{opacity:0;transform:scale(.98)}}
+@keyframes fadeIn{from{opacity:0}}
+@keyframes flashok{0%{background:rgba(42,115,73,.12)}100%{background:transparent}}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.8)}100%{transform:scale(1)}}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.st.pop{animation:pop 280ms var(--ease-out)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;animation-delay:0ms!important;transition-duration:1ms!important;scroll-behavior:auto!important}::view-transition-group(*){animation:none!important}}
+@media print{header,.noprint,.inputs{display:none!important}main{padding:0}.conf{display:block}.card{border:0;box-shadow:none}body{background:#fff}.ggrid{display:block}.gcard{margin-bottom:12px;border:1px solid #ccc}}
+
+/* editor codici su due livelli */
+.mx2{table-layout:auto;width:100%}
+.mx2 tbody.it{border-top:1px solid var(--bd)}
+.mx2 tbody.it:nth-of-type(even){background:#f6f7f9}
+.mx2 tbody.it:hover{background:var(--surface-2)}
+.mx2 tbody tr:nth-child(even),.mx2 tbody tr:hover{background:transparent}
+.mx2 tr.rA td{height:36px;padding-bottom:0}
+.mx2 tr.rB td{height:auto;padding:2px 8px 8px}
+.mx2 .attrs{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+.mx2 .at{display:inline-flex;align-items:center;gap:6px}
+.mx2 .al{font-size:11px;font-weight:600;color:var(--mut);white-space:nowrap}
+.mx2 tbody.review tr.rA td:first-child,.mx2 tbody.review tr.rB td:first-child{box-shadow:inset 3px 0 0 var(--wa)}
+.acccard .mx2 tbody.it:nth-of-type(even){background:transparent}
+.mx2 textarea.wrapta{display:block;width:100%;resize:none;overflow:hidden;min-height:30px;line-height:1.35;padding-top:6px;padding-bottom:6px;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}
+.mx2 tr.rA td{vertical-align:top}
+
+/* ===== elenco codici editor (griglia) ===== */
+.clist{--cw-code:150px;border:1px solid var(--bd);border-radius:var(--r-s);overflow:hidden}
+.clist.cx{--cw-code:250px}
+.chead,.crow{display:grid;gap:4px 12px;align-items:center;padding:6px 10px}
+/* larghezza ampia: tutto su una riga */
+.clist.ci .chead,.clist.ci .crow{grid-template-columns:var(--cw-code) minmax(260px,1fr) minmax(0,1.6fr) 52px 84px;grid-template-areas:"code desc attrs qty act"}
+.clist.cx .chead,.clist.cx .crow{grid-template-columns:var(--cw-code) minmax(220px,1fr) minmax(0,1.9fr) 84px;grid-template-areas:"code desc attrs act"}
+.clist.ci.noattr .chead,.clist.ci.noattr .crow{grid-template-columns:var(--cw-code) 1fr 52px 84px;grid-template-areas:"code desc qty act"}
+.clist.cx.noattr .chead,.clist.cx.noattr .crow{grid-template-columns:var(--cw-code) 1fr 84px;grid-template-areas:"code desc act"}
+.c-code{grid-area:code;min-width:0}.c-desc{grid-area:desc;min-width:0}.c-attrs{grid-area:attrs;min-width:0}.c-qty{grid-area:qty}.c-note{grid-area:note;min-width:0}.c-act{grid-area:act;display:flex;align-items:center;gap:6px;justify-content:flex-end;white-space:nowrap}
+.chead{background:var(--surface-2);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);padding-top:8px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
+.crow{border-top:1px solid var(--bd);transition:background .15s;position:relative}
+.chead+.crow{border-top:0}
+.crow:nth-child(odd){background:#f8f9fb}
+.crow:hover{background:var(--surface-2)}
+.crow.review{box-shadow:inset 3px 0 0 var(--wa)}
+.crow.flash{animation:flash 900ms var(--ease)}.crow.flashok{animation:flashok 700ms var(--ease)}
+.crow .c-code input{width:100%;font-weight:600}
+.crow .c-qty input{width:100%;text-align:right}
+.crow .acts{display:inline-flex}
+.crow{align-items:start}.crow>div{padding-top:0}.crow .c-attrs{padding-top:2px}.crow .c-qty,.crow .c-act{padding-top:2px}
+.cmark{margin-top:4px}.cmark .tag{font-size:10.5px}
+.c-attrs{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center}
+.c-attrs .at{display:inline-flex;align-items:center;gap:6px}
+.c-attrs .al{font-size:11px;font-weight:600;color:var(--mut);white-space:nowrap}
+.crow textarea.wrapta{display:block;width:100%;resize:none;overflow:hidden;min-height:32px;line-height:1.35;padding:6px 8px;white-space:pre-wrap;overflow-wrap:anywhere;font:inherit}
+.crow .c-note textarea.wrapta{font-size:12.5px;color:var(--tx-2)}
+/* larghezza media: attributi sotto, allineati alla descrizione */
+@media (max-width:1500px){
+  .clist.ci .chead,.clist.ci .crow{grid-template-columns:var(--cw-code) 1fr 52px 84px;grid-template-areas:"code desc qty act" ". attrs attrs attrs"}
+  .clist.cx .chead,.clist.cx .crow{grid-template-columns:var(--cw-code) 1fr 84px;grid-template-areas:"code desc act" ". attrs attrs"}
+  .chead .c-attrs{display:none}
+}
+/* schermi stretti: una colonna */
+@media (max-width:760px){
+  .clist .chead{display:none}
+  .clist.ci .crow,.clist.ci.noattr .crow{grid-template-columns:1fr 56px auto;grid-template-areas:"code qty act" "desc desc desc" "attrs attrs attrs"}
+  .clist.cx .crow,.clist.cx.noattr .crow{grid-template-columns:1fr auto;grid-template-areas:"code act" "desc desc" "attrs attrs"}
+}
+.misstog{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--tx-2);cursor:pointer;user-select:none}
+
+/* macrogruppi */
+.mcard{break-inside:avoid;margin:0 0 12px;padding:0;overflow:hidden;display:block}
+.mcard .mh{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface-2);border-bottom:1px solid var(--bd)}
+.mcard .mh>div{flex:1;min-width:0;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.mcard .mh h3{font-size:14.5px;font-weight:700;margin:0}
+.mcard .mh .code{font-size:11.5px;color:var(--mut)}
+.mcard>.gcard{margin:0;border:0;border-radius:0;box-shadow:none;break-inside:auto}
+.mcard>.gcard+.gcard{border-top:1px solid var(--bd)}
+.mcard>.gcard .gh{border-bottom:1px dashed var(--bd);padding-left:18px}
+.mcard>.gcard .body{padding-left:18px}
+.mcard>.gcard.hide{display:none}
+.mhead{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);padding:12px 10px 4px;display:flex;gap:8px;align-items:baseline;cursor:pointer;border-radius:6px}
+.mhead:hover{color:var(--ac-tx)}
+.mhead .code{font-size:10.5px;font-weight:500;text-transform:none;letter-spacing:0}
+.mhead.nom{cursor:default}
+.mhead+.gitem,.mhead~.gitem:not(.master){padding-left:18px}
+.bomt tr.l3 td{color:var(--tx-2)}
+.bomt tr.l3 td:nth-child(2){padding-left:50px;background:linear-gradient(var(--bd-2),var(--bd-2)) 38px 0/1px 100% no-repeat}
+
+/* =====================================================================
+   v8 — gerarchia macrogruppo → sotto-parte → interscambio → codici → accessori
+   (solo presentazione)
+   ===================================================================== */
+:root{--xa:#5f4591;--xa-s:#f3f0f9;--xa-b:#d9d0ea;--db:#9a3b2c}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield select:focus-visible,.misstog input:focus-visible,tr.pick input:focus-visible{outline:2px solid var(--ac);outline-offset:2px;box-shadow:none}
+.b:focus-visible,.ib:focus-visible,.seg button:focus-visible,nav button:focus-visible,.sech:focus-visible,.rq:focus-visible,.pfield .clr:focus-visible{outline:2px solid var(--ac);outline-offset:1px;box-shadow:none}
+/* ---- hero + barra configurazione ---- */
+.herowrap{padding:0;overflow:hidden}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(200px,260px);gap:12px 28px;align-items:center;padding:14px 18px 12px}
+.hero .master{display:flex;align-items:center;gap:12px;min-width:0}
+.hero .mtx{min-width:0}
+.st.big{width:34px;height:34px;font-size:16px}
+.st.big svg{width:17px;height:17px}
+.hero .mcode{font-family:"Cascadia Mono",Consolas,ui-monospace,monospace;font-size:21px;font-weight:650;letter-spacing:.02em;line-height:1.2;overflow-wrap:anywhere}
+.hero .mcode.unres{font-family:inherit;font-size:16px;color:var(--tx-2)}
+.hero .mdesc{color:var(--mut);font-size:13px}
+.hprog{display:flex;flex-direction:column;gap:6px}
+.hnum{display:flex;align-items:baseline;gap:4px;color:var(--mut);font-size:13px}
+.hnum b{font-size:20px;font-weight:650;color:var(--tx);font-variant-numeric:tabular-nums;line-height:1}
+.hsub{font-size:12px}
+.progress{height:6px}
+.progress.part>i{background:var(--ac)}
+.cfgbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 18px;border-top:1px solid var(--bd);background:var(--surface-2)}
+.cfgbar .cfgname{flex:1 1 200px;max-width:320px;display:flex}
+.cfgbar .cfgname input{width:100%;height:32px}
+.cfgbar .b.p{height:32px}
+.cfgbar .vsep{width:1px;height:20px;background:var(--bd-2);margin:0 2px}
+.cfgbar .icons{gap:0}
+.cfgbar #openChip:empty{display:none}
+/* ---- toolbar: solo controlli di vista ---- */
+.toolbar{margin:0 0 10px;gap:8px 14px}
+.misstog{font-size:12.5px;color:var(--mut)}
+/* ---- barra problemi: bianca con accento, divisa per tipo ---- */
+.issuebar{display:block;background:var(--surface);border:1px solid var(--bd);border-left:3px solid #c9a15c;border-radius:var(--r-s);padding:8px 12px;margin-bottom:12px;font-size:12.5px;color:var(--tx-2)}
+.issuebar .ibh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.issuebar .ibh b{color:var(--tx);font-size:13px}
+.issuebar .ibn{min-width:22px;height:20px;padding:0 6px;border-radius:999px;background:var(--wa-s);color:var(--wa);font-weight:700;font-size:12px;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}
+.issuebar .ibr{display:grid;grid-template-columns:136px minmax(0,1fr);gap:8px;align-items:baseline;margin-top:6px}
+.issuebar .ibk{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.issuebar .ibk::before{content:"";width:7px;height:7px;border-radius:50%;flex:none}
+.issuebar .ibk.wa{color:var(--wa)}.issuebar .ibk.wa::before{background:#c9a15c}
+.issuebar .ibk.db{color:var(--mut)}.issuebar .ibk.db::before{background:var(--db)}
+.issuebar .ibl{display:flex;flex-wrap:wrap;gap:2px 0;line-height:1.6}
+.issuebar a{color:var(--tx);font-weight:500;text-decoration:underline;text-decoration-color:var(--bd-2);text-underline-offset:3px}
+.issuebar a:hover{color:var(--ac-tx);text-decoration-color:currentColor}
+.issuebar .sep{color:var(--bd-2);margin:0 7px}
+.issuebar details{margin-top:6px}
+.issuebar summary{font-size:12px;color:var(--mut);opacity:1;width:max-content}
+.issuebar details ul{margin:4px 0 0;padding-left:18px;line-height:1.55}
+.issuebar details a{color:var(--wa)}
+.issuebar.okbar{display:flex;align-items:center;gap:8px;border-left-color:var(--ok)}
+.issuebar .st{width:20px;height:20px;font-size:11px}
+/* ---- macrogruppo ---- */
+.ggrid{columns:440px;column-gap:14px}
+.mcard{margin:0 0 14px;border-color:var(--bd-2)}
+.mcard .mh{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface-3);border-bottom:1px solid var(--bd-2)}
+.mcard .mic{width:28px;height:28px;border-radius:7px;background:var(--surface);border:1px solid var(--bd-2);color:var(--tx-2);display:grid;place-items:center;flex:none}
+.mcard .mht{flex:1;min-width:0}
+.mcard .mht .eyebrow{font-size:10px;line-height:1.2}
+.mcard .mhn{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mcard .mh h3{font-size:15px;font-weight:700;margin:0;line-height:1.3}
+.mcard .mh .code{font-size:11.5px;color:var(--mut)}
+.mprog{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:11.5px;color:var(--mut);white-space:nowrap}
+.mprog b{color:var(--tx);font-variant-numeric:tabular-nums}
+.mprog .progress{width:64px;height:4px;display:block;background:var(--bd)}
+.mcard.done .mprog b{color:var(--ok)}
+/* ---- sotto-parte (tipologia) ---- */
+.mcard>.gcard+.gcard{border-top:1px solid var(--bd-2)}
+.gcard .gh{display:flex;align-items:flex-start;gap:10px;padding:10px 14px 6px;border-bottom:0}
+.mcard>.gcard .gh{padding-left:14px;border-bottom:0}
+.gcard .ght{flex:1;min-width:0}
+.gcard .gh h3{font-size:13.5px;font-weight:650;line-height:1.35}
+.gdeps{display:block;font-size:11.5px;margin-top:1px}
+.gdeps .sep{margin:0 1px;opacity:1;color:var(--bd-2)}
+.mcard .mh>.mht{display:block;flex:1}
+.mcard .mh>.mprog{flex:none;display:flex;flex-direction:column;align-items:flex-end}
+.mcard .mh .mhn h3{flex:none}
+.schip{gap:5px;height:20px;padding:0 8px 0 7px;font-size:11px;font-weight:600;border:1px solid transparent;flex:none}
+.schip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.schip.ok{background:var(--ok-s);color:var(--ok)}
+.schip.wa{background:var(--wa-s);color:var(--wa)}
+.schip.er{background:var(--er-s);color:var(--er)}
+.schip.db{background:transparent;border-color:var(--bd-2);color:var(--tx-2)}.schip.db i{background:var(--db)}
+.schip.ne{background:var(--surface-3);color:var(--mut)}
+.schip.pop{animation:pop 280ms var(--ease-out)}
+.gbody{margin:0 14px 10px 14px;padding-left:12px;border-left:2px solid var(--bd)}
+.lrow{display:grid;grid-template-columns:94px minmax(0,1fr);gap:10px;align-items:start;padding:5px 0}
+.lrow+.lrow{border-top:1px dashed var(--bd)}
+.lk{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);padding-top:3px;white-space:nowrap}
+.lv{min-width:0}
+.gcard .gx{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;padding:0;border:0;font-size:12.5px;line-height:1.4}
+.gcard .gx svg.i{width:14px;height:14px;margin:0;vertical-align:0;align-self:center;color:var(--ac)}
+.gcard .gx .code{font-weight:650;font-size:12px;color:var(--tx);margin:0}
+.gcard .gx .xd{color:var(--mut)}
+.gcard .gx.miss{color:var(--mut)}
+.gcard .gx.miss svg.i{color:var(--db)}
+.gcard .gx.er{color:var(--er)}
+.gcard .gx.flash{animation:flash 900ms var(--ease)}
+.ctab td{padding:2px 4px;border-bottom:0!important;font-size:12.5px;line-height:1.35;vertical-align:baseline}
+.ctab tr+tr td{border-top:1px solid var(--surface-3)!important;padding-top:4px}
+.gcard .ctab td.code{width:1%;white-space:nowrap;padding-left:0;padding-right:12px;font-size:12px;padding-top:2px}
+.gcard .ctab td.num{width:34px;padding-top:2px;padding-right:0}
+.ctab .q{font-size:11.5px;color:var(--mut)}.ctab .q::before{content:"×";margin-right:1px;opacity:.7}
+.gcard .ctab td.ds .mut{font-size:11px}
+.ctab tr.pick{cursor:pointer}.ctab tr.pick:hover td{background:var(--surface-2)}
+.ctab td.rad{width:22px;padding:2px 0 0}
+.note{font-size:12.5px;line-height:1.4;padding:1px 0 1px 9px;border-left:2px solid var(--bd-2);color:var(--tx-2);margin:2px 0}
+.note.wa{border-left-color:#c9a15c}.note.er{border-left-color:var(--er);color:var(--er)}.note.ne{color:var(--mut)}
+.note .tlink{color:var(--ac-tx);font-weight:600}
+/* ---- accessori: blocco proprio, colore e icona dedicati ---- */
+.accblk{margin:8px 0 2px;border:1px solid var(--xa-b);background:var(--xa-s);border-radius:var(--r-s);padding:7px 10px}
+.accblk+.accblk{margin-top:6px}
+.lrow+.accblk{margin-top:6px}
+.accblk.off{background:transparent;border-style:dashed;border-color:var(--bd-2)}
+.acch{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.acctag{display:inline-flex;align-items:center;gap:4px;height:19px;padding:0 7px;border-radius:5px;background:var(--xa);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;flex:none}
+.acctag svg.i{width:12px;height:12px;stroke-width:2}
+.accblk.off .acctag{background:transparent;color:var(--xa);box-shadow:inset 0 0 0 1px var(--xa-b)}
+.acch .an{font-weight:600;font-size:13px;color:var(--tx);margin-right:auto}
+.acch .an small{font-weight:500;font-size:11px;color:var(--mut)}
+.accblk .seg.sm{background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px var(--xa-b)}
+.accblk .seg.sm button.on{color:var(--xa);box-shadow:0 1px 2px rgba(40,49,60,.12),0 0 0 1px var(--xa)}
+.accblk.off .seg.sm{background:transparent;box-shadow:inset 0 0 0 1px var(--bd)}
+.accblk .seg.sm.unset.req{box-shadow:inset 0 0 0 1px #d9b77e}
+.accbody{margin:6px 0 0;padding-top:6px;border-top:1px solid var(--xa-b)}
+.accbody .ctab tr+tr td{border-top-color:var(--xa-b)!important}
+.accbody .note{margin:0}
+/* ---- pannello parametri: badge "richiesto da" più silenziosi ---- */
+.rq{border-color:transparent;background:var(--surface-3);color:var(--mut);font-weight:600}
+.rq.none{background:transparent;border:1px dashed var(--bd-2)}
+/* ---- distinta ---- */
+.bomt{min-width:860px}
+.bomt .ty{font-size:12px;color:var(--mut)}
+.bomt td.code svg.i{width:14px;height:14px;vertical-align:-2px;color:var(--mut)}
+.bomt tr.l1 td.code svg.i{color:var(--tx-2)}
+.bomt tr.acc td.code{color:var(--xa)}
+.bomt tr.acc td.code svg.i{color:var(--xa)}
+.bomt tr.acc td:nth-child(2){box-shadow:inset 2px 0 0 var(--xa-b)}
+.tag.xa{background:var(--xa-s);border-color:var(--xa-b);color:var(--xa);font-size:11px;margin:0}
+.bomt .tag.wa{font-size:11px;margin:0;font-family:inherit}
+.bomt tr.unres td:nth-child(3){color:var(--wa)}
+.bomt td .mut{font-size:11.5px}
+/* ---- responsive ---- */
+@media (max-width:720px){
+  .hero{grid-template-columns:minmax(0,1fr);padding:12px}
+  .cfgbar{padding:8px 12px}
+  .cfgbar .cfgname{flex:1 1 100%;max-width:none}
+  .cfgbar .vsep{display:none}
+  .cfgbar .icons{margin-left:auto}
+  .issuebar .ibr{grid-template-columns:minmax(0,1fr);gap:2px}
+  .mcard .mh{padding:9px 12px}
+  .gcard .gh,.mcard>.gcard .gh{padding:9px 12px 5px;flex-wrap:wrap}
+  .gbody{margin:0 12px 10px 12px;padding-left:10px}
+  .lrow{grid-template-columns:minmax(0,1fr);gap:2px}
+  .lk{padding-top:0}
+  .acch .an{margin-right:0;flex:1 1 auto}
+}
+/* configurazione vuota: niente contorni ambra su tutti i 22 parametri */
+#cfgInputs.fresh .seg.unset.req{box-shadow:none}
+#cfgInputs.fresh select.unset.req{border-color:var(--bd-2)}
+@media print{.herowrap{border:0}.cfgbar,.issuebar{display:none!important}}
+
+/* v11 — interscambio come icona con anteprima */
+.gcard .gh{align-items:flex-start}
+.xbtn{flex:none;width:24px;height:22px;display:inline-grid;place-items:center;border-radius:6px;border:1px solid var(--bd-2);background:#fff;color:var(--ac);cursor:help;padding:0;transition:background .15s,border-color .15s}
+.xbtn svg.i{width:14px;height:14px}
+.xbtn:hover,.xbtn:focus-visible,.xbtn.on{background:var(--surface-2);border-color:var(--ac);outline:none}
+.xbtn.er{color:var(--er);border-color:var(--er-s);background:var(--er-s)}
+.xbtn.miss{color:var(--mut);border-style:dashed}
+.xbtn.flash{animation:flash 900ms var(--ease)}
+#xpop{position:fixed;z-index:60;max-width:360px;min-width:220px;background:#fff;border:1px solid var(--bd-2);border-radius:var(--r-s);box-shadow:0 10px 30px rgba(15,23,42,.14);padding:10px 12px;font-size:12.5px;line-height:1.45;opacity:0;transform:translateY(-3px);pointer-events:none;transition:opacity .12s,transform .12s}
+#xpop.show{opacity:1;transform:none;pointer-events:auto}
+#xpop .xh{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:4px}
+#xpop .xc{font-weight:650;font-size:12.5px;overflow-wrap:anywhere}
+#xpop .xd{color:var(--tx-2);margin-top:2px}
+#xpop .xa{margin-top:8px;padding-top:7px;border-top:1px dashed var(--bd);display:flex;gap:12px;flex-wrap:wrap}
+#xpop.er .xh{color:var(--er)}
+@media print{#xpop,.xbtn{display:none!important}}
+.toolbar .vsep{width:1px;height:20px;background:var(--bd-2)}
+.toolbar .row.icons{gap:2px}
+/* v13 — macrogruppi leggermente più in evidenza */
+.mcard{margin:0 0 18px;border:1px solid #c9d4ea;box-shadow:0 1px 2px rgba(15,23,42,.05),0 4px 14px rgba(53,88,168,.07)}
+.mcard .mh{background:linear-gradient(var(--ac-s),#edf1f9);border-bottom:1px solid #c9d4ea;box-shadow:inset 3px 0 0 var(--ac);padding:11px 14px 11px 16px}
+.mcard .mic{background:#fff;border-color:#c9d4ea;color:var(--ac)}
+.mcard .mh h3{font-size:15.5px;color:var(--ac-tx)}
+.mcard .mh .code{color:var(--ac-h);opacity:.75}
+.mcard.done .mh{background:linear-gradient(var(--ok-s),#f1f8f3);box-shadow:inset 3px 0 0 var(--ok)}
+.mcard.done .mh h3{color:var(--tx)}
+/* v13 — griglia regolare: macrogruppi in ordine da sinistra a destra, righe allineate */
+.ggrid{display:grid;columns:auto;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:18px;align-items:stretch}
+.ggrid>.mcard,.ggrid>.gcard{margin:0}
+.ggrid>.startcard,.ggrid>.empty{grid-column:1/-1}
+@media (max-width:1100px){.ggrid{grid-template-columns:minmax(0,1fr)}}
+@media print{.ggrid{display:block}.ggrid>.mcard,.ggrid>.gcard{margin:0 0 12px}}
+/* v15 — salvataggio su file */
+button.savestate{background:none;border:0;font:inherit;font-size:12px;cursor:pointer;padding:4px 8px;border-radius:6px}
+button.savestate:hover{background:var(--surface-3);color:var(--tx)}
+.savestate.fs-wa{color:var(--wa)}.savestate.fs-wa i{background:var(--wa)}
+.savestate.fs-er{color:var(--er)}.savestate.fs-er i{background:var(--er)}
+#fsBanner .fsb{display:flex;align-items:center;gap:10px;padding:8px 24px;font-size:13px;border-bottom:1px solid var(--bd)}
+#fsBanner .fsb span{line-height:1.9}
+#fsBanner .fs-wa{background:var(--wa-s);color:#6b4a12}
+#fsBanner .fs-er{background:var(--er-s);color:var(--er)}
+#fsBanner .b{height:28px;margin-left:8px;vertical-align:middle}
+.fsrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fsdot{width:9px;height:9px;border-radius:50%;background:var(--ok);flex:none}
+.fsdot.fs-wa{background:var(--wa)}.fsdot.fs-er{background:var(--er)}
+@media (max-width:760px){#fsBanner .fsb{padding:8px 12px}}
+/* v16 — evidenza al passaggio del mouse sulle sotto-parti */
+.mcard>.gcard{transition:background-color .15s var(--ease),box-shadow .15s var(--ease)}
+@media (hover:hover){
+  .mcard>.gcard:hover{background:#e9f0fb;box-shadow:inset 3px 0 0 var(--ac)}
+  .mcard>.gcard:hover .gh h3{color:var(--ac-tx)}
+  .ggrid>.gcard:hover{border-color:var(--ac);box-shadow:var(--ring)}
+}
+@media print{.mcard>.gcard{background:none!important;box-shadow:none!important}}
+/* v17 — l'ultima sotto-parte riempie il riquadro, così l'evidenza copre tutta l'altezza */
+.ggrid>.mcard{display:flex;flex-direction:column}
+.ggrid>.mcard>.gcard{flex:0 0 auto}
+.ggrid>.mcard>.gcard:not(.hide):not(:has(~ .gcard:not(.hide))){flex:1 0 auto}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">F</div><b>Configuratore Falcon</b></div>
+  <nav id="nav">
+    <button data-t="conf" class="on">Configuratore</button>
+    <button data-t="params">Parametri</button>
+    <button data-t="groups">Tipologie e codici</button>
+    <button data-t="data">Import / Export</button>
+  </nav>
+  <button type="button" class="savestate" id="saveState"><i></i><span>Salvato nel browser</span></button>
+</header>
+<div id="fsBanner" class="hide noprint"></div>
+<main>
+
+<!-- ============ CONFIGURATORE ============ -->
+<section id="t-conf" class="view">
+  <div class="conf">
+    <aside class="card inputs noprint">
+      <div class="cardhead" style="margin-bottom:6px"><h2>Parametri macchina <span class="mut" id="pCount"></span></h2>
+        <div class="row" style="gap:0"><button class="ib" id="btnSecAll" title="Comprimi / espandi tutte le sezioni" aria-label="Comprimi o espandi tutte le sezioni"><svg class="i" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></button>
+        <button class="ib" id="btnReset" title="Azzera parametri" aria-label="Azzera parametri"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div></div>
+      <div id="cfgInputs"></div>
+    </aside>
+    <div>
+      <div class="card herowrap">
+        <div class="hero" id="hero"></div>
+      </div>
+      <div class="toolbar noprint">
+        <div class="row" style="gap:8px"><div class="seg" id="viewSeg" role="group" aria-label="Vista"><button data-v="cards" class="on">Schede</button><button data-v="bom">Distinta</button></div>
+          <div class="seg hide" id="fltSeg" role="group" aria-label="Filtra le schede"><button data-f="all" class="on">Tutte<span class="n" id="fltAll"></span></button><button data-f="open">Da risolvere<span class="n" id="fltOpen"></span></button></div></div>
+        <div class="row" style="gap:14px;align-items:center"><label class="misstog" title="Se tolta, le tipologie con codici o interscambi non ancora inseriti nel database non vengono segnalate come da risolvere"><input type="checkbox" id="chkMissC"> Mostra combinazioni mancanti</label><span class="vsep" aria-hidden="true"></span><div class="row icons" role="group" aria-label="Esporta distinta">
+            <button class="ib" id="btnCopy" title="Copia distinta (incolla in Excel)" aria-label="Copia distinta"><svg class="i" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg></button>
+            <button class="ib" id="btnCsvBom" title="Scarica CSV" aria-label="Scarica CSV"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></button>
+            <button class="ib" id="btnPrint" title="Stampa" aria-label="Stampa"><svg class="i" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg></button>
+          </div></div>
+      </div>
+      <div id="issues"></div>
+      <div id="cfgGroups" class="ggrid"></div>
+      <div id="cfgBom" class="card hide" style="padding:0"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARAMETRI ============ -->
+<section id="t-params" class="view hide">
+  <div class="pagehead"><h1>Parametri</h1>
+    <p>Gli input fondamentali della macchina, divisi in sezioni. Per ogni valore: doppio clic per rinominarlo (codici e interscambi si aggiornano da soli), × per rimuoverlo, trascina ⋮⋮ per cambiare l'ordine. Per aggiungerne uno scrivilo nel campo “+ valore” e premi Invio.</p></div>
+  <div id="paramSections"></div>
+  <div class="row">
+    <input id="newSec" placeholder="Nome nuova sezione, es. Tagliacuce" style="width:280px">
+    <button class="b" id="btnSecAdd">+ Aggiungi sezione</button>
+  </div>
+</section>
+
+<!-- ============ TIPOLOGIE ============ -->
+<section id="t-groups" class="view hide">
+  <div class="pagehead"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><h1>Tipologie e codici</h1><label class="misstog" title="Mostra o nasconde il conteggio delle combinazioni di attributi che non hanno ancora un codice o un interscambio"><input type="checkbox" id="chkMiss"> Mostra combinazioni mancanti</label></div>
+    <p>Per ogni tipologia scegli gli attributi disponibili. Poi assegna a ogni codice e a ogni assieme di interscambio un valore per ciascun attributo che lo identifica, oppure “—” se quell'attributo non conta. <b>?</b> vuol dire da definire: finché una riga ha un <b>?</b> o il codice vuoto resta in bozza e il configuratore non la usa.</p></div>
+  <div class="gcols">
+    <div class="card glist">
+      <div id="groupList"></div>
+      <div class="addrow">
+        <input id="newGroup" placeholder="Nuova tipologia" style="flex:1">
+        <button class="b p" id="btnGroupAdd" style="padding:0 12px" title="Aggiungi">+</button>
+      </div>
+      <button class="b s" id="btnMacroAdd" style="width:100%;margin-top:8px" title="Crea un macrogruppo (es. Basamento, codice BS1XD0XXX); poi assegna le tipologie dal menu Macrogruppo">+ Nuovo macrogruppo</button>
+    </div>
+    <div id="groupEditor"></div>
+  </div>
+</section>
+
+<!-- ============ DATI ============ -->
+<section id="t-data" class="view hide">
+  <div class="pagehead"><h1>Import / Export</h1></div>
+  <div class="card">
+    <div class="cardhead"><h2>Salvataggio automatico su file</h2></div>
+    <p class="mut" style="margin:0 0 12px">Collega la cartella del configuratore: ogni modifica viene scritta subito in <span class="code">falcon_db.json</span> e all'apertura il database viene letto da lì. Una volta al giorno viene salvata una copia in <span class="code">backup_db/</span>.</p>
+    <div id="fsCard"></div>
+  </div>
+  <div class="card">
+    <div class="cardhead"><h2>Database completo (JSON)</h2></div>
+    <p class="mut" style="margin:0 0 14px">Esporta o importa manualmente l'intero database, per esempio per passarlo a un collega.</p>
+    <div class="row">
+      <button class="b p" id="btnJsonExp">Esporta JSON</button>
+      <button class="b" id="btnJsonImp">Importa JSON…</button><input type="file" id="fJson" accept=".json" hidden>
+      <button class="b dz" id="btnWipe" style="margin-left:auto">Svuota tutto</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="cardhead"><h2>Codici e interscambi (CSV / Excel)</h2></div>
+    <p class="mut" style="margin:0 0 14px">Colonne: <span class="code">tipologia;tipo;codice;descrizione;qta;note;&lt;Parametro1&gt;;&lt;Parametro2&gt;…</span>. In <span class="code">tipo</span> scrivi <span class="code">codice</span> oppure <span class="code">interscambio</span>. Per il master usa la tipologia <span class="code">Assieme master</span>. Una cella parametro vuota vuol dire attributo non usato, <span class="code">?</span> vuol dire da definire. Se in una cella metti più valori separati da <span class="code">|</span>, viene creata una riga per ogni valore. Il separatore (<span class="code">;</span> o <span class="code">,</span>) viene riconosciuto da solo. Prima di importare vedi un'anteprima: se una riga ha stesso codice e stessi attributi di una esistente la aggiorna, altrimenti ne aggiunge una nuova.</p>
+    <div class="row">
+      <button class="b p" id="btnCsvExp">Esporta CSV</button>
+      <button class="b" id="btnCsvImp">Importa CSV…</button><input type="file" id="fCsv" accept=".csv,.txt" hidden>
+    </div>
+    <div id="csvMsg" class="mut" style="margin-top:10px"></div>
+  </div>
+</section>
+</main>
+<dialog id="dlg" class="dlg"></dialog>
+<div id="toast"><span id="toastMsg"></span><button id="toastUndo" class="hide">Annulla</button></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   MODELLO DATI (v4)
+   sections: [{id,name}]
+   params:   [{id,sectionId,name,values:[]}]
+   groups:   [{id,name,kind:'master'|'group',params:[pid],mode:'all'|'one',required}]
+   items:    [{id,groupId,code,desc,qty,note,cond:{pid:value},review?}]   codici
+   inter:    [{id,groupId,code,desc,cond:{pid:value},review?}]            assiemi di interscambio
+   acc:      [{id,groupId,name,values:[opzioni],params:[pid],required}]   accessori di una tipologia
+   accItems: [{id,groupId:accId,code,desc,qty,note,cond:{accId:opzione,pid:value}}] codici accessorio
+   configs:  [{id,name,date,sel,choice,bomSnap:[lines]}]   (la scelta di un accessorio è in sel[accId])
+   cond[pid]: valore singolo | "?" (da definire) | assente = "—" (vale per ogni valore)
+   Bozza = codice vuoto, oppure un "?", oppure review=true → ignorata da configuratore e copertura.
+   ===================================================================== */
+const KEY = "configuratore_falcon_v4", KEY_OLD = null, KEY_DRAFT = "configuratore_falcon_draft_v4";
+const Q = "?";
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const uid = () => Math.random().toString(36).slice(2, 10);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const svg = d => `<svg class="i" viewBox="0 0 24 24">${d}</svg>`;
+const IC = {
+  up: svg('<path d="m6 15 6-6 6 6"/>'),
+  del: svg('<path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>'),
+  dup: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>'),
+  asm: svg('<path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 13 9 5 9-5"/>'),
+  star: svg('<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>'),
+  check: svg('<path d="m5 12 5 5 9-10"/>'),
+  plug: svg('<path d="M9 7V3M15 7V3"/><path d="M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v4"/>'),
+};
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+/* ---------- toast + undo ---------- */
+let toastT, undoFn = null;
+function toast(msg, undo) {
+  $("#toastMsg").textContent = msg; undoFn = undo || null;
+  $("#toastUndo").classList.toggle("hide", !undo);
+  $("#toast").classList.add("on"); clearTimeout(toastT);
+  toastT = setTimeout(() => { $("#toast").classList.remove("on"); undoFn = null; }, undo ? 6000 : 2200);
+}
+$("#toastUndo").onclick = () => { if (undoFn) { undoFn(); undoFn = null; } $("#toast").classList.remove("on"); };
+const snapshot = () => JSON.stringify(db);
+function restore(snap) { db = JSON.parse(snap); save(); rerender(); toast("Modifica annullata"); }
+
+/* ---------- dialogo (sostituisce confirm/prompt) ---------- */
+function ask({title, body = "", actions, input, wide}) {
+  return new Promise(res => {
+    const d = $("#dlg");
+    d.className = "dlg" + (wide ? " wide" : ""); d.onchange = null;
+    d.innerHTML = `<h3>${esc(title)}</h3><div class="dbody">${body}</div>${input ? `<input id="dlgIn" value="${esc(input.value || "")}" placeholder="${esc(input.placeholder || "")}" style="width:100%;margin-top:12px">` : ""}
+      <div class="dacts">${actions.map((a, k) => `<button class="b ${a.kind === "p" ? "p" : a.kind === "d" ? "dz" : ""}" data-k="${k}">${esc(a.label)}</button>`).join("")}</div>`;
+    let closed = false;
+    const tok = ask.n = (ask.n || 0) + 1;                  // una finestra aperta subito dopo non viene chiusa dal timer della precedente
+    const done = v => { if (closed) return; closed = true; d.classList.add("closing"); setTimeout(() => { if (ask.n === tok) { d.close(); d.classList.remove("closing"); } }, 120); res(v); };
+    const def = Math.max(0, actions.findIndex(a => a.default));
+    d.onclick = e => { const k = e.target.closest("[data-k]")?.dataset.k; if (k != null) done({action: actions[k].value, value: $("#dlgIn")?.value.trim()}); };
+    d.oncancel = e => { e.preventDefault(); done({action: null}); };
+    d.classList.remove("closing"); if (d.open) d.close(); d.showModal();
+    if (input) { const i = $("#dlgIn"); i.focus(); i.select(); i.onkeydown = e => { if (e.key === "Enter") done({action: actions[def].value, value: i.value.trim()}); }; }
+    else d.querySelector(`[data-k="${def}"]`).focus();
+  });
+}
+
+/* ---------- seed / migrazione ---------- */
+// Database Falcon importato da configuratore-prelim.xlsx (fogli BS/TS/LS/CF/MV/TP, RIFERIMENTI .ASM)
+const FALCON_DB = {"sections":[{"id":"s08dd647f","name":"Dati macchina base"},{"id":"s68559f4b","name":"Tagliacuce"},{"id":"s9ca237e1","name":"Gruppo ruote"},{"id":"sad2be42c","name":"Convogliamento film"},{"id":"s46551f90","name":"Tappeto uscita"}],"params":[{"id":"pb8ed88a6","sectionId":"s08dd647f","name":"Versione","values":["DX","SX"]},{"id":"p6a8a8a3b","sectionId":"s08dd647f","name":"Materiale","values":["INOX","FE"]},{"id":"p73b0116f","sectionId":"s08dd647f","name":"Altezza lavoro","values":["765","850","900"]},{"id":"p8cc04cf3","sectionId":"s08dd647f","name":"Motorizzazione","values":["SIEMENS","AB","CMZ"]},{"id":"pc528d7c0","sectionId":"s68559f4b","name":"Ø tagliacuce","values":["170","200"]},{"id":"pda085593","sectionId":"s68559f4b","name":"Incavo","values":["SI","NO"]},{"id":"p43fb4e2c","sectionId":"s68559f4b","name":"Ø spatole","values":["140","150","170","200"]},{"id":"p4cb4a977","sectionId":"s68559f4b","name":"Numero spatole","values":["1","2"]},{"id":"p0b77a632","sectionId":"s68559f4b","name":"Larghezza spatole","values":["190","250","350","400","420"]},{"id":"p9fbd3fb9","sectionId":"s68559f4b","name":"Profilo saldatura","values":["2X90 10/5/10","1,5X90 10/5/10","1,5X90 6/5/6"]},{"id":"pc31c2bef","sectionId":"s68559f4b","name":"Tipo coltello","values":["INCLINATA","ZIG-ZAG"]},{"id":"p4a37d2e5","sectionId":"s68559f4b","name":"Altezza lama","values":["15","20"]},{"id":"pa562b8d2","sectionId":"s68559f4b","name":"Nastro rullini","values":["SI","NO"]},{"id":"pffd85499","sectionId":"s68559f4b","name":"Trasmissione movimenti","values":["CINGHIA","CATENA"]},{"id":"p996e57f6","sectionId":"s9ca237e1","name":"Altezza sald. ruote","values":["10","12"]},{"id":"p5eb663ba","sectionId":"s9ca237e1","name":"Altezza sald. pattini","values":["9","15"]},{"id":"p1647d211","sectionId":"s9ca237e1","name":"Numero ruote","values":["3","4"]},{"id":"p797b5d5e","sectionId":"s9ca237e1","name":"Materiale ruote","values":["INOX","FE"]},{"id":"p346bc0e9","sectionId":"sad2be42c","name":"Stampatore","values":["SMARTDATE 5","VIDEOJET","DOMINO VX150I","DOMINO V300"]},{"id":"p5d1be123","sectionId":"sad2be42c","name":"W rulli","values":["527","620","720"]},{"id":"p89081cee","sectionId":"s46551f90","name":"Tensionamento tappeto","values":["PNEUMATICO","MANUALE"]},{"id":"p5103eafa","sectionId":"s46551f90","name":"Colore tappeti","values":["BIANCO","BLU"]}],"groups":[{"id":"g65f9d739","name":"Assieme master","kind":"master","params":["pb8ed88a6"],"mode":"one","required":true},{"id":"g67e017a6","name":"Basamento","kind":"group","params":["p6a8a8a3b","pb8ed88a6"],"mode":"all","required":true},{"id":"gf6f0412d","name":"Gambe basamento","kind":"group","params":["p6a8a8a3b","p73b0116f"],"mode":"all","required":true},{"id":"g003575b6","name":"Piastra principale","kind":"group","params":["pb8ed88a6"],"mode":"all","required":true},{"id":"g0e57f2bb","name":"Gruppo tagliacuce","kind":"group","params":["pc528d7c0","pda085593","p8cc04cf3","pb8ed88a6"],"mode":"all","required":true},{"id":"g4c9be3e1","name":"Gruppo spatole","kind":"group","params":["pc528d7c0","p43fb4e2c","pda085593","p4cb4a977","p0b77a632","p9fbd3fb9"],"mode":"all","required":true},{"id":"g50e5f8af","name":"Kit coltelli","kind":"group","params":["p0b77a632","pc31c2bef","p4a37d2e5"],"mode":"all","required":true},{"id":"gfc36be2f","name":"Movimenti","kind":"group","params":["pb8ed88a6","pffd85499","p8cc04cf3","p1647d211"],"mode":"all","required":true},{"id":"g48ae8456","name":"Ruote traino","kind":"group","params":["p797b5d5e","pb8ed88a6","p996e57f6"],"mode":"all","required":true},{"id":"g4d524fe2","name":"Ruote saldanti","kind":"group","params":["p797b5d5e","pb8ed88a6","p996e57f6"],"mode":"all","required":true},{"id":"g053ec840","name":"Ruote piegatrici","kind":"group","params":["pb8ed88a6"],"mode":"all","required":true},{"id":"g53502d1d","name":"Saldatura a pattini","kind":"group","params":["pb8ed88a6","p5eb663ba"],"mode":"all","required":true},{"id":"g08b8246f","name":"Gruppo colonna","kind":"group","params":["p6a8a8a3b","pb8ed88a6"],"mode":"all","required":true},{"id":"g964602a2","name":"Braccio formatore","kind":"group","params":["pb8ed88a6"],"mode":"all","required":true},{"id":"g66b226f5","name":"Calandra stampatore","kind":"group","params":["pb8ed88a6","p346bc0e9","p5d1be123"],"mode":"all","required":true},{"id":"g73f3ea8b","name":"Motorizzazione convogliamento film","kind":"group","params":["p8cc04cf3"],"mode":"all","required":true},{"id":"g93e7dc63","name":"Tappeto uscita","kind":"group","params":["p6a8a8a3b","p89081cee","p5103eafa"],"mode":"all","required":false}],"items":[{"id":"i43a8cc30","groupId":"g65f9d739","code":"CS1XD0DXXX","desc":"Assieme master Falcon DX","qty":1,"note":"","cond":{"pb8ed88a6":"DX"}},{"id":"i18cb7389","groupId":"g65f9d739","code":"CS1XD0SXXX","desc":"Assieme master Falcon SX","qty":1,"note":"","cond":{"pb8ed88a6":"SX"}},{"id":"i4c743ff1","groupId":"g67e017a6","code":"BS18CSH008","desc":"BASAMENTO FALCON INOX DX","qty":1,"note":"BS1XD0XXX r2","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"DX"}},{"id":"ifecf62a0","groupId":"g67e017a6","code":"BS18CSH009","desc":"BASAMENTO FALCON INOX SX","qty":1,"note":"BS1XD0XXX r3","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"SX"}},{"id":"iab3dea0f","groupId":"g67e017a6","code":"BS17CSH047","desc":"BASAMENTO FALCON DX FE","qty":1,"note":"BS1XD0XXX r12","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"DX"}},{"id":"if73b98f2","groupId":"g67e017a6","code":"BS17CSH061","desc":"BASAMENTO FALCON SX FE","qty":1,"note":"BS1XD0XXX r13","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"SX"}},{"id":"if64d0be6","groupId":"gf6f0412d","code":"","desc":"GAMBA BASAMENTO H=765 INOX (DA FARE)","qty":1,"note":"BS1XD0XXX r5: codice DA FARE","cond":{"p6a8a8a3b":"INOX","p73b0116f":"765"}},{"id":"i45527697","groupId":"gf6f0412d","code":"8194015","desc":"GAMBA BASAMENTO H=850 INOX","qty":1,"note":"BS1XD0XXX r6","cond":{"p6a8a8a3b":"INOX","p73b0116f":"850"}},{"id":"ibd469377","groupId":"gf6f0412d","code":"BS17CS0529","desc":"GAMBE BASAMENTO H=900 +-50 INOX","qty":1,"note":"BS1XD0XXX r7","cond":{"p6a8a8a3b":"INOX","p73b0116f":"900"}},{"id":"ie3080d12","groupId":"gf6f0412d","code":"8182201","desc":"GAMBA BASAMENTO H=765","qty":1,"note":"BS1XD0XXX r15","cond":{"p6a8a8a3b":"FE","p73b0116f":"765"}},{"id":"i7c0cbde6","groupId":"gf6f0412d","code":"BS19CS0517","desc":"GAMBA BASAMENTO H=900","qty":1,"note":"BS1XD0XXX r16: attributo 850 ma descrizione H=900, da verificare","cond":{"p6a8a8a3b":"FE","p73b0116f":"850"},"review":true},{"id":"i1030f6aa","groupId":"gf6f0412d","code":"8192500","desc":"GAMBA BASAMENTO H=900 FE","qty":1,"note":"BS1XD0XXX r17","cond":{"p6a8a8a3b":"FE","p73b0116f":"900"}},{"id":"i23837bad","groupId":"g003575b6","code":"8194444","desc":"PIASTRA VERTICALE DX","qty":1,"note":"BS1XD0XXX r22 (AL)","cond":{"pb8ed88a6":"DX"}},{"id":"ib73e413f","groupId":"g003575b6","code":"8194017","desc":"PIASTRA VERTICALE SX","qty":1,"note":"BS1XD0XXX r23 (AL)","cond":{"pb8ed88a6":"SX"}},{"id":"i3dcb3691","groupId":"g0e57f2bb","code":"ST17CSG079","desc":"TC. FALCON D=170 1 SP I=265 DX SIEMENS","qty":1,"note":"TS1XD0XXX r3","cond":{"pc528d7c0":"170","pda085593":"NO","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"}},{"id":"if48f96ef","groupId":"g0e57f2bb","code":"ST17CSG073","desc":"TC. FALCON D=170 SP I=265 SIEMENS DX","qty":1,"note":"TS1XD0XXX r4","cond":{"pc528d7c0":"170","pda085593":"SI","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"}},{"id":"i7b3a5828","groupId":"g0e57f2bb","code":"ST17CSG074","desc":"TC. FALCON D=170 SP I=265 SIEMENS SX","qty":1,"note":"TS1XD0XXX r5","cond":{"pc528d7c0":"170","pda085593":"SI","p8cc04cf3":"SIEMENS","pb8ed88a6":"SX"}},{"id":"i0d738481","groupId":"g0e57f2bb","code":"ST17CSG078","desc":"SUP.TC.FALCON D=170 2SP I=265 SX NO MOT","qty":1,"note":"TS1XD0XXX r6: senza motore, motorizzazione da definire","cond":{"pc528d7c0":"170","pda085593":"NO","p8cc04cf3":"?","pb8ed88a6":"SX"},"review":true},{"id":"ic7c42470","groupId":"g0e57f2bb","code":"ST17CSG076","desc":"TC.FALCON D=200 SP I=265 SIEMENS DX","qty":1,"note":"TS1XD0XXX r17","cond":{"pc528d7c0":"200","pda085593":"SI","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"}},{"id":"ic8a32c41","groupId":"g0e57f2bb","code":"ST17CS0118","desc":"TC. FALCON SERVO I=265 SIEMENS DX","qty":1,"note":"TS1XD0XXX r18: incavo \"?\"","cond":{"pc528d7c0":"200","pda085593":"?","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"},"review":true},{"id":"i4480c65f","groupId":"g4c9be3e1","code":"TC15B14021","desc":"SPATOLE D=140X250 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r8","cond":{"pc528d7c0":"170","p43fb4e2c":"140","pda085593":"NO","p4cb4a977":"1","p0b77a632":"250","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i7a6debfc","groupId":"g4c9be3e1","code":"TC17CSH070","desc":"SPATOLE D=150X190 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r9","cond":{"pc528d7c0":"170","p43fb4e2c":"150","pda085593":"NO","p4cb4a977":"1","p0b77a632":"190","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i72f722a8","groupId":"g4c9be3e1","code":"TC17CSH071","desc":"SPATOLE D=170X250 TRASV. 1,5X90 10/5/10","qty":1,"note":"TS1XD0XXX r10","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"1","p0b77a632":"250","p9fbd3fb9":"1,5X90 10/5/10"}},{"id":"i53294953","groupId":"g4c9be3e1","code":"TC15B17021","desc":"SPATOLE D=170X250 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r11","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"1","p0b77a632":"250","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i8d3fc2f0","groupId":"g4c9be3e1","code":"TC15B17019","desc":"SPATOLE D=170X250 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r12","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"2","p0b77a632":"250","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i45770107","groupId":"g4c9be3e1","code":"TC17CSH030","desc":"SPATOLE D=170X350 TRAS 2X90° 10/5/10","qty":1,"note":"TS1XD0XXX r13","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"1","p0b77a632":"350","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i0be8463f","groupId":"g4c9be3e1","code":"TC15B17040","desc":"SPATOLE D=170X350 TRAS 2X90° 10/5/10","qty":1,"note":"TS1XD0XXX r14","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"2","p0b77a632":"350","p9fbd3fb9":"2X90 10/5/10"}},{"id":"ibb5281e9","groupId":"g4c9be3e1","code":"TC15Z17011","desc":"SPATOLE D=170X400 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r15: profilo 1,5X90 in tabella ma 2X90 in descrizione","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"SI","p4cb4a977":"1","p0b77a632":"400","p9fbd3fb9":"1,5X90 10/5/10"},"review":true},{"id":"icb9b908a","groupId":"g4c9be3e1","code":"TC15A20014","desc":"SPATOLE D=200X350 TRAS 2X90° 10/5/10","qty":1,"note":"TS1XD0XXX r20","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"NO","p4cb4a977":"1","p0b77a632":"350","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i5f3f14a0","groupId":"g4c9be3e1","code":"TC15Z200016","desc":"SPATOLE D=200X420 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r21: codice con uno 0 in più? verificare","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"SI","p4cb4a977":"1","p0b77a632":"420","p9fbd3fb9":"2X90 10/5/10"},"review":true},{"id":"if67ac959","groupId":"g4c9be3e1","code":"SP17CSH007","desc":"BARRE SALDANTI D=200X400 1.5X90° 6/5/6*","qty":1,"note":"TS1XD0XXX r22","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"SI","p4cb4a977":"1","p0b77a632":"400","p9fbd3fb9":"1,5X90 6/5/6"}},{"id":"i8328e50e","groupId":"g4c9be3e1","code":"TC15Z20008","desc":"SPATOLE D=200X400 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r23","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"SI","p4cb4a977":"1","p0b77a632":"400","p9fbd3fb9":"2X90 10/5/10"}},{"id":"ib8a8cc23","groupId":"g50e5f8af","code":"LM04191550","desc":"KIT LAMA INCLINATA 190X15X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r25","cond":{"p0b77a632":"190","pc31c2bef":"INCLINATA","p4a37d2e5":"15"}},{"id":"ibb021f3e","groupId":"g50e5f8af","code":"LM04251550","desc":"KIT LAMA INCLINATA 250X15X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r26","cond":{"p0b77a632":"250","pc31c2bef":"INCLINATA","p4a37d2e5":"15"}},{"id":"i7b4b571f","groupId":"g50e5f8af","code":"LM04252050","desc":"KIT LAMA INCLINATA 250X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r27","cond":{"p0b77a632":"250","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"i5e824114","groupId":"g50e5f8af","code":"LM04351550","desc":"KIT LAMA INCLINATA 350X15X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r28","cond":{"p0b77a632":"350","pc31c2bef":"INCLINATA","p4a37d2e5":"15"}},{"id":"ie280039c","groupId":"g50e5f8af","code":"LM04352050","desc":"KIT LAMA INCLINATA 350X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r29","cond":{"p0b77a632":"350","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"if40ead7c","groupId":"g50e5f8af","code":"LM06252052","desc":"KIT LAMA ZIG-ZAG D=70 250X20X5 SPESSORE","qty":1,"note":"TS1XD0XXX r30","cond":{"p0b77a632":"250","pc31c2bef":"ZIG-ZAG","p4a37d2e5":"20"}},{"id":"i7f571769","groupId":"g50e5f8af","code":"LM04402050","desc":"KIT LAMA INCLINATA 400X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r31","cond":{"p0b77a632":"400","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"i6a9cb5d7","groupId":"g50e5f8af","code":"LM04422050","desc":"KIT LAMA INCLINATA 420X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r32","cond":{"p0b77a632":"420","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"i4c6170b0","groupId":"gfc36be2f","code":"MV17CSH020","desc":"MOVIM. 3 RUOTE T.S. SIEMENS CINGHIA DX","qty":1,"note":"MV1XD0XXX r2","cond":{"pb8ed88a6":"DX","pffd85499":"CINGHIA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"i8a6dcd1a","groupId":"gfc36be2f","code":"MV17CSH020-SX","desc":"MOVIM. 3 RUOTE T.S. SIEMENS CINGHIA SX","qty":1,"note":"MV1XD0XXX r3","cond":{"pb8ed88a6":"SX","pffd85499":"CINGHIA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"i78c9e84d","groupId":"gfc36be2f","code":"MV17KT0107","desc":"MOVIMENTO RUOTE T.S. SERVO SIEMENS","qty":1,"note":"MV1XD0XXX r5","cond":{"pb8ed88a6":"DX","pffd85499":"CATENA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"ie86d6c47","groupId":"gfc36be2f","code":"MV17KT0107-SX","desc":"MOVIMENTO RUOTE T.S. SERVO SIEMENS","qty":1,"note":"MV1XD0XXX r6","cond":{"pb8ed88a6":"SX","pffd85499":"CATENA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"iabd1d635","groupId":"gfc36be2f","code":"MV17KT0109","desc":"MOVIM. 4 RUOTE T.S.SIEMENS CINGHIA DX","qty":1,"note":"MV1XD0XXX r8","cond":{"pb8ed88a6":"DX","pffd85499":"CINGHIA","p8cc04cf3":"SIEMENS","p1647d211":"4"}},{"id":"i89362069","groupId":"gfc36be2f","code":"MV17CSH013","desc":"MOVIM. 4 RUOTE T.S. A.B. CINGHIA SX","qty":1,"note":"MV1XD0XXX r10","cond":{"pb8ed88a6":"SX","pffd85499":"CINGHIA","p8cc04cf3":"AB","p1647d211":"4"}},{"id":"ib1482efa","groupId":"g48ae8456","code":"BRT2621540","desc":"TRAI.IN.INOX 1,5X90° H=10 I=265 1AP.P","qty":1,"note":"LS1XD0XXX r2","cond":{"p797b5d5e":"INOX","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"ie5486085","groupId":"g48ae8456","code":"BRT2621540","desc":"TRAI.IN.INOX 1,5X90° H=10 I=265 1AP.P","qty":1,"note":"LS1XD0XXX r3","cond":{"p797b5d5e":"INOX","pb8ed88a6":"SX","p996e57f6":"10"}},{"id":"ia7d0c98c","groupId":"g48ae8456","code":"BRT00MG0003","desc":"RUOTE TRAINO FE 1.5X90° H=10 I=265 DX","qty":1,"note":"LS1XD0XXX r4","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"ib69c67f3","groupId":"g48ae8456","code":"BRT00MG0033","desc":"RUOTE TRAINO FE 1.5X90° H=12 I=265 DX","qty":1,"note":"LS1XD0XXX r5","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"12"}},{"id":"iccc05187","groupId":"g4d524fe2","code":"BRS00MG0033","desc":"RUOTE SALD. INOX 1.5X90° H=10 I=265 2AP","qty":1,"note":"LS1XD0XXX r6","cond":{"p797b5d5e":"INOX","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"i7e477fce","groupId":"g4d524fe2","code":"BRS00MG0033","desc":"RUOTE SALD. INOX 1.5X90° H=10 I=265 2AP","qty":1,"note":"LS1XD0XXX r7","cond":{"p797b5d5e":"INOX","pb8ed88a6":"SX","p996e57f6":"10"}},{"id":"i0663784f","groupId":"g4d524fe2","code":"BRS00MG0062","desc":"RUOTE SALD. FE 1.5X90° H=10 I=265 DX","qty":1,"note":"LS1XD0XXX r9","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"i713e4f56","groupId":"g4d524fe2","code":"BRS00MG0053","desc":"RUOTE SALD. FE 1.5X90° H=12 I=265 DX","qty":1,"note":"LS1XD0XXX r10","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"12"}},{"id":"i3260ec57","groupId":"g053ec840","code":"RP261A2021","desc":"GR. RUOTE PIEGATORI I=265 AL86,5X2 DX FP","qty":1,"note":"LS1XD0XXX r11","cond":{"pb8ed88a6":"DX"}},{"id":"i1b14bc1d","groupId":"g053ec840","code":"RP265A2020","desc":"GR.RUOTE PIEGATORI I=265 AL86.5X2 SX FP SX","qty":1,"note":"LS1XD0XXX r12","cond":{"pb8ed88a6":"SX"}},{"id":"i4312d7b8","groupId":"g53502d1d","code":"SL00CSG002-SX","desc":"SALDATURA LONG.A PATTINI L=85 SMC H=9 SX","qty":1,"note":"LS1XD0XXX r14","cond":{"pb8ed88a6":"SX","p5eb663ba":"9"}},{"id":"i58070ff4","groupId":"g53502d1d","code":"SL00CSG002","desc":"SALDATURA LONG.A PATTINI L=85 SMC H=9 DX","qty":1,"note":"LS1XD0XXX r15","cond":{"pb8ed88a6":"DX","p5eb663ba":"9"}},{"id":"id7579320","groupId":"g53502d1d","code":"SL15CS0002","desc":"SALDATURA LONG.A PATTINI L=85 SMC H=15 DX","qty":1,"note":"LS1XD0XXX r16","cond":{"pb8ed88a6":"DX","p5eb663ba":"15"}},{"id":"i2f34bbce","groupId":"g08b8246f","code":"PB18CSG002","desc":"GR. COLONNA CON PORTA LEXAN DX","qty":1,"note":"CF1XD0XXX r2","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"DX"}},{"id":"i472e7841","groupId":"g08b8246f","code":"PB18CSG003","desc":"GR. COLONNA CON PORTA LEXAN SX","qty":1,"note":"CF1XD0XXX r3","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"SX"}},{"id":"iad0cdf76","groupId":"g08b8246f","code":"PB17CSG048","desc":"GR. COLONNA FE DX","qty":1,"note":"CF1XD0XXX r5","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"DX"}},{"id":"i26714612","groupId":"g08b8246f","code":"PB17CSG049","desc":"GR. COLONNA FE SX","qty":1,"note":"CF1XD0XXX r6","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"SX"}},{"id":"i3328446c","groupId":"g964602a2","code":"CL17CSH065","desc":"BRACCIO FORMATORE REGOLAB. DX","qty":1,"note":"CF1XD0XXX r8","cond":{"pb8ed88a6":"DX"}},{"id":"ifb02b0f7","groupId":"g964602a2","code":"CL17CSH066","desc":"BRACCIO FORMATORE REGOLAB. SX","qty":1,"note":"CF1XD0XXX r9","cond":{"pb8ed88a6":"SX"}},{"id":"i8f6e0bb7","groupId":"g66b226f5","code":"CL17CSG028","desc":"CALANDRA PRED STAMPATORE VIDEOJET DX","qty":1,"note":"CF1XD0XXX r11","cond":{"pb8ed88a6":"DX","p346bc0e9":"VIDEOJET","p5d1be123":"720"}},{"id":"i2fd39182","groupId":"g66b226f5","code":"CL17CSG028-SX","desc":"CALANDRA PRED STAMPATORE VIDEOJET SX","qty":1,"note":"CF1XD0XXX r12","cond":{"pb8ed88a6":"SX","p346bc0e9":"VIDEOJET","p5d1be123":"720"}},{"id":"i948ef6e1","groupId":"g66b226f5","code":"CL17CS0016","desc":"CALANDRA PRED STAMP NIMAX DOMINO V300* DX","qty":1,"note":"CF1XD0XXX r13","cond":{"pb8ed88a6":"DX","p346bc0e9":"DOMINO V300","p5d1be123":"527"}},{"id":"i3d119564","groupId":"g66b226f5","code":"CL17CSH008","desc":"CALANDRA DOMINO VX150I DX","qty":1,"note":"CF1XD0XXX r14","cond":{"pb8ed88a6":"DX","p346bc0e9":"DOMINO VX150I","p5d1be123":"620"}},{"id":"i4ba0a6d5","groupId":"g66b226f5","code":"CL17CSH008-SX","desc":"CALANDRA DOMINO VX150I SX","qty":1,"note":"CF1XD0XXX r15","cond":{"pb8ed88a6":"SX","p346bc0e9":"DOMINO VX150I","p5d1be123":"620"}},{"id":"i54e40cd1","groupId":"g66b226f5","code":"CL17CSG013","desc":"CALANDRA STAMPATORE SMARTDATE 5 DX W620","qty":1,"note":"CF1XD0XXX r16","cond":{"pb8ed88a6":"DX","p346bc0e9":"SMARTDATE 5","p5d1be123":"620"}},{"id":"i9c3f936e","groupId":"g66b226f5","code":"CL17CS0037","desc":"CALANDRA STAMPATORE SMARTDATE 5 DX W720","qty":1,"note":"CF1XD0XXX r17","cond":{"pb8ed88a6":"DX","p346bc0e9":"SMARTDATE 5","p5d1be123":"720"}},{"id":"i6f32fdd7","groupId":"g66b226f5","code":"CL17CSG013-SX","desc":"CALANDRA STAMPATORE SMARTDATE 5 SX W720","qty":1,"note":"CF1XD0XXX r18","cond":{"pb8ed88a6":"SX","p346bc0e9":"SMARTDATE 5","p5d1be123":"720"}},{"id":"i967f188f","groupId":"g73f3ea8b","code":"CB18CSH001","desc":"GR. MOT. C.B. MP060 TECNOING-SIEMENS","qty":1,"note":"CF1XD0XXX r20","cond":{"p8cc04cf3":"SIEMENS"}},{"id":"ibc2bd6f2","groupId":"g73f3ea8b","code":"CB17CSH020","desc":"KIT MOTORIZZAZIONE CB CMZ","qty":1,"note":"CF1XD0XXX r21","cond":{"p8cc04cf3":"CMZ"}},{"id":"ia72d4c7e","groupId":"g73f3ea8b","code":"CB17CSH002","desc":"KIT MOTORIZZAZIONE CB TECNOING-AB VPL","qty":1,"note":"CF1XD0XXX r22","cond":{"p8cc04cf3":"AB"}}],"inter":[{"id":"xde20dfdf","groupId":"g67e017a6","code":"BASAMENTO_FALCON_DX.ASM","desc":"Interscambio basamento DX","cond":{"pb8ed88a6":"DX"},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6036509170&u8=1"},{"id":"xacc9f7de","groupId":"gf6f0412d","code":"GAMBE_BASAMENTO_FALCON.ASM","desc":"Interscambio gambe basamento","cond":{},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6036650652&u8=1"},{"id":"x6241154d","groupId":"g08b8246f","code":"CONV_FILM_FALCON_DX.ASM","desc":"Interscambio convogliamento film DX","cond":{"pb8ed88a6":"DX"},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6039712830&u8=1"},{"id":"x1b3949be","groupId":"g66b226f5","code":"CALANDRA_STAMP_FALCON_DX.ASM","desc":"Interscambio calandra stampatore DX","cond":{"pb8ed88a6":"DX"},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6040049946&u8=1"},{"id":"xc595515d","groupId":"g66b226f5","code":"CALANDRA_STAMP_FALCON_SX.ASM","desc":"Interscambio calandra stampatore SX","cond":{"pb8ed88a6":"SX"}},{"id":"xf0a83145","groupId":"g73f3ea8b","code":"MOTORIZZ_CONV_FILM.ASM","desc":"Interscambio motorizzazione convogliamento film","cond":{},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6039866767&u8=1"}],"acc":[{"id":"a49b827ab","groupId":"gf6f0412d","name":"Prolunga gambe","values":["H=50","H=125","H=150"],"params":["p6a8a8a3b"],"required":false},{"id":"a5aa541a5","groupId":"g0e57f2bb","name":"Sollevamento","values":["MANUALE","PNEUMATICO"],"params":["pb8ed88a6"],"required":true}],"accItems":[{"id":"c45ec5f2a","groupId":"a49b827ab","code":"8194492","desc":"PROLUNGA PIEDE H=50 INOX","qty":1,"note":"BS1XD0XXX r9","cond":{"a49b827ab":"H=50","p6a8a8a3b":"INOX"}},{"id":"c563b62e6","groupId":"a49b827ab","code":"8195616","desc":"PROLUNGA PIEDI H=125 INOX","qty":1,"note":"BS1XD0XXX r10","cond":{"a49b827ab":"H=125","p6a8a8a3b":"INOX"}},{"id":"c12f6c19a","groupId":"a49b827ab","code":"8121279","desc":"PROLUNGA PIEDE H=50 FE","qty":1,"note":"BS1XD0XXX r19","cond":{"a49b827ab":"H=50","p6a8a8a3b":"FE"}},{"id":"cf7c90dca","groupId":"a49b827ab","code":"BS15CS0557","desc":"PROLUNGA PIEDI H=150 FE","qty":1,"note":"BS1XD0XXX r20","cond":{"a49b827ab":"H=150","p6a8a8a3b":"FE"}},{"id":"c0c5abcbb","groupId":"a5aa541a5","code":"ST17KT0006","desc":"REGOLAZIONE VERT.TC SERVO E EL.CON PLC","qty":1,"note":"TS1XD0XXX r34","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"DX"}},{"id":"c525bfeff","groupId":"a5aa541a5","code":"ST17KT0006-SX","desc":"REGOLAZIONE VERT.TC SERVO E EL.CON PLC","qty":1,"note":"TS1XD0XXX r35","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"SX"}},{"id":"cbcec57b1","groupId":"a5aa541a5","code":"ST17CS0003","desc":"CONTROLLO REGOLAZIONE AUTOMATICA T.C.","qty":1,"note":"TS1XD0XXX r36","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"DX"}},{"id":"c6d84d26e","groupId":"a5aa541a5","code":"ST17CS0003","desc":"CONTROLLO REGOLAZIONE AUTOMATICA T.C.","qty":1,"note":"TS1XD0XXX r36","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"SX"}},{"id":"c0aa55ae8","groupId":"a5aa541a5","code":"RV15CS0001-DX","desc":"REGOLAZIONE VERTICALE TC MANUALE","qty":1,"note":"TS1XD0XXX r38","cond":{"a5aa541a5":"MANUALE","pb8ed88a6":"DX"}},{"id":"c8d102124","groupId":"a5aa541a5","code":"RV15CS0001","desc":"REGOLAZIONE VERTICALE TC MANUALE","qty":1,"note":"TS1XD0XXX r37","cond":{"a5aa541a5":"MANUALE","pb8ed88a6":"SX"}}],"configs":[],"version":4,"source":"configuratore-prelim.xlsx"};
+function seed() { return normalize(JSON.parse(JSON.stringify(FALCON_DB))); }
+// Condizioni a più valori (versioni precedenti / CSV con "|") → una riga per valore.
+function expandConds(list) {
+  const out = [];
+  for (const it of list) {
+    let vars = [{...it, cond: {}}];
+    for (const [pid, v] of Object.entries(it.cond || {})) {
+      const vals = (Array.isArray(v) ? v : [v]).filter(x => x != null && x !== "");
+      if (!vals.length) continue;
+      vars = vars.flatMap(x => vals.map(val => ({...x, cond: {...x.cond, [pid]: String(val)}})));
+    }
+    vars.forEach((x, k) => { if (k) x.id = uid(); out.push(x); });
+  }
+  return out;
+}
+// Macrogruppi (un foglio Excel = un macrogruppo): contengono più tipologie (sotto-parti), ognuna col proprio interscambio.
+const MACRO_DEFAULT = [
+  ["Basamento", "BS1XD0XXX", ["Basamento", "Gambe basamento", "Piastra principale"]],
+  ["Tagliacuce", "TS1XD0XXX", ["Gruppo tagliacuce", "Gruppo spatole", "Kit coltelli"]],
+  ["Gruppo ruote", "LS1XD0XXX", ["Ruote traino", "Ruote saldanti", "Ruote piegatrici", "Saldatura a pattini"]],
+  ["Convogliamento film", "CF1XD0XXX", ["Gruppo colonna", "Braccio formatore", "Calandra stampatore", "Motorizzazione convogliamento film"]],
+  ["Movimenti", "MV1XD0XXX", ["Movimenti"]],
+  ["Tappeto uscita", "TP1XD0XXX", ["Tappeto uscita"]],
+];
+function migrateMacros(d) {
+  if (d.macrosInit) return;                              // una sola volta: poi decide l'utente
+  d.macrosInit = true;
+  if (d.macros.length) return;
+  for (const [name, code, gnames] of MACRO_DEFAULT) {
+    const gs = d.groups.filter(g => g.kind !== "master" && gnames.some(n => n.toLowerCase() === g.name.toLowerCase()));
+    if (!gs.length) continue;
+    const m = {id: "m" + Math.random().toString(36).slice(2, 10), name, code};
+    d.macros.push(m); gs.forEach(g => g.macroId = m.id);
+  }
+}
+function normalize(d) {
+  for (const k of ["sections", "params", "groups", "items", "inter", "acc", "accItems", "configs", "macros"]) d[k] ??= [];
+  migrateMacros(d);
+  d.acc.forEach(a => { a.values ??= []; a.params ??= []; a.required ??= false; });
+  d.accItems.forEach(i => { i.qty ??= 1; i.note ??= ""; i.code ??= ""; i.desc ??= ""; });
+  d.accItems = expandConds(d.accItems);
+  d.groups.forEach(g => { g.params ??= []; g.kind ??= "group"; g.mode ??= "all"; g.required ??= true; if (g.kind === "master") g.mode = "one"; });
+  d.items.forEach(i => { i.qty ??= 1; i.note ??= ""; i.code ??= ""; i.desc ??= ""; });
+  d.inter.forEach(i => { i.code ??= ""; i.desc ??= ""; });
+  d.items = expandConds(d.items); d.inter = expandConds(d.inter);
+  d.configs.forEach(c => { c.sel ??= {}; c.choice ??= {}; });
+  if (!d.groups.some(g => g.kind === "master")) {
+    const pv = d.params.find(p => /versione/i.test(p.name));
+    const gm = {id: uid(), name: "Assieme master", kind: "master", params: pv ? [pv.id] : [], mode: "one", required: true};
+    d.groups.unshift(gm);
+    if (pv) for (const v of ["DX", "SX"]) if (pv.values.includes(v))
+      d.items.push({id: uid(), groupId: gm.id, code: `CS1XD0${v}XXX`, desc: `Assieme master Falcon ${v}`, qty: 1, note: "", cond: {[pv.id]: v}});
+  }
+  d.groups.sort((a, b) => (b.kind === "master") - (a.kind === "master"));
+  d.version = 4;
+  return d;
+}
+function load() {
+  for (const k of [KEY, KEY_OLD].filter(Boolean)) { try { const d = JSON.parse(localStorage.getItem(k)); if (d) return normalize(d); } catch {} }
+  return seed();
+}
+let db = load();
+function save() {
+  const ss = $("#saveState");
+  try {
+    localStorage.setItem(KEY, JSON.stringify(db));
+    ss.querySelector("span").textContent = "Salvato alle " + new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit"});
+    ss.classList.remove("pulse"); void ss.offsetWidth; ss.classList.add("pulse");
+  } catch (e) { ss.querySelector("span").textContent = "Errore salvataggio"; toast("Errore salvataggio: " + e.message); }
+}
+save();
+const byId = (arr, id) => arr.find(x => x.id === id);
+const P = id => byId(db.params, id) || byId(db.acc, id), G = id => byId(db.groups, id);
+const accsOf = g => db.acc.filter(a => a.groupId === g.id);
+const accPseudo = a => ({id: a.id, name: a.name, kind: "acc", params: [a.id, ...a.params], mode: "all", required: a.required});
+const allRows = () => [...db.items, ...db.inter, ...db.accItems];
+const master = () => db.groups.find(g => g.kind === "master");
+const normalGroups = () => db.groups.filter(g => g.kind !== "master");
+const macroOf = g => g.macroId ? byId(db.macros, g.macroId) : null;
+// tipologie ordinate per macrogruppo (ordine dei macrogruppi), poi quelle senza macrogruppo
+const orderedGroups = () => { const ng = normalGroups(), mi = g => { const k = db.macros.findIndex(m => m.id === g.macroId); return k < 0 ? 1e9 : k; };
+  return ng.map((g, k) => [g, k]).sort((a, b) => mi(a[0]) - mi(b[0]) || a[1] - b[1]).map(x => x[0]); };
+const sameObj = (a = {}, b = {}) => { const ka = Object.keys(a), kb = Object.keys(b); return ka.length === kb.length && ka.every(k => a[k] === b[k]); };
+// noInter = true → per la tipologia non è previsto un assieme di interscambio
+const needsInter = g => g.kind !== "master" && g.kind !== "acc" && !g.noInter;
+const rowsOf = g => (g.kind === "acc" || db.acc.includes(g) ? db.accItems : [...db.items, ...(needsInter(g) ? db.inter : [])]).filter(r => r.groupId === g.id);
+
+/* =================== LOGICA =================== */
+const isDraft = r => !String(r.code || "").trim() || !!r.review || Object.values(r.cond).includes(Q);
+const matches = (r, sel) => Object.entries(r.cond).every(([pid, v]) => v !== Q && sel[pid] === v);
+const partialMatch = (r, sel) => Object.entries(r.cond).every(([pid, v]) => v === Q || sel[pid] === v);
+const combos = pids => pids.reduce((acc, pid) => acc.flatMap(c => (P(pid)?.values || []).map(v => ({...c, [pid]: v}))), [{}]);
+function coverage(g, arr) {
+  const act = arr.filter(x => x.groupId === g.id && !isDraft(x));
+  if (!g.params.length) return {total: 1, missing: act.length ? [] : [{}], multi: act.length > 1 ? [{}] : []};
+  const cs = combos(g.params);
+  if (cs.length > 3000) return {total: cs.length, missing: null, multi: []};
+  const n = c => act.filter(i => matches(i, c)).length;
+  return {total: cs.length, missing: cs.filter(c => !n(c)), multi: cs.filter(c => n(c) > 1)};
+}
+// Stato unico della tipologia: alimenta lista, schede e hero.
+function groupHealth(g) {
+  const isM = g.kind === "master";
+  const rows = db.items.filter(i => i.groupId === g.id), xs = !needsInter(g) ? [] : db.inter.filter(i => i.groupId === g.id);
+  const drafts = rows.filter(isDraft).length + xs.filter(isDraft).length;
+  const ci = coverage(g, db.items), cx = !needsInter(g) ? {missing: [], multi: []} : coverage(g, db.inter);
+  const uncov = ci.missing === null ? 0 : ci.missing.length + (cx.missing?.length || 0);
+  let ambig = cx.multi.length;
+  if (g.mode === "all" && !isM) {
+    const seen = {};
+    rows.filter(r => !isDraft(r)).forEach(r => { const k = r.code.toLowerCase() + "#" + JSON.stringify(Object.entries(r.cond).sort()); seen[k] = (seen[k] || 0) + 1; });
+    ambig += Object.values(seen).filter(n => n > 1).length;
+  }
+  let aUnc = 0, aDr = 0;
+  if (!isM) for (const a of accsOf(g)) { const ps = accPseudo(a), cv = coverage(ps, db.accItems); aUnc += cv.missing?.length || 0; aDr += rowsOf(ps).filter(isDraft).length; }
+  const accN = aUnc + aDr;
+  const parts = [];
+  if (accN) parts.push(`accessori: ${accN} da sistemare`);
+  if (uncov) parts.push(`${uncov} scoperte`); if (drafts) parts.push(`${drafts} in bozza`); if (ambig) parts.push(`${ambig} ambigue`);
+  return {uncov, drafts, ambig, badge: ambig ? "er" : uncov || drafts || accN ? "wa" : "ok", title: parts.join(" · ") || "Tutto definito", n: uncov + drafts + accN};
+}
+function resolveGroup(g, sel, choice) {
+  const missing = g.params.filter(pid => !sel[pid]);
+  const base = {g, missing, items: [], cands: [], inter: []};
+  if (missing.length) return {...base, state: "missing"};
+  const act = arr => arr.filter(x => x.groupId === g.id && !isDraft(x) && matches(x, sel));
+  const cands = act(db.items), inter = needsInter(g) ? act(db.inter) : [];
+  // righe in bozza che potrebbero valere per questi parametri: la tipologia non è pronta finché non vengono completate
+  const pending = rowsOf(g).filter(x => isDraft(x) && partialMatch(x, sel));
+  if (pending.length) return {...base, cands, inter, pending, state: "draft"};
+  if (!cands.length) return {...base, inter, state: g.required ? "none" : "empty"};
+  if ((g.mode === "one" || g.kind === "master") && cands.length > 1) {
+    const ch = cands.find(i => i.id === choice?.[g.id]);
+    return {...base, cands, inter, items: ch ? [ch] : [], state: ch ? "ok" : "choose"};
+  }
+  return {...base, cands, inter, items: cands, state: "ok"};
+}
+// accessorio: la scelta dell'opzione è in sel[acc.id]; "Nessuno" = assente
+function resolveAcc(a, sel) {
+  const v = sel[a.id];
+  if (!v || !a.values.includes(v)) return {a, state: a.required ? "choose" : "off", items: [], missing: []};
+  const missing = a.params.filter(p => !sel[p]);
+  if (missing.length) return {a, state: "missing", items: [], missing};
+  const rows = db.accItems.filter(r => r.groupId === a.id);
+  const pending = rows.filter(x => isDraft(x) && partialMatch(x, sel));
+  if (pending.length) return {a, state: "draft", items: [], missing, pending};
+  const items = rows.filter(x => !isDraft(x) && matches(x, sel));
+  return {a, state: items.length ? "ok" : "none", items, missing};
+}
+const accOk = x => x.state === "ok" || x.state === "off";
+function accIssue(x) {
+  return {choose: "scegli un'opzione", missing: "manca " + (x.missing || []).map(p => P(p)?.name).join(", "), draft: "righe in bozza da completare", none: `nessun codice per «${x.a.name}: ${x.v || ""}»`}[x.state] || "";
+}
+const isBaseReady = r => r.state === "empty" || (r.state === "ok" && (!needsInter(r.g) || r.inter.length === 1));
+const isReady = r => isBaseReady(r) && (r.acc || []).every(accOk);
+function issueText(r) {
+  const T = {missing: () => "manca " + r.missing.map(p => P(p)?.name).join(", "), none: () => "nessun codice per questa combinazione",
+    draft: () => `${plural(r.pending.length, "riga in bozza o da revisionare", "righe in bozza o da revisionare")} da completare`, choose: () => `scegli tra ${r.cands.length} alternative`};
+  if (!isBaseReady(r)) {
+    if (T[r.state]) return T[r.state]();
+    return r.inter.length ? `${r.inter.length} interscambi validi: ne serve uno` : "assieme di interscambio non definito";
+  }
+  const x = r.acc.find(a => !accOk(a));
+  return `accessorio «${x.a.name}»: ${accIssue(x)}`;
+}
+function resolveAll(sel, choice) {
+  const m = master() ? resolveGroup(master(), sel, choice) : null;
+  const res = orderedGroups().map(g => ({...resolveGroup(g, sel, choice), acc: accsOf(g).map(a => ({...resolveAcc(a, sel), v: sel[a.id]}))}));
+  const all = m ? [m, ...res] : res;
+  const issues = all.filter(r => !isReady(r)).map(r => ({g: r.g, text: issueText(r), missing: r.missing}));
+  const lines = [];
+  if (m) lines.push(isReady(m) ? {lvl: 0, type: "Master", group: m.g.name, code: m.items[0].code, desc: m.items[0].desc, qty: 1}
+    : {lvl: 0, type: "NON RISOLTO", group: m.g.name, code: "", desc: issueText(m), qty: "", unres: true});
+  let curMacro = null;
+  for (const r of res) {
+    if (r.state === "empty" && r.acc.every(x => x.state === "off")) continue;
+    const mc = macroOf(r.g), o = mc ? 1 : 0;            // dentro un macrogruppo tutto scende di un livello
+    if (mc && mc !== curMacro) lines.push({lvl: 1, type: "Macrogruppo", group: mc.name, code: mc.code || "", desc: mc.name, qty: 1});
+    curMacro = mc;
+    if (r.state === "ok") {
+      const ni = needsInter(r.g), x = r.inter.length === 1 ? r.inter[0] : null;
+      if (ni) lines.push(x ? {lvl: 1 + o, type: "Interscambio", group: r.g.name, code: x.code, desc: x.desc, qty: 1}
+        : {lvl: 1 + o, type: "NON RISOLTO", group: r.g.name, code: "", desc: issueText(r), qty: "", unres: true});
+      r.items.forEach(i => lines.push({lvl: (ni ? 2 : 1) + o, type: "Codice", group: r.g.name, code: i.code, desc: i.desc, qty: i.qty}));
+    } else if (!isBaseReady(r)) lines.push({lvl: 1 + o, type: "NON RISOLTO", group: r.g.name, code: "", desc: issueText(r), qty: "", unres: true});
+    for (const x of r.acc) {
+      if (x.state === "off") continue;
+      if (x.state === "ok") x.items.forEach(i => lines.push({lvl: 2 + o, type: "Accessorio", group: r.g.name, acc: `${x.a.name}: ${x.v}`, code: i.code, desc: i.desc, qty: i.qty}));
+      else lines.push({lvl: 2 + o, type: "NON RISOLTO", group: r.g.name, acc: x.a.name, code: "", desc: `Accessorio «${x.a.name}»: ${accIssue(x)}`, qty: "", unres: true});
+    }
+  }
+  const ready = all.filter(isReady).length;
+  return {m, res, lines, issues, ready, total: all.length};
+}
+const bomSig = lines => (lines || []).map(l => `${l.lvl}|${l.code}|${l.qty}`).join(";");
+
+/* =================== CONFIGURATORE =================== */
+let onlyOpen = false;
+// preferenza di visualizzazione (solo browser, non entra nel database): mostrare o no le combinazioni mancanti,
+// cioè codici / interscambi non ancora inseriti. Vale per il configuratore e per Tipologie e codici.
+let showMiss = (() => { try { return localStorage.getItem("cf_showmiss") !== "0"; } catch { return true; } })();
+// tipologia non risolta solo perché nel database manca il dato (codice o interscambio), non per una scelta dell'utente
+const dataGap = r => r.state === "none" || (r.state === "ok" && needsInter(r.g) && r.inter.length === 0 && (r.acc || []).every(accOk));
+const hiddenGap = r => !showMiss && dataGap(r);
+let cfg = {name: "", sel: {}, choice: {}, openId: null}, viewMode = "cards", prevKeys = null, prevStates = {}, animateCards = true;
+try { const d = JSON.parse(localStorage.getItem(KEY_DRAFT)); if (d?.sel) cfg = {name: d.name || "", sel: d.sel, choice: d.choice || {}, openId: d.openId || null}; } catch {}
+function persistDraft() { try { localStorage.setItem(KEY_DRAFT, JSON.stringify(cfg)); } catch {} }
+const reqBy = pid => db.groups.filter(g => g.params.includes(pid));
+const reqByNames = pid => [...reqBy(pid).map(g => g.name), ...db.acc.filter(a => a.params.includes(pid)).map(a => `${G(a.groupId)?.name} (acc. ${a.name})`)];
+
+function paramControl(p, req) {
+  const v = cfg.sel[p.id], u = v ? "" : "unset" + (req ? " req" : "");
+  const compact = p.values.length <= 4 && p.values.join("").length <= 30;
+  if (compact) return `<div class="seg ${u}" data-p="${p.id}">${p.values.map(x => `<button data-v="${esc(x)}" class="${v === x ? "on" : ""}">${esc(x)}</button>`).join("")}</div>`;
+  return `<select data-p="${p.id}" class="${u}"><option value="">— scegli —</option>${p.values.map(x => `<option ${v === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
+}
+// v5: sezioni comprimibili (stato solo in memoria, nessuna nuova chiave localStorage)
+const secClosed = {};
+const CHEV = '<svg class="i chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>';
+function secSummary(s) {
+  const ps = db.params.filter(p => p.sectionId === s.id), set = ps.filter(p => cfg.sel[p.id]);
+  const missReq = ps.some(p => !cfg.sel[p.id] && reqBy(p.id).some(g => g.required));
+  return {cnt: `<span class="cnt ${set.length === ps.length ? "ok" : missReq && set.length ? "wa" : ""}" title="${set.length} di ${ps.length} parametri impostati">${set.length}/${ps.length}</span>`,
+    sum: set.length ? set.map(p => `${esc(p.name)} <b>${esc(cfg.sel[p.id])}</b>`).join(" · ") : '<span class="mut">nessun valore impostato</span>'};
+}
+function updateSecSummaries() {
+  $$("#cfgInputs .psec").forEach(el => { const s = byId(db.sections, el.dataset.sec); if (!s) return; const x = secSummary(s);
+    el.querySelector(".cnt").outerHTML = x.cnt; el.querySelector(".psum").innerHTML = x.sum; });
+  const n = db.params.filter(p => cfg.sel[p.id]).length; $("#pCount").textContent = `${n}/${db.params.length}`;
+  $("#cfgInputs").classList.toggle("fresh", !Object.keys(cfg.sel).length);
+}
+function renderInputs() {
+  $("#cfgInputs").innerHTML = db.sections.map(s => {
+    const ps = db.params.filter(p => p.sectionId === s.id);
+    if (!ps.length) return "";
+    const x = secSummary(s), closed = !!secClosed[s.id];
+    return `<div class="psec ${closed ? "closed" : ""}" data-sec="${s.id}">
+      <button type="button" class="sech" data-sech="${s.id}" aria-expanded="${!closed}">${CHEV}<span class="eyebrow">${esc(s.name)}</span>${x.cnt}</button>
+      <div class="psum">${x.sum}</div>
+      <div class="pbody">${ps.map(p => {
+      const gs = reqBy(p.id), req = gs.some(g => g.required), names = reqByNames(p.id);
+      const tip = names.length ? "Richiesto da: " + names.join(", ") : "Non usato da nessuna tipologia";
+      return `<div class="pfield ${names.length ? "" : "unused"}" data-pf="${p.id}">
+        <div class="lbl"><span>${esc(p.name)}</span><button type="button" class="rq ${names.length ? "" : "none"}" data-rq="${p.id}" aria-expanded="false" title="${esc(tip)}" aria-label="${esc(tip)}">${names.length}</button></div>
+        ${paramControl(p, req)}
+        <button type="button" class="clr ${cfg.sel[p.id] ? "" : "hide"}" data-clr="${p.id}" title="Azzera ${esc(p.name)}" aria-label="Azzera ${esc(p.name)}">×</button>
+        <div class="reqby hide">${names.length ? "<b>Richiesto da</b> " + names.map(esc).join(", ") : "Non usato da nessuna tipologia"}</div></div>`;
+    }).join("")}</div></div>`;
+  }).join("") || '<div class="empty">Nessun parametro. Vai su “Parametri”.</div>';
+  $("#pCount").textContent = `${db.params.filter(p => cfg.sel[p.id]).length}/${db.params.length}`;
+  $("#cfgInputs").classList.toggle("fresh", !Object.keys(cfg.sel).length);
+}
+function renderConf() { renderInputs(); renderResult(); }
+function renderToolbar() {} // v12: salvataggio configurazioni rimosso
+function renderResult() {
+  renderToolbar();
+  const R = resolveAll(cfg.sel, cfg.choice);
+  const keys = new Set(), fresh = k => prevKeys && !prevKeys.has(k) ? "flash" : "";
+
+  // ---- hero: master
+  const m = R.m, mi = m && isReady(m) ? m.items[0] : null;
+  const pct = R.total ? Math.round(R.ready / R.total * 100) : 0;
+  const oldW = $("#hero .progress>i")?.style.width || "0%";
+  let mTitle, mDesc, mCls = "wa";
+  if (!m) { mTitle = "Nessuna tipologia master"; mDesc = ""; }
+  else if (mi) { mTitle = esc(mi.code); mDesc = esc(mi.desc); mCls = "ok"; }
+  else if (m.state === "missing") { mTitle = "Scegli " + m.missing.map(p => esc(P(p)?.name)).join(", "); mDesc = "Il master Creo dipende da " + m.g.params.map(p => esc(P(p)?.name)).join(", "); }
+  else if (m.state === "choose") { mTitle = `${m.cands.length} master validi: scegline uno`;
+    mDesc = `<div class="seg mseg" id="mSeg">${m.cands.map(i => `<button data-mpick="${i.id}" class="code">${esc(i.code)}</button>`).join("")}</div>`; }
+  else if (m.state === "draft") { mTitle = "Master in bozza: da completare"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Completalo in Tipologie</a>`; }
+  else { mCls = "er"; mTitle = "Nessun master per questi parametri"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Aggiungilo in Tipologie</a>`; }
+  const mPop = prevStates.__m && prevStates.__m !== mCls ? "pop" : ""; prevStates.__m = mCls;
+  const nGap = R.res.filter(hiddenGap).length, notReady = R.total - R.ready - nGap;
+  $("#hero").innerHTML = `
+    <div class="master"><span class="st big ${mCls} ${mPop}" aria-hidden="true">${mCls === "er" ? "✕" : IC.star}</span>
+      <div class="mtx"><div class="eyebrow">Assieme master Creo</div>
+        <div class="mcode ${mi ? "" : "unres"}">${mTitle}</div>
+        <div class="mdesc">${mDesc}</div></div></div>
+    <div class="hprog"><div class="hnum"><b>${R.ready}</b><span> / ${R.total} tipologie pronte</span></div>
+      <div class="progress ${pct < 100 ? "part" : ""}" role="progressbar" aria-valuemin="0" aria-valuemax="${R.total}" aria-valuenow="${R.ready}" aria-label="Tipologie pronte"><i style="width:${oldW}"></i></div>
+      <div class="hsub">${notReady ? `<span class="warn">${notReady} da risolvere</span>` : '<span class="ok">Tutto pronto</span>'}${nGap ? ` <span class="mut">· ${nGap} con dati da inserire (nascoste)</span>` : ""}</div></div>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => { const i = $("#hero .progress>i"); if (i) i.style.width = pct + "%"; }));
+
+  // ---- barra problemi (stesso conteggio dell'hero), divisa in: scelte da fare qui / dati da inserire nel database
+  const started = Object.keys(cfg.sel).length > 0;
+  const rOf = g => (m && m.g === g) ? m : (R.res.find(r => r.g === g) || {});
+  const issues = R.issues.filter(i => !hiddenGap(rOf(i.g)));
+  const isChoice = r => r.state === "missing" || r.state === "choose" || (isBaseReady(r) && (r.acc || []).some(x => x.state === "choose" || x.state === "missing"));
+  const iCh = issues.filter(i => isChoice(rOf(i.g))), iDb = issues.filter(i => !isChoice(rOf(i.g)));
+  const iLinks = arr => arr.map(i => `<a data-goto="${i.g.id}" href="javascript:void 0">${esc(i.g.name)}</a>`).join('<span class="sep" aria-hidden="true">·</span>');
+  $("#issues").innerHTML = !started ? "" : issues.length
+    ? `<div class="issuebar" role="region" aria-label="Da risolvere">
+        <div class="ibh"><span class="ibn">${issues.length}</span><b>da risolvere</b><span class="mut">${iCh.length ? plural(iCh.length, "scelta da fare", "scelte da fare") : ""}${iCh.length && iDb.length ? " · " : ""}${iDb.length ? plural(iDb.length, "dato da inserire nel database", "dati da inserire nel database") : ""}</span></div>
+        ${iCh.length ? `<div class="ibr"><span class="ibk wa">Scelte da fare</span><div class="ibl">${iLinks(iCh)}</div></div>` : ""}
+        ${iDb.length ? `<div class="ibr"><span class="ibk db">Dati da inserire</span><div class="ibl">${iLinks(iDb)}</div></div>` : ""}
+        <details><summary>Dettagli</summary><ul>${issues.map(i => `<li><b>${esc(i.g.name)}</b>: ${i.missing.length
+          ? "manca " + i.missing.map(p => `<a data-param="${p}" href="javascript:void 0">${esc(P(p)?.name)}</a>`).join(", ") : esc(i.text)}</li>`).join("")}</ul></details></div>`
+    : `<div class="issuebar okbar"><span class="st ok" aria-hidden="true">✓</span>${nGap ? `Nessuna scelta da fare <span class="mut">· ${nGap} ${nGap === 1 ? "tipologia" : "tipologie"} con dati ancora da inserire, nascoste</span>` : "Configurazione completa: master, interscambi e codici definiti."}</div>`;
+  if (!started) {
+    $("#cfgGroups").innerHTML = `<div class="card startcard" style="grid-column:1/-1"><div class="ic">${IC.asm}</div><b>Scegli i parametri per iniziare</b>Parti da <b style="display:inline;font-size:inherit">${esc(m?.g.params.map(p => P(p)?.name).join(", ") || "Versione")}</b>: il master Creo, gli interscambi e i codici compariranno qui.</div>`;
+    $("#cfgBom").innerHTML = '<div class="empty">Imposta i parametri per generare la distinta.</div>';
+    $("#fltSeg").classList.add("hide");
+    prevKeys = new Set(); animateCards = true; return;
+  }
+
+  // ---- schede v8: macrogruppo → sotto-parte → interscambio → codici → accessori
+  // stato: verde = pronta · ambra = scelta da fare qui · rosso/contorno = dato mancante nel database · grigio = neutro
+  const LBL = {ok: ["ok", "Pronta"], empty: ["ne", "Opzionale"], missing: ["wa", "Manca parametro"], choose: ["wa", "Scegli alternativa"], draft: ["db", "In bozza"], none: ["er", "Manca codice"]};
+  let nOpen = 0;
+  const cardInfo = [];
+  const lrow = (k, v, cls = "") => `<div class="lrow ${cls}"><span class="lk">${k}</span><div class="lv">${v}</div></div>`;
+  const cardsHtml = R.res.map((r, k) => {
+    const g = r.g, gap = hiddenGap(r), ready = isReady(r) || gap;
+    cardInfo.push({g, ready});
+    if (!ready) nOpen++;
+    let [cls, lbl] = LBL[r.state];
+    if (r.state === "ok" && needsInter(g) && r.inter.length !== 1) [cls, lbl] = r.inter.length ? ["er", "Interscambio ambiguo"] : ["db", "Manca interscambio"];
+    else if (isBaseReady(r) && !r.acc.every(accOk)) [cls, lbl] = r.acc.some(x => x.state === "choose" || x.state === "missing") ? ["wa", "Scegli accessorio"] : ["db", "Accessorio incompleto"];
+    if (gap) [cls, lbl] = ["ne", "Dati da inserire"];
+    const pop = prevStates[g.id] && prevStates[g.id] !== cls ? "pop" : ""; prevStates[g.id] = cls;
+    const tip = ready ? (r.state === "empty" ? "Tipologia opzionale: nessun codice per questa combinazione" : gap ? "Nel database manca ancora il codice o l'interscambio (non segnalato)" : needsInter(g) ? "Master, interscambio e codici definiti" : "Codici definiti (interscambio non previsto)") : issueText(r);
+    const deps = g.params.map(pid => cfg.sel[pid]
+      ? `<span>${esc(P(pid)?.name)} <b>${esc(cfg.sel[pid])}</b></span>`
+      : `<button type="button" class="un" data-param="${pid}" title="Da impostare nei parametri">${esc(P(pid)?.name)}?</button>`).join(' <span class="sep" aria-hidden="true">·</span> ') || '<span>Non dipende da parametri</span>';
+    let inter = "", body = "";
+    if ((r.state === "ok" || r.state === "choose") && needsInter(g) && !(gap && !r.inter.length)) {
+      const x = r.inter.length === 1 ? r.inter[0] : null;
+      if (x) keys.add("x" + x.id);
+      // v11: interscambio non più in riga, ma icona nell'intestazione con anteprima al passaggio del mouse
+      const st = x ? "ok" : r.inter.length ? "er" : "miss";
+      const lab = x ? `Interscambio: ${x.code}` : r.inter.length ? "Interscambio ambiguo" : "Interscambio mancante";
+      inter = `<button type="button" class="xbtn ${st} ${x ? fresh("x" + x.id) : ""}" data-xg="${g.id}" data-xs="${st}" ${x ? `data-xi="${x.id}"` : ""} aria-label="${esc(lab)}">${IC.asm}</button>`;
+    }
+    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${esc(i.code)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="num"><span class="q">${i.qty}</span></td>`;
+    const note = (c, t) => `<div class="note ${c}">${t}</div>`;
+    if (r.state === "missing") body = ""; // i parametri mancanti sono già evidenziati (cliccabili) nella riga attributi
+    else if (r.state === "none" && gap) body = lrow("Codici", note("ne", "Codice non ancora inserito."));
+    else if (r.state === "none") body = lrow("Codici", note("er", `Nessun codice per questa combinazione · <a class="tlink" data-goedit="${g.id}" href="javascript:void 0">aggiungilo in Tipologie</a>`));
+    else if (r.state === "draft") body = lrow("Codici", note("wa", `${plural(r.pending.length, "riga in bozza o da revisionare potrebbe", "righe in bozza o da revisionare potrebbero")} valere qui (${r.pending.map(x => `<span class="code">${esc(x.code || "senza codice")}</span>`).slice(0, 4).join(", ")}${r.pending.length > 4 ? "…" : ""}) · <a class="tlink" data-goedit="${g.id}" href="javascript:void 0">Completale</a>`));
+    else if (r.state === "empty") body = lrow("Codici", note("ne", "Nessun codice (tipologia opzionale)."));
+    else if (g.mode === "one" && r.cands.length > 1) body = lrow("Codici", `${r.state === "choose" ? note("wa", "Scegli un'alternativa:") : ""}<table class="ctab"><tbody>${r.cands.map(i => { keys.add("i" + i.id); return `
+        <tr class="${fresh("i" + i.id)} pick" data-pick="${g.id}" data-i="${i.id}"><td class="rad"><input type="radio" name="ch${g.id}" ${r.items[0]?.id === i.id ? "checked" : ""} aria-label="Scegli ${esc(i.code)}"></td>${row(i)}</tr>`; }).join("")}</tbody></table>`);
+    else body = lrow(r.items.length === 1 ? "Codice" : "Codici", `<table class="ctab"><tbody>${r.items.map(i => { keys.add("i" + i.id); return `<tr class="${fresh("i" + i.id)}">${row(i, true)}</tr>`; }).join("")}</tbody></table>`);
+    const accs = r.acc.length ? r.acc.map(x => accHtml(x, keys, fresh)).join("") : "";
+    const inner = body + accs;
+    return `<div class="card gcard ${animateCards ? "enter" : ""} ${onlyOpen && ready ? "hide" : ""}" data-gid="${g.id}" style="view-transition-name:g-${g.id};${animateCards ? `animation-delay:${Math.min(k * 25, 200)}ms` : ""}">
+      <div class="gh"><div class="ght"><h3>${esc(g.name)}</h3><div class="gdeps">${deps}</div></div>${inter}<span class="schip ${cls} ${pop}" title="${esc(tip)}"><i aria-hidden="true"></i>${lbl}</span></div>
+      ${inner ? `<div class="gbody">${inner}</div>` : ""}</div>`;
+  });
+  // raggruppa le schede consecutive dello stesso macrogruppo in un unico riquadro
+  let htmlC = "";
+  for (let k = 0; k < cardsHtml.length;) {
+    const mc = macroOf(cardInfo[k].g);
+    if (!mc) { htmlC += cardsHtml[k++]; continue; }
+    let j = k; while (j < cardsHtml.length && macroOf(cardInfo[j].g) === mc) j++;
+    const sub = cardInfo.slice(k, j), nr = sub.filter(x => x.ready).length, all = nr === sub.length;
+    htmlC += `<section class="card mcard ${all ? "done" : ""} ${onlyOpen && all ? "hide" : ""}" data-mid="${mc.id}" aria-label="Macrogruppo ${esc(mc.name)}">
+      <div class="mh"><span class="mic" aria-hidden="true">${IC.asm}</span><div class="mht"><div class="mhn"><h3>${esc(mc.name)}</h3>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}</div></div>
+        <div class="mprog" title="Tipologie pronte nel macrogruppo"><span><b>${nr}</b>/${sub.length} pronte</span><span class="progress ${all ? "" : "part"}"><i style="width:${Math.round(nr / sub.length * 100)}%"></i></span></div></div>
+      ${cardsHtml.slice(k, j).join("")}</section>`;
+    k = j;
+  }
+  $("#cfgGroups").innerHTML = htmlC || '<div class="card empty">Nessuna tipologia. Creale in “Tipologie e codici”.</div>';
+  if (onlyOpen && R.res.length && !nOpen) $("#cfgGroups").insertAdjacentHTML("afterbegin", '<div class="card empty">Tutte le tipologie sono risolte.</div>');
+  $("#fltAll").textContent = R.res.length; $("#fltOpen").textContent = nOpen;
+  $("#fltSeg").classList.toggle("hide", viewMode !== "cards");
+
+  // ---- distinta: colonna Tipo esplicita, accessori marcati, tipologia ripetuta solo quando cambia
+  const TY = {Master: "Master", Macrogruppo: "Macrogruppo", Interscambio: "Interscambio", Codice: "Codice", Accessorio: "Accessorio"};
+  let prevG = null;
+  $("#cfgBom").innerHTML = `<div class="scroll"><table class="bomt"><thead><tr><th style="width:40px">Liv.</th><th>Codice</th><th>Descrizione</th><th>Tipo</th><th>Tipologia</th><th class="num">Q.tà</th></tr></thead><tbody>${
+    R.lines.map(l => { const gname = l.lvl <= 1 && l.type !== "NON RISOLTO" ? "" : (l.group !== prevG ? esc(l.group) : ""); if (l.lvl > 1 || l.type === "NON RISOLTO") prevG = l.group; if (l.type === "Macrogruppo") prevG = null;
+      const acc = l.type === "Accessorio" || (l.unres && l.acc);
+      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + esc(l.code)}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}</td><td class="mut">${gname}</td><td class="num">${l.qty}</td></tr>`; }).join("")}</tbody></table></div>`;
+
+  prevKeys = keys; animateCards = false;
+}
+function accHtml(x, keys, fresh) {
+  const a = x.a, v = cfg.sel[a.id] && a.values.includes(cfg.sel[a.id]) ? cfg.sel[a.id] : "";
+  const seg = `<div class="seg sm ${!v && a.required ? "unset req" : ""}" data-accsel="${a.id}" role="group" aria-label="Opzione accessorio ${esc(a.name)}">${a.required ? "" : `<button data-v="" class="none ${v ? "" : "on"}">Nessuno</button>`}${a.values.map(o => `<button data-v="${esc(o)}" class="${v === o ? "on" : ""}">${esc(o)}</button>`).join("")}</div>`;
+  let body = "";
+  if (x.state === "ok") body = `<table class="ctab"><tbody>${x.items.map(i => { keys.add("a" + i.id); return `<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${esc(i.code)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="num"><span class="q">${i.qty}</span></td></tr>`; }).join("")}</tbody></table>`;
+  else if (x.state === "missing") body = `<div class="note wa">Scegli ${x.missing.map(p => `<a class="tlink" data-param="${p}" href="javascript:void 0"><b>${esc(P(p)?.name)}</b></a>`).join(", ")} nei parametri.</div>`;
+  else if (x.state === "draft") body = `<div class="note wa">Righe dell'accessorio in bozza · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Completale in Tipologie</a></div>`;
+  else if (x.state === "none") body = `<div class="note er">Nessun codice per «${esc(v)}» · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Aggiungilo in Tipologie</a></div>`;
+  else if (x.state === "choose") body = `<div class="note wa">Accessorio obbligatorio: scegli un'opzione.</div>`;
+  return `<div class="accblk ${x.state === "off" ? "off" : ""}">
+    <div class="acch"><span class="acctag">${IC.plug}Accessorio</span><span class="an">${esc(a.name)}${a.required ? ' <small>obbligatorio</small>' : ""}</span>${seg}</div>
+    ${body ? `<div class="accbody">${body}</div>` : ""}</div>`;
+}
+function setView(v) {
+  viewMode = v;
+  $$("#viewSeg button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
+  $("#cfgGroups").classList.toggle("hide", v !== "cards");
+  $("#cfgBom").classList.toggle("hide", v !== "bom");
+  $("#fltSeg").classList.toggle("hide", v !== "cards" || !Object.keys(cfg.sel).length);
+  const el = v === "cards" ? $("#cfgGroups") : $("#cfgBom");
+  el.classList.remove("view"); void el.offsetWidth; el.classList.add("view");
+}
+$("#viewSeg").onclick = e => { if (e.target.dataset.v) setView(e.target.dataset.v); };
+function withTransition(fn) { if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(fn); else fn(); }
+function setParam(pid, v, ctl) {
+  if (v) cfg.sel[pid] = v; else delete cfg.sel[pid];
+  if (ctl) { // aggiornamento sul posto: le transizioni CSS restano visibili
+    ctl.classList.toggle("unset", !v);
+    ctl.classList.toggle("req", !v && reqBy(pid).some(g => g.required));
+    ctl.querySelectorAll("button").forEach(x => x.classList.toggle("on", !!v && x.dataset.v === v));
+    if (ctl.tagName === "SELECT") ctl.value = v || "";
+    ctl.closest(".pfield")?.querySelector(".clr")?.classList.toggle("hide", !v);
+  }
+  updateSecSummaries(); persistDraft(); withTransition(renderResult);
+}
+$("#cfgInputs").addEventListener("click", e => {
+  const sh = e.target.closest("[data-sech]");
+  if (sh) { const id = sh.dataset.sech; secClosed[id] = !secClosed[id]; const el = sh.closest(".psec");
+    el.classList.toggle("closed", secClosed[id]); sh.setAttribute("aria-expanded", String(!secClosed[id])); return; }
+  const rq = e.target.closest("[data-rq]");
+  if (rq) { const box = rq.closest(".pfield").querySelector(".reqby"), open = box.classList.toggle("hide") === false;
+    rq.setAttribute("aria-expanded", String(open)); return; }
+  const clr = e.target.dataset.clr;
+  if (clr) { const pf = e.target.closest(".pfield"); return setParam(clr, "", pf.querySelector("[data-p]")); }
+  const b = e.target.closest(".seg[data-p] button"); if (!b) return;
+  const seg = b.parentElement, pid = seg.dataset.p;
+  if (cfg.sel[pid] !== b.dataset.v) setParam(pid, b.dataset.v, seg); // un secondo clic non deseleziona più
+});
+$("#cfgInputs").addEventListener("change", e => { const t = e.target; if (t.dataset.p) setParam(t.dataset.p, t.value, t); });
+function focusParam(pid) {
+  const f = $(`.pfield[data-pf="${pid}"]`); if (!f) return;
+  const sec = f.closest(".psec"); if (sec?.classList.contains("closed")) sec.querySelector("[data-sech]").click();
+  f.scrollIntoView({behavior: "smooth", block: "center"});
+  f.classList.add("hit"); setTimeout(() => f.classList.remove("hit"), 1100);
+  f.querySelector("button,select")?.focus({preventScroll: true});
+}
+function onConfLinks(e) {
+  const d = e.target.closest("[data-goto],[data-param],[data-goedit],[data-mpick]")?.dataset; if (!d) return;
+  if (d.param) return focusParam(d.param);
+  if (d.goedit) { curG = d.goedit; return show("groups"); }
+  if (d.mpick) { cfg.choice[master().id] = d.mpick; persistDraft(); return withTransition(renderResult); }
+  if (d.goto) {
+    if (viewMode !== "cards") setView("cards");
+    let c = $(`.gcard[data-gid="${d.goto}"]`); if (!c) return;
+    if (c.classList.contains("hide")) { $("#fltSeg [data-f=all]").click(); c = $(`.gcard[data-gid="${d.goto}"]`); }
+    c.scrollIntoView({behavior: "smooth", block: "center"});
+    c.classList.add("hl"); setTimeout(() => c.classList.remove("hl"), 1400);
+  }
+}
+$("#issues").addEventListener("click", onConfLinks);
+$("#hero").addEventListener("click", onConfLinks);
+$("#cfgGroups").addEventListener("click", e => {
+  const ab = e.target.closest(".seg[data-accsel] button");
+  if (ab) {
+    const aid = ab.parentElement.dataset.accsel;
+    if (ab.dataset.v) cfg.sel[aid] = ab.dataset.v; else delete cfg.sel[aid];
+    ab.parentElement.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === ab));
+    persistDraft(); return withTransition(renderResult);
+  }
+  const tr = e.target.closest("tr[data-pick]");
+  if (tr) { cfg.choice[tr.dataset.pick] = tr.dataset.i; persistDraft(); return withTransition(renderResult); }
+  onConfLinks(e);
+});
+$("#btnSecAll").onclick = () => {
+  const ids = db.sections.map(s => s.id), close = ids.some(id => !secClosed[id]);
+  ids.forEach(id => secClosed[id] = close); renderInputs();
+};
+$("#fltSeg").onclick = e => { const b = e.target.closest("[data-f]"); if (!b) return; onlyOpen = b.dataset.f === "open";
+  $$("#fltSeg button").forEach(x => x.classList.toggle("on", x === b)); renderResult(); };
+$("#btnReset").onclick = () => {
+  const old = structuredClone(cfg); cfg = {name: "", sel: {}, choice: {}, openId: null}; prevKeys = null; persistDraft(); renderConf();
+  toast("Nuova configurazione: parametri azzerati", () => { cfg = old; persistDraft(); renderConf(); });
+};
+
+/* ---- export distinta: avvisa se incompleta ---- */
+async function guardExport(fn) {
+  const R = resolveAll(cfg.sel, cfg.choice);
+  if (!R.issues.length) return fn();
+  const r = await ask({title: `Distinta incompleta: ${plural(R.issues.length, "tipologia non risolta", "tipologie non risolte")}`,
+    body: `<ul>${R.issues.map(i => `<li><b>${esc(i.g.name)}</b>: ${esc(i.text)}</li>`).join("")}</ul><p class="mut">Se esporti comunque, le righe mancanti compaiono come <b>NON RISOLTO</b>.</p>`,
+    actions: [{label: "Vai ai problemi", value: "go", default: true}, {label: "Esporta comunque", value: "ok", kind: "p"}]});
+  if (r.action === "ok") fn();
+  if (r.action === "go") { setView("cards"); $("#issues").scrollIntoView({behavior: "smooth", block: "center"}); }
+}
+function bomTable(sep, lines = resolveAll(cfg.sel, cfg.choice).lines, name = cfg.name, sel = cfg.sel) {
+  const num = n => sep === ";" ? String(n).replace(".", ",") : String(n);
+  const head = [...db.params, ...db.acc].filter(p => sel[p.id]).map(p => [db.acc.includes(p) ? `Accessorio ${G(p.groupId)?.name} · ${p.name}` : p.name, sel[p.id]]);
+  const rows = [["Configurazione", name], ...head, [], ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione", "Qta"], ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc, num(l.qty)])];
+  return rows.map(r => r.map(x => csvCell(x, sep)).join(sep)).join("\r\n") + "\r\n";
+}
+const defName = () => { const v = db.params.filter(p => cfg.sel[p.id]).map(p => cfg.sel[p.id]); return v.length ? "distinta_falcon_" + v.join("_") : "distinta_falcon"; };
+$("#btnCopy").onclick = () => guardExport(() => navigator.clipboard.writeText(bomTable("\t")).then(() => toast("Distinta copiata: incollala in Excel"), () => toast("Copia non consentita dal browser")));
+$("#btnCsvBom").onclick = () => guardExport(() => download(defName() + ".csv", "﻿" + bomTable(";"), "text/csv"));
+$("#btnPrint").onclick = () => guardExport(() => { const v = viewMode; setView("bom"); setTimeout(() => { print(); setView(v); }, 60); });
+
+/* =================== PARAMETRI =================== */
+const parseVals = s => [...new Set(s.split(",").map(x => x.trim()).filter(Boolean))];
+function renderParams() {
+  $("#paramSections").innerHTML = db.sections.map((s, si) => {
+    const ps = db.params.filter(p => p.sectionId === s.id), others = db.sections.filter(x => x.id !== s.id);
+    return `<div class="section-card">
+      <div class="cardhead">
+        <input class="ghost h3" data-secname="${s.id}" value="${esc(s.name)}" style="flex:1;max-width:420px" title="Rinomina sezione">
+        <div class="acts" style="opacity:1"><button class="ib" data-secup="${si}" title="Sposta su">${IC.up}</button><button class="ib del" data-secdel="${s.id}" title="Elimina sezione">${IC.del}</button></div>
+      </div>
+      <div class="scroll"><table class="mx"><thead><tr><th style="width:220px">Parametro</th><th>Valori</th><th style="width:220px">Usato da</th><th style="width:140px"></th></tr></thead><tbody>
+      ${ps.map(p => {
+        const used = reqBy(p.id);
+        return `<tr>
+        <td><input class="ghost" data-pn="${p.id}" value="${esc(p.name)}" style="width:100%;font-weight:500"></td>
+        <td><div class="vlist" data-vl="${p.id}">${p.values.map(v => `<span class="vchip" draggable="true" data-v="${esc(v)}"><span class="grip" title="Trascina per riordinare">⋮⋮</span><span class="vl" title="Doppio clic per rinominare">${esc(v)}</span><button class="vx" title="Rimuovi ${esc(v)}">×</button></span>`).join("")}
+          <input class="vadd" data-vadd="${p.id}" placeholder="+ valore"></div></td>
+        <td>${used.slice(0, used.length > 4 ? 3 : 4).map(g => `<span class="tag">${esc(g.name)}</span>`).join("")}${used.length > 4 ? `<span class="tag tagmore" tabindex="0" title="${esc(used.slice(3).map(g => g.name).join(", "))}">+${used.length - 3} altre</span>` : ""}${used.length ? "" : '<span class="mut">non usato</span>'}</td>
+        <td><div class="acts"><button class="ib" data-pup="${p.id}" title="Sposta su">${IC.up}</button>
+          ${others.length ? `<select data-pmove="${p.id}" title="Sposta in un'altra sezione" style="height:30px;width:86px;font-size:12px;padding:0 6px"><option value="">Sposta…</option>${others.map(x => `<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select>` : ""}
+          <button class="ib del" data-pdel="${p.id}" title="Elimina parametro">${IC.del}</button></div></td>
+      </tr>`;
+      }).join("") || '<tr><td colspan="4" class="empty">Nessun parametro in questa sezione.</td></tr>'}
+      </tbody></table></div>
+      <div class="addrow">
+        <input data-newpn="${s.id}" placeholder="Nuovo parametro" style="width:220px">
+        <input data-newpv="${s.id}" placeholder="Valori separati da virgola, es. 400, 600, 800" style="flex:1">
+        <button class="b s" data-padd="${s.id}">+ Aggiungi</button>
+      </div></div>`;
+  }).join("") || '<div class="card empty">Nessuna sezione. Creane una qui sotto.</div>';
+}
+const findCI = (arr, v, except) => arr.find(x => x.toLowerCase() === v.toLowerCase() && x !== except);
+function addValues(p, text) {
+  const vals = parseVals(text); let added = 0;
+  for (const v of vals) {
+    const dup = findCI(p.values, v);
+    if (dup) { toast(`Esiste già «${dup}» in ${p.name}`); continue; }
+    p.values.push(v); added++;
+  }
+  if (added) { save(); rerender(); toast(`${plural(added, "valore aggiunto", "valori aggiunti")} a ${p.name}`); $(`[data-vadd="${p.id}"]`)?.focus(); }
+}
+function renameValue(p, oldV, newV) {
+  newV = newV.trim();
+  if (!newV || newV === oldV) return rerender();
+  const dup = findCI(p.values, newV, oldV);
+  if (dup) { toast(`Esiste già «${dup}»`); return rerender(); }
+  const snap = snapshot();
+  p.values[p.values.indexOf(oldV)] = newV;
+  let n = 0;
+  allRows().forEach(r => { if (r.cond[p.id] === oldV) { r.cond[p.id] = newV; n++; } });
+  for (const s of [cfg.sel, ...db.configs.map(c => c.sel)]) if (s[p.id] === oldV) s[p.id] = newV;
+  save(); persistDraft(); rerender();
+  toast(`«${oldV}» → «${newV}»: ${plural(n, "riga aggiornata", "righe aggiornate")}`, () => restore(snap));
+}
+function delRows(rows) { const ids = new Set(rows.map(x => x.id)); db.items = db.items.filter(x => !ids.has(x.id)); db.inter = db.inter.filter(x => !ids.has(x.id)); db.accItems = db.accItems.filter(x => !ids.has(x.id)); }
+async function removeValue(p, v) {
+  const using = allRows().filter(r => r.cond[p.id] === v);
+  let action = "none";
+  if (using.length) {
+    const gnames = [...new Set(using.map(r => G(r.groupId)?.name || (byId(db.acc, r.groupId) ? "accessorio " + byId(db.acc, r.groupId).name : "")))].join(", ");
+    const r = await ask({title: `Rimuovi «${v}» da ${p.name}`, body: `<p>${plural(using.length, "riga usa", "righe usano")} questo valore (${esc(gnames)}). Cosa vuoi fare con queste righe?</p>
+      <p class="mut">“Da revisionare” le mette in bozza con <b>?</b>: il configuratore non le usa finché non le correggi.</p>`,
+      actions: [{label: "Annulla", value: null}, {label: "Elimina le righe", value: "del", kind: "d"}, {label: "Rendi valide per tutti (—)", value: "all"}, {label: "Segna da revisionare", value: "rev", kind: "p", default: true}]});
+    if (!r.action) return;
+    action = r.action;
+  }
+  const snap = snapshot();
+  const chip = $(`[data-vl="${p.id}"] .vchip[data-v="${CSS.escape(v)}"]`); chip?.classList.add("gone");
+  if (action === "del") delRows(using);
+  else if (action === "all") using.forEach(x => delete x.cond[p.id]);
+  else if (action === "rev") using.forEach(x => { x.cond[p.id] = Q; x.review = true; });
+  p.values = p.values.filter(x => x !== v);
+  for (const s of [cfg.sel, ...db.configs.map(c => c.sel)]) if (s[p.id] === v) delete s[p.id];
+  save(); persistDraft();
+  setTimeout(rerender, 150);
+  toast(`«${v}» rimosso${using.length ? ` · ${plural(using.length, "riga", "righe")} ${action === "del" ? "eliminate" : action === "all" ? "rese valide per tutti" : "da revisionare"}` : ""}`, () => restore(snap));
+}
+const ps = $("#paramSections");
+ps.addEventListener("change", e => {
+  const d = e.target.dataset;
+  if (d.secname) { byId(db.sections, d.secname).name = e.target.value.trim() || "Sezione"; save(); }
+  if (d.pn) {
+    const p = P(d.pn), n = e.target.value.trim();
+    if (!n || db.params.some(x => x !== p && x.name.toLowerCase() === n.toLowerCase())) { toast(n ? "Nome già usato" : "Nome vuoto"); e.target.value = p.name; return; }
+    p.name = n; save();
+  }
+  if (d.pmove && e.target.value) { P(d.pmove).sectionId = e.target.value; save(); renderParams(); }
+});
+document.addEventListener("keydown", e => {
+  const d = e.target.dataset || {};
+  if (e.key === "Enter" && d.vadd) { e.preventDefault(); addValues(P(d.vadd), e.target.value); }
+  if (e.key === "Enter" && (d.newpn || d.newpv)) $(`[data-padd="${d.newpn || d.newpv}"]`).click();
+  if (e.target.classList.contains("vren")) {
+    if (e.key === "Enter") e.target.blur();
+    if (e.key === "Escape") { e.target.dataset.cancel = "1"; e.target.blur(); }
+  }
+});
+document.addEventListener("dblclick", e => {
+  const vl = e.target.closest?.(".vl"); if (!vl) return;
+  const chip = vl.parentElement, old = chip.dataset.v, pid = chip.parentElement.dataset.vl;
+  vl.outerHTML = `<input class="vren" value="${esc(old)}">`;
+  const inp = chip.querySelector(".vren"); inp.focus(); inp.select();
+  inp.addEventListener("blur", () => inp.dataset.cancel ? rerender() : renameValue(P(pid), old, inp.value), {once: true});
+});
+let dragV = null;
+document.addEventListener("dragstart", e => { const c = e.target.closest?.(".vchip"); if (!c) return; dragV = {v: c.dataset.v, pid: c.parentElement.dataset.vl}; c.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; });
+document.addEventListener("dragend", () => { $$(".vchip.dragging,.vchip.over").forEach(x => x.classList.remove("dragging", "over")); dragV = null; });
+document.addEventListener("dragover", e => { const c = e.target.closest?.(".vchip"); if (!dragV || !c || c.parentElement.dataset.vl !== dragV.pid) return; e.preventDefault(); $$(".vchip.over").forEach(x => x.classList.remove("over")); c.classList.add("over"); });
+document.addEventListener("drop", e => {
+  const c = e.target.closest?.(".vchip"); if (!dragV || !c || c.parentElement.dataset.vl !== dragV.pid) return;
+  e.preventDefault();
+  const p = P(dragV.pid), arr = p.values.filter(x => x !== dragV.v);
+  arr.splice(arr.indexOf(c.dataset.v), 0, dragV.v); p.values = arr; // riordino solo visivo: i dati non cambiano
+  save(); rerender();
+});
+document.addEventListener("click", e => {
+  if (e.target.classList?.contains("vx")) { const chip = e.target.parentElement; removeValue(P(chip.parentElement.dataset.vl), chip.dataset.v); }
+});
+ps.addEventListener("click", async e => {
+  const d = e.target.dataset;
+  if (d.padd) {
+    const inN = $(`[data-newpn="${d.padd}"]`), n = inN.value.trim(); if (!n) return inN.focus();
+    if (db.params.some(p => p.name.toLowerCase() === n.toLowerCase())) return toast("Parametro già esistente");
+    db.params.push({id: uid(), sectionId: d.padd, name: n, values: parseVals($(`[data-newpv="${d.padd}"]`).value)});
+    save(); renderParams(); toast(`Parametro «${n}» aggiunto`);
+  }
+  if (d.pup) {
+    const k = db.params.findIndex(p => p.id === d.pup), sid = db.params[k].sectionId;
+    let j = k - 1; while (j >= 0 && db.params[j].sectionId !== sid) j--;
+    if (j >= 0) { [db.params[j], db.params[k]] = [db.params[k], db.params[j]]; save(); renderParams(); }
+  }
+  if (d.pdel) {
+    const p = P(d.pdel), gs = reqBy(p.id), using = allRows().filter(r => r.cond[p.id] != null);
+    const r = await ask({title: `Elimina il parametro «${p.name}»`, body: `<p>${gs.length ? `Verrà tolto da: <b>${gs.map(g => esc(g.name)).join(", ")}</b>. ` : ""}${using.length ? `${plural(using.length, "riga lo usa", "righe lo usano")}: verranno segnate <b>da revisionare</b> per non diventare valide per tutti.` : ""}</p>`,
+      actions: [{label: "Annulla", value: null, default: true}, {label: "Elimina parametro", value: "ok", kind: "d"}]});
+    if (r.action !== "ok") return;
+    const snap = snapshot();
+    db.params = db.params.filter(x => x.id !== p.id);
+    gs.forEach(g => g.params = g.params.filter(x => x !== p.id));
+    db.acc.forEach(a => a.params = a.params.filter(x => x !== p.id));
+    using.forEach(x => { delete x.cond[p.id]; x.review = true; });
+    for (const s of [cfg.sel, ...db.configs.map(c => c.sel)]) delete s[p.id];
+    save(); persistDraft(); renderParams(); toast(`Parametro «${p.name}» eliminato`, () => restore(snap));
+  }
+  if (d.secup && +d.secup > 0) { const k = +d.secup; [db.sections[k - 1], db.sections[k]] = [db.sections[k], db.sections[k - 1]]; save(); renderParams(); }
+  if (d.secdel) {
+    if (db.params.some(p => p.sectionId === d.secdel)) return toast("Sposta o elimina prima i parametri della sezione");
+    db.sections = db.sections.filter(s => s.id !== d.secdel); save(); renderParams();
+  }
+});
+$("#btnSecAdd").onclick = () => { const n = $("#newSec").value.trim(); if (!n) return $("#newSec").focus(); db.sections.push({id: uid(), name: n}); $("#newSec").value = ""; save(); renderParams(); };
+$("#newSec").addEventListener("keydown", e => { if (e.key === "Enter") $("#btnSecAdd").click(); });
+
+/* =================== TIPOLOGIE E CODICI =================== */
+let curG = null, gFilter = "", onlyDraft = false, flashId = null, flashOk = null;
+function renderGroups() {
+  const cm = $("#chkMiss"); if (cm) cm.checked = showMiss;
+  if (!G(curG)) curG = normalGroups()[0]?.id || master()?.id || null;
+  const item = (g, k) => {
+    const h0 = groupHealth(g), n = db.items.filter(i => i.groupId === g.id).length;
+    const h = showMiss ? h0 : (() => { const k = h0.n - h0.uncov; return {...h0, n: k, badge: h0.ambig ? "er" : k ? "wa" : "ok", title: h0.title.split(" · ").filter(t => !/scoperte|accessori/.test(t)).join(" · ") || "Nessuna bozza"}; })();
+    const badge = `<span class="hb ${h.badge}" title="${esc(h.title)}">${h.badge === "ok" ? "✓" : h.badge === "er" ? "≠" : h.n}</span>`;
+    return `<div class="gitem ${g.kind === "master" ? "master" : ""} ${g.id === curG ? "on" : ""}" data-sel="${g.id}" title="${esc(h.title)}">
+      ${g.kind === "master" ? `<span style="color:var(--ac)">${IC.star}</span>` : ""}
+      <span style="flex:1">${esc(g.name)}</span><span class="n">${n}</span>${badge}
+      ${g.kind === "master" ? "" : `<span class="acts"><button class="ib" data-gup="${k}" title="Sposta su" style="width:24px;height:24px">${IC.up}</button></span>`}</div>`;
+  };
+  const m = master();
+  const og = orderedGroups(); let lastM, html = "";
+  og.forEach((g, k) => {
+    const mc = macroOf(g);
+    if (mc !== lastM) html += mc ? `<div class="mhead" data-medit="${mc.id}" title="Clic per rinominare il macrogruppo o cambiarne il codice"><b>${esc(mc.name)}</b>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}</div>` : (lastM ? `<div class="mhead nom">Senza macrogruppo</div>` : "");
+    lastM = mc; html += item(g, k);
+  });
+  // macrogruppi ancora vuoti: visibili, così si possono rinominare/eliminare e si capisce che esistono
+  db.macros.filter(mc => !og.some(g => g.macroId === mc.id)).forEach(mc => { html += `<div class="mhead" data-medit="${mc.id}" title="Macrogruppo vuoto: assegnagli le tipologie dal menu «Macrogruppo» dell'editor"><b>${esc(mc.name)}</b>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}<span class="code">· vuoto</span></div>`; });
+  $("#groupList").innerHTML = (m ? item(m, -1) : "") + (html || '<div class="empty">Nessuna tipologia.</div>');
+  renderGroupEditor();
+}
+function attrCell(obj, pid, kind) {
+  const p = P(pid), v = obj.cond[pid];
+  if (p.values.length > 4) return `<select class="sm ${v === Q ? "q" : ""}" data-k="${kind}" data-o="${obj.id}" data-cp="${pid}">
+    <option value="" ${v == null ? "selected" : ""}>— tutti</option>${v === Q ? `<option value="${Q}" selected>? da definire</option>` : ""}${p.values.map(x => `<option ${v === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
+  return `<div class="seg sm" data-k="${kind}" data-o="${obj.id}" data-cp="${pid}"><button data-v="" class="none ${v == null ? "on" : ""}" title="Non usato: vale per ogni valore">—</button>${
+    v === Q ? `<button data-v="${Q}" class="q on" title="Da definire">?</button>` : ""}${
+    p.values.map(x => `<button data-v="${esc(x)}" class="${v === x ? "on" : ""}">${esc(x)}</button>`).join("")}</div>`;
+}
+function coverageHtml(g, arr, kind, label, accId = "") {
+  const kid = kind + accId, acA = accId ? ` data-acc="${accId}"` : "";
+  const cv = coverage(g, arr), own = arr.filter(x => x.groupId === g.id), drafts = own.filter(isDraft).length;
+  const dr = drafts ? ` <span>· ${plural(drafts, "riga in bozza", "righe in bozza")}</span>` : "";
+  if (cv.missing === null) return `<div class="callout ne">${cv.total} combinazioni: troppe per il controllo di copertura.${dr}</div>`;
+  if (!showMiss && cv.missing !== null) {                  // nascosto: restano solo bozze e ambiguità
+    const mu = kind === "x" && cv.multi.length ? `<div class="callout er">${plural(cv.multi.length, "combinazione ha", "combinazioni hanno")} più di un interscambio valido: ne serve uno solo.</div>` : "";
+    return (drafts ? `<div class="callout wa">${plural(drafts, "riga in bozza", "righe in bozza")}</div>` : "") + mu;
+  }
+  const multi = kind === "x" && cv.multi.length ? `<div class="callout er" style="margin-top:6px">${plural(cv.multi.length, "combinazione ha", "combinazioni hanno")} più di un interscambio valido: ne serve uno solo.</div>` : "";
+  if (!g.params.length) return (cv.missing.length ? `<div class="callout wa">Nessun ${label} valido.${dr}</div>` : drafts ? `<div class="callout wa">${dr}</div>` : "") + multi;
+  if (!cv.missing.length) return `<div class="callout ${drafts ? "wa" : "ok"}">${drafts ? "" : "✓ "}Tutte le ${cv.total} combinazioni hanno un ${label}.${dr}</div>` + multi;
+  const n = cv.missing.length;
+  return `<div class="callout wa flex"><span style="flex:1"><b>${n}</b> ${n === 1 ? "combinazione" : "combinazioni"} su ${cv.total} senza ${label} valido.${dr}</span>
+    <button class="b s" data-showmiss="${kid}">Mostra</button><button class="b s" data-gen="${kind}"${acA}>Crea righe mancanti</button></div>
+    <div class="hide" id="miss-${kid}" style="margin:8px 0 0">${cv.missing.map(c => `<div>${g.params.map(pid => `<span class="tag"><em>${esc(P(pid).name)}</em><b>${esc(c[pid])}</b></span>`).join("")}</div>`).join("")}</div>` + multi;
+}
+function rowsHtml(g, arr, kind) {
+  const q = gFilter.toLowerCase(), isItem = kind !== "x";
+  const all = arr.filter(i => i.groupId === g.id);
+  const list = all.filter(i => (!onlyDraft || isDraft(i)) && (!q || (i.code + " " + i.desc + " " + (i.note || "") + " " + Object.values(i.cond).join(" ")).toLowerCase().includes(q)));
+  const sig = x => g.params.map(p => x.cond[p] ?? "*").join("|");
+  const cnt = {}; all.filter(i => !isDraft(i)).forEach(i => { const k = sig(i) + (isItem && g.mode === "all" ? "#" + i.code.toLowerCase() : ""); cnt[k] = (cnt[k] || 0) + 1; });
+  const mark = i => {
+    if (isDraft(i)) return i.review ? `<span class="tag wa" title="Un attributo è stato tolto o cambiato: verifica la riga">da revisionare</span>` : "";
+    const k = sig(i) + (isItem && g.mode === "all" ? "#" + i.code.toLowerCase() : "");
+    if (cnt[k] < 2) return "";
+    if (isItem && (g.mode === "one" || g.kind === "master")) return `<span class="tag alt" title="Stessi attributi di un'altra riga: nel configuratore si sceglie quale usare">alternativa</span>`;
+    return `<span class="tag er" title="${isItem ? "Riga duplicata: stesso codice e stessi attributi" : "Stessi attributi di un altro interscambio: risultato ambiguo"}">${isItem ? "duplicato" : "ambiguo"}</span>`;
+  };
+  // elenco a griglia: su schermi larghi una riga sola (codice · descrizione · attributi · q.tà · note),
+  // su schermi più stretti gli attributi scendono sotto la descrizione. Colonne allineate fra le righe.
+  const cls = isItem ? "ci" : "cx", ta = (f, v, ph) => `<textarea class="ghost wrapta" rows="1" data-k="${f === "note" ? "i" : kind}" data-f="${f}" data-i="__ID__" title="${esc(v)}" placeholder="${ph}">${esc(v)}</textarea>`;
+  const head = `<div class="chead"><span class="c-code">Codice</span><span class="c-desc">Descrizione</span>${g.params.length ? `<span class="c-attrs">Attributi</span>` : ""}${isItem ? '<span class="c-qty">Q.tà</span>' : ""}<span class="c-act"></span></div>`;
+  return `<div class="clist ${cls} ${g.params.length ? "" : "noattr"}">${head}
+    ${list.map(i => `<div class="crow ${i.review ? "review" : ""} ${i.id === flashId ? "flash" : ""} ${i.id === flashOk ? "flashok" : ""}" data-row="${i.id}">
+      <div class="c-code"><input class="ghost code ${String(i.code).trim() ? "" : "draftcode"}" data-k="${kind}" data-f="code" data-i="${i.id}" value="${esc(i.code)}" title="${esc(i.code)}" placeholder="Codice da inserire">${mark(i) ? `<div class="cmark">${mark(i)}</div>` : ""}</div>
+      <div class="c-desc">${ta("desc", i.desc, "Descrizione").replace("__ID__", i.id)}</div>
+      ${g.params.length ? `<div class="c-attrs">${g.params.map(pid => `<span class="at"><span class="al">${esc(P(pid)?.name)}</span>${attrCell(i, pid, kind)}</span>`).join("")}</div>` : ""}
+      ${isItem ? `<div class="c-qty"><input class="ghost" type="number" min="0" step="any" data-k="i" data-f="qty" data-i="${i.id}" value="${i.qty}" title="Quantità"></div>` : ""}
+      <div class="c-act"><div class="acts">${i.review ? `<button class="ib" data-ok="${i.id}" data-k="${kind}" title="Segna come revisionata">${IC.check}</button>` : ""}<button class="ib" data-dup="${i.id}" data-k="${kind}" title="Duplica (codice da inserire)">${IC.dup}</button><button class="ib del" data-del="${i.id}" data-k="${kind}" title="Elimina">${IC.del}</button></div></div>
+    </div>`).join("") || `<div class="empty" style="padding:14px">${onlyDraft || q ? "Nessuna riga corrisponde al filtro." : "Nessuna riga."}</div>`}</div>`;
+}
+function accEditorHtml(g) {
+  const accs = accsOf(g);
+  return `<div class="card">
+    <div class="subhead"><h3>Accessori</h3><div class="row"><input id="newAcc" placeholder="Nuovo accessorio, es. Sollevamento" style="width:260px"><button class="b s" id="btnAccAdd">+ Accessorio</button></div></div>
+    ${accs.length ? "" : '<p class="hint" style="margin-top:0">Nessun accessorio per questa tipologia. Un accessorio ha le sue opzioni (es. Manuale / Pneumatico) e i suoi codici; nel configuratore si sceglie nella scheda della tipologia.</p>'}
+    ${accs.map(a => { const ps = accPseudo(a); return `<div class="acccard" data-accid="${a.id}">
+      <div class="cardhead" style="margin-bottom:8px">
+        <input class="ghost h3" data-accname="${a.id}" value="${esc(a.name)}" title="Rinomina accessorio" style="flex:1;max-width:360px">
+        <div class="row"><label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)" title="Se obbligatorio, nel configuratore non c'è l'opzione “Nessuno”"><input type="checkbox" data-accreq="${a.id}" ${a.required ? "checked" : ""}> Obbligatorio</label>
+          <button class="ib del" data-accdel="${a.id}" title="Elimina accessorio">${IC.del}</button></div>
+      </div>
+      <div class="accgrid">
+        <span class="mut">Opzioni</span>
+        <div class="vlist" data-vl="${a.id}">${a.values.map(v => `<span class="vchip" draggable="true" data-v="${esc(v)}"><span class="grip" title="Trascina per riordinare">⋮⋮</span><span class="vl" title="Doppio clic per rinominare">${esc(v)}</span><button class="vx" title="Rimuovi ${esc(v)}">×</button></span>`).join("")}
+          <input class="vadd" data-vadd="${a.id}" placeholder="+ opzione"></div>
+        <span class="mut">Dipende anche da</span>
+        <div>${db.params.map(p => `<span class="chip ${a.params.includes(p.id) ? "on" : ""}" data-accp="${p.id}" data-acc="${a.id}">${a.params.includes(p.id) ? "✓ " : "+ "}${esc(p.name)}</span>`).join("")}</div>
+      </div>
+      <div class="subhead" style="margin:12px 0 8px"><span class="eyebrow">Codici accessorio</span><button class="b s" data-add="a" data-acc="${a.id}">+ Codice accessorio</button></div>
+      ${a.values.length ? rowsHtml(ps, db.accItems, "a") : '<div class="callout ne">Aggiungi prima le opzioni dell\'accessorio.</div>'}
+      ${a.values.length ? `<div style="margin-top:8px">${coverageHtml(ps, db.accItems, "a", "codice", a.id)}</div>` : ""}
+    </div>`; }).join("")}
+  </div>`;
+}
+function renderGroupEditor() {
+  const g = G(curG);
+  if (!g) { $("#groupEditor").innerHTML = '<div class="card empty">Crea una tipologia a sinistra.</div>'; return; }
+  const isM = g.kind === "master", nDraft = rowsOf(g).filter(isDraft).length;
+  if (!nDraft) onlyDraft = false;
+  $("#groupEditor").innerHTML = `
+  <div class="card">
+    <div class="cardhead" style="align-items:flex-start">
+      <div style="flex:1">${isM ? `<div class="eyebrow" style="color:var(--ac)">Assieme master Creo</div>` : ""}<input class="ghost title" id="gName" value="${esc(g.name)}" title="Rinomina" style="width:100%;max-width:420px"></div>
+      ${isM ? "" : `<div class="row">
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)">Macrogruppo <select id="gMacro"><option value="">— nessuno</option>${db.macros.map(mc => `<option value="${mc.id}" ${g.macroId === mc.id ? "selected" : ""}>${esc(mc.name)}</option>`).join("")}<option value="__new">+ nuovo…</option></select><button type="button" class="b s" id="gMacroNew" title="Crea un nuovo macrogruppo e metti qui questa tipologia">+ Nuovo</button></label>
+        <select id="gMode" title="Cosa fare se più codici corrispondono ai parametri"><option value="all" ${g.mode === "all" ? "selected" : ""}>Più codici validi: inseriscili tutti</option><option value="one" ${g.mode === "one" ? "selected" : ""}>Più codici validi: ne scelgo uno</option></select>
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)"><input type="checkbox" id="gReq" ${g.required ? "checked" : ""}> Obbligatoria</label>
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)" title="Se tolto, la tipologia non richiede un assieme di interscambio: nel configuratore non ne viene segnalata l'assenza"><input type="checkbox" id="gInter" ${g.noInter ? "" : "checked"}> Interscambio previsto</label></div>`}
+    </div>
+    <div class="eyebrow" style="margin-bottom:8px">Attributi della tipologia</div>
+    ${db.sections.map(s => {
+      const pp = db.params.filter(p => p.sectionId === s.id);
+      return pp.length ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px"><span class="mut" style="width:120px">${esc(s.name)}</span><span>${pp.map(p => `<span class="chip ${g.params.includes(p.id) ? "on" : ""}" data-gp="${p.id}">${g.params.includes(p.id) ? "✓ " : "+ "}${esc(p.name)}</span>`).join("")}</span></div>` : "";
+    }).join("")}
+    <p class="hint" style="margin-top:6px">Ogni codice usa un sottoinsieme di questi attributi, con un solo valore per attributo. <b>—</b> = non usato (vale per tutti) · <b>?</b> = da definire (riga in bozza).</p>
+  </div>
+  ${isM ? "" : g.noInter ? `
+  <div class="card"><div class="subhead"><h3>${IC.asm} Assiemi di interscambio</h3></div>
+    <p class="hint" style="margin:0">Interscambio <b>non previsto</b> per questa tipologia: nel configuratore i codici vanno direttamente sotto il master.${db.inter.some(i => i.groupId === g.id) ? ` Le ${db.inter.filter(i => i.groupId === g.id).length} righe di interscambio già inserite sono conservate ma ignorate.` : ""} Riattiva «Interscambio previsto» per gestirli.</p></div>` : `
+  <div class="card">
+    <div class="subhead"><h3>${IC.asm} Assiemi di interscambio</h3><button class="b s" data-add="x">+ Interscambio</button></div>
+    ${rowsHtml(g, db.inter, "x")}
+    <div style="margin-top:10px">${coverageHtml(g, db.inter, "x", "interscambio")}</div>
+  </div>`}
+  <div class="card">
+    <div class="subhead"><h3>${isM ? "Codici master" : "Codici"}</h3>
+      <div class="row">${nDraft ? `<button class="chip fchip ${onlyDraft ? "on" : ""}" id="gOnlyDraft" title="Mostra solo righe in bozza o da revisionare">Bozze e da revisionare (${nDraft})</button>` : ""}
+        <input id="gSearch" placeholder="Cerca…" value="${esc(gFilter)}" style="width:200px"><button class="b p s" data-add="i">+ Codice</button></div></div>
+    ${rowsHtml(g, db.items, "i")}
+    <div style="margin-top:10px">${coverageHtml(g, db.items, "i", "codice")}</div>
+  </div>
+  ${isM ? "" : accEditorHtml(g)}
+  ${isM ? "" : `<div style="text-align:right"><button class="b s dz" id="gDel">${IC.del} Elimina tipologia «${esc(g.name)}»</button></div>`}`;
+  flashId = flashOk = null;
+}
+const listOf = k => k === "x" ? db.inter : k === "a" ? db.accItems : db.items;
+function refreshGroups() { const y = scrollY; renderGroups(); scrollTo(0, y); }
+async function toggleGroupParam(g, pid) {
+  const rows = rowsOf(g), pn = P(pid).name;
+  if (g.params.includes(pid)) {
+    const using = rows.filter(r => r.cond[pid] != null);
+    let action = "all";
+    if (using.length) {
+      const r = await ask({title: `Rimuovi «${pn}» da ${g.name}`, body: `<p>${plural(using.length, "riga usa", "righe usano")} questo attributo. Senza, potrebbero diventare valide per combinazioni sbagliate.</p>
+        <p class="mut">“Da revisionare” le mette in bozza: il configuratore non le usa finché non le controlli.</p>`,
+        actions: [{label: "Annulla", value: null}, {label: "Elimina le righe", value: "del", kind: "d"}, {label: "Rendi valide per tutti (—)", value: "all"}, {label: "Segna da revisionare", value: "rev", kind: "p", default: true}]});
+      if (!r.action) return;
+      action = r.action;
+    }
+    const snap = snapshot();
+    if (action === "del") delRows(using);
+    else using.forEach(x => { delete x.cond[pid]; if (action === "rev") x.review = true; });
+    g.params = g.params.filter(x => x !== pid);
+    save(); refreshGroups();
+    if (using.length) toast(`«${pn}» rimosso da ${g.name}`, () => restore(snap));
+  } else {
+    let mode = "q";
+    if (rows.length) {
+      const r = await ask({title: `Aggiungi «${pn}» a ${g.name}`, body: `<p>Le ${rows.length} righe esistenti non hanno ancora un valore per questo attributo.</p>`,
+        actions: [{label: "Annulla", value: null}, {label: "Lascia «—» (vale per tutti)", value: "all"}, {label: "Imposta «?» da definire", value: "q", kind: "p", default: true}]});
+      if (!r.action) return;
+      mode = r.action;
+    }
+    const snap = snapshot();
+    g.params = db.params.map(p => p.id).filter(id => id === pid || g.params.includes(id));
+    if (mode === "q") rows.forEach(x => x.cond[pid] = Q);
+    save(); refreshGroups();
+    if (rows.length && mode === "q") { onlyDraft = true; refreshGroups(); toast(`${plural(rows.length, "riga", "righe")} da definire per «${pn}»`, () => restore(snap)); }
+  }
+}
+// finestra unica nome + codice (due ask() in sequenza si chiudevano a vicenda)
+async function macroDialog(title, mc, withDelete) {
+  const r = await ask({title, wide: false,
+    body: `<label class="mut" style="display:block;margin:4px 0 4px">Nome del macrogruppo</label><input id="mcName" value="${esc(mc?.name || "")}" placeholder="es. Basamento" style="width:100%">
+      <label class="mut" style="display:block;margin:12px 0 4px">Codice assieme (facoltativo, compare nella distinta)</label><input id="mcCode" value="${esc(mc?.code || "")}" placeholder="es. BS1XD0XXX" style="width:100%">`,
+    actions: [{label: "Annulla", value: null}, ...(withDelete ? [{label: "Elimina macrogruppo", value: "del", kind: "d"}] : []), {label: mc ? "Salva" : "Crea", value: "ok", kind: "p", default: true}]});
+  return {action: r.action, name: ($("#mcName")?.value || "").trim(), code: ($("#mcCode")?.value || "").trim()};
+}
+async function editMacro(mc) {
+  if (!mc) return;
+  const r = await macroDialog("Macrogruppo", mc, true);
+  if (r.action === "del") { const snap = snapshot(); db.groups.forEach(g => { if (g.macroId === mc.id) delete g.macroId; }); db.macros = db.macros.filter(x => x !== mc); save(); renderGroups(); toast(`Macrogruppo «${mc.name}» eliminato (le tipologie restano)`, () => restore(snap)); return; }
+  if (r.action !== "ok" || !r.name) return;
+  mc.name = r.name; mc.code = r.code; save(); renderGroups();
+}
+async function newMacro() {
+  const r = await macroDialog("Nuovo macrogruppo", null, false);
+  if (r.action !== "ok" || !r.name) return null;
+  const mc = {id: "m" + uid(), name: r.name, code: r.code}; db.macros.push(mc); return mc;
+}
+$("#groupList").addEventListener("click", e => {
+  const d = e.target.dataset;
+  if (d.gup !== undefined) {
+    e.stopPropagation();
+    const ng = orderedGroups(), k = +d.gup; if (k <= 0 || ng[k - 1].macroId !== ng[k].macroId) return;
+    const a = db.groups.indexOf(ng[k - 1]), b = db.groups.indexOf(ng[k]);
+    [db.groups[a], db.groups[b]] = [db.groups[b], db.groups[a]]; save(); renderGroups(); return;
+  }
+  const me = e.target.closest("[data-medit]");
+  if (me) { editMacro(byId(db.macros, me.dataset.medit)); return; }
+  const it = e.target.closest("[data-sel]");
+  if (it && it.dataset.sel !== curG) { curG = it.dataset.sel; gFilter = ""; onlyDraft = false; renderGroups(); const ed = $("#groupEditor"); ed.classList.remove("view"); void ed.offsetWidth; ed.classList.add("view"); }
+});
+$("#btnGroupAdd").onclick = () => {
+  const n = $("#newGroup").value.trim(); if (!n) return $("#newGroup").focus();
+  if (db.groups.some(g => g.name.toLowerCase() === n.toLowerCase())) return toast("Tipologia già esistente");
+  const g = {id: uid(), name: n, kind: "group", params: [], mode: "all", required: true};
+  db.groups.push(g); curG = g.id; $("#newGroup").value = ""; save(); renderGroups(); toast(`Tipologia «${n}» creata: scegli i suoi attributi`);
+};
+$("#newGroup").addEventListener("keydown", e => { if (e.key === "Enter") $("#btnGroupAdd").click(); });
+const ge = $("#groupEditor");
+ge.addEventListener("input", e => {
+  if (e.target.id === "gSearch") { gFilter = e.target.value; const pos = e.target.selectionStart; renderGroupEditor(); const s = $("#gSearch"); s.focus(); s.setSelectionRange(pos, pos); return; }
+  const d = e.target.dataset;
+  if (e.target.classList.contains("wrapta")) fitTa(e.target);
+  if (d.f && d.i && d.f !== "code") { const it = byId(listOf(d.k), d.i); it[d.f] = d.f === "qty" ? (parseFloat(e.target.value) || 0) : e.target.value; save(); }
+});
+// textarea che si adatta al testo (descrizioni e note sempre leggibili per intero)
+function fitTa(t) { t.style.height = "auto"; t.style.height = t.scrollHeight + "px"; }
+ge.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.classList?.contains("wrapta")) { e.preventDefault(); e.target.blur(); } });
+new MutationObserver(() => ge.querySelectorAll("textarea.wrapta").forEach(fitTa)).observe(ge, {childList: true, subtree: true});
+function setAttr(kind, oid, pid, v) {
+  const obj = byId(listOf(kind), oid), was = isDraft(obj);
+  if (!v) delete obj.cond[pid]; else obj.cond[pid] = v;
+  if (obj.review && !Object.values(obj.cond).includes(Q)) obj.review = false;
+  save();
+  if (was && !isDraft(obj)) flashOk = obj.id;
+  clearTimeout(ge.t); ge.t = setTimeout(refreshGroups, 450); // aggiorna badge e copertura senza disturbare i clic
+  return obj;
+}
+ge.addEventListener("change", e => {
+  const g = G(curG), t = e.target;
+  if (t.id === "gName") { const n = t.value.trim(); if (n && !db.groups.some(x => x !== g && x.name.toLowerCase() === n.toLowerCase())) g.name = n; else t.value = g.name; save(); renderGroups(); }
+  if (t.id === "gMode") { g.mode = t.value; save(); renderGroupEditor(); }
+  if (t.id === "gReq") { g.required = t.checked; save(); }
+  if (t.id === "gMacro") {
+    (async () => { let id = t.value; if (id === "__new") { const mc = await newMacro(); if (!mc) { renderGroupEditor(); return; } id = mc.id; }
+      if (id) g.macroId = id; else delete g.macroId; save(); renderGroups(); })();
+  }
+  if (t.id === "gInter") { if (t.checked) delete g.noInter; else g.noInter = true; save(); renderGroupEditor(); renderGroups(); }
+  if (t.dataset.accname) { const a = byId(db.acc, t.dataset.accname), n = t.value.trim(); if (n) a.name = n; else t.value = a.name; save(); }
+  if (t.dataset.accreq) { byId(db.acc, t.dataset.accreq).required = t.checked; save(); }
+  if (t.dataset.cp && t.tagName === "SELECT") { setAttr(t.dataset.k, t.dataset.o, t.dataset.cp, t.value); t.classList.toggle("q", t.value === Q); }
+  if (t.dataset.f === "code") {
+    const it = byId(listOf(t.dataset.k), t.dataset.i), was = isDraft(it);
+    it.code = t.value = t.value.trim(); save();
+    t.classList.toggle("draftcode", !it.code);
+    if (was && !isDraft(it)) { const tr = t.closest(".crow, tr"); tr.classList.remove("flashok"); void tr.offsetWidth; tr.classList.add("flashok"); }
+    clearTimeout(ge.t); ge.t = setTimeout(refreshGroups, 450);
+  }
+});
+ge.addEventListener("click", async e => {
+  const g = G(curG), d = e.target.dataset;
+  const segBtn = e.target.closest(".seg[data-cp] button");
+  if (segBtn) {
+    const s = segBtn.parentElement, obj = setAttr(s.dataset.k, s.dataset.o, s.dataset.cp, segBtn.dataset.v);
+    const cur = obj.cond[s.dataset.cp] ?? "";
+    s.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === cur));
+    if (cur !== Q) s.querySelector("button.q")?.remove();
+    return;
+  }
+  if (d.gp) return toggleGroupParam(g, d.gp);
+  if (d.accp) return toggleGroupParam(byId(db.acc, d.acc), d.accp);
+  if (e.target.id === "btnAccAdd") {
+    const inp = $("#newAcc"), n = inp.value.trim(); if (!n) return inp.focus();
+    if (accsOf(g).some(a => a.name.toLowerCase() === n.toLowerCase())) return toast("Accessorio già esistente");
+    db.acc.push({id: uid(), groupId: g.id, name: n, values: [], params: [], required: false}); save(); refreshGroups();
+    toast(`Accessorio «${n}» creato: aggiungi le opzioni`); $$(".acccard:last-child .vadd")[0]?.focus(); return;
+  }
+  if (d.accdel) {
+    const a = byId(db.acc, d.accdel), n = db.accItems.filter(r => r.groupId === a.id).length;
+    const r = await ask({title: `Elimina l'accessorio «${a.name}»`, body: `<p>${n ? `Verranno eliminati anche i suoi ${n} codici.` : "L'accessorio non ha codici."}</p>`, actions: [{label: "Annulla", value: null, default: true}, {label: "Elimina", value: "ok", kind: "d"}]});
+    if (r.action !== "ok") return;
+    const snap = snapshot();
+    db.acc = db.acc.filter(x => x !== a); db.accItems = db.accItems.filter(x => x.groupId !== a.id);
+    for (const s of [cfg.sel, ...db.configs.map(c => c.sel)]) delete s[a.id];
+    save(); persistDraft(); refreshGroups(); toast(`Accessorio «${a.name}» eliminato`, () => restore(snap)); return;
+  }
+  if (e.target.id === "gOnlyDraft") { onlyDraft = !onlyDraft; return renderGroupEditor(); }
+  if (d.add) {
+    const rec = {id: uid(), groupId: d.acc || g.id, code: "", desc: "", cond: {}};
+    if (d.add !== "x") Object.assign(rec, {qty: 1, note: ""});
+    listOf(d.add).push(rec); gFilter = ""; onlyDraft = false; flashId = rec.id; save(); refreshGroups();
+    ge.querySelector(`input[data-i="${rec.id}"][data-f="code"]`)?.focus();
+  }
+  if (d.dup) {
+    const L = listOf(d.k), s = byId(L, d.dup), c = {...structuredClone(s), id: uid(), code: "", review: false};
+    L.splice(L.indexOf(s) + 1, 0, c); flashId = c.id; save(); refreshGroups();
+    ge.querySelector(`input[data-i="${c.id}"][data-f="code"]`)?.focus();
+  }
+  if (d.ok) { const it = byId(listOf(d.k), d.ok); it.review = false; if (Object.values(it.cond).includes(Q)) toast("Imposta prima gli attributi con «?»"); save(); flashOk = it.id; refreshGroups(); }
+  if (d.del) {
+    const L = listOf(d.k), s = byId(L, d.del), k = L.indexOf(s);
+    L.splice(k, 1); save(); refreshGroups();
+    toast(`Eliminato ${s.code || "riga senza codice"}`, () => { L.splice(k, 0, s); save(); refreshGroups(); });
+  }
+  if (d.showmiss) $("#miss-" + d.showmiss).classList.toggle("hide");
+  if (d.gen) {
+    const tg = d.acc ? accPseudo(byId(db.acc, d.acc)) : g;
+    const L = listOf(d.gen), miss = coverage(tg, L).missing;
+    miss.forEach(c => { const rec = {id: uid(), groupId: tg.id, code: "", desc: `${tg.name} ${tg.params.map(p => c[p]).join(" ")}`, cond: {...c}}; if (d.gen !== "x") Object.assign(rec, {qty: 1, note: ""}); L.push(rec); });
+    onlyDraft = true; save(); refreshGroups();
+    toast(`${plural(miss.length, "riga creata", "righe create")} in bozza: inserisci i codici`);
+    ge.querySelector("input.draftcode")?.focus();
+  }
+  if (e.target.id === "gDel") {
+    const n = rowsOf(g).length + accsOf(g).length;
+    const r = await ask({title: `Elimina la tipologia «${g.name}»`, body: `<p>${n ? `Verranno eliminate anche le sue ${n} righe (codici e interscambi).` : "La tipologia è vuota."}</p>`,
+      actions: [{label: "Annulla", value: null, default: true}, {label: "Elimina", value: "ok", kind: "d"}]});
+    if (r.action !== "ok") return;
+    const snap = snapshot();
+    const accIds = new Set(accsOf(g).map(a => a.id));
+    db.groups = db.groups.filter(x => x.id !== g.id); db.items = db.items.filter(i => i.groupId !== g.id); db.inter = db.inter.filter(i => i.groupId !== g.id);
+    db.acc = db.acc.filter(a => !accIds.has(a.id)); db.accItems = db.accItems.filter(i => !accIds.has(i.groupId));
+    save(); renderGroups(); toast(`Tipologia «${g.name}» eliminata`, () => restore(snap));
+  }
+});
+
+/* =================== IMPORT / EXPORT =================== */
+function download(name, content, type) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([content], {type}));
+  a.download = name.replace(/[\\/:*?"<>|]/g, "_"); a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function csvCell(v, sep) { v = String(v ?? ""); return /["\r\n]/.test(v) || v.includes(sep) ? `"${v.replace(/"/g, '""')}"` : v; }
+function parseCsv(text) {
+  text = text.replace(/^﻿/, "");
+  const first = text.split(/\r?\n/)[0];
+  const sep = (first.match(/;/g) || []).length >= (first.match(/,/g) || []).length ? ";" : ",";
+  const rows = []; let row = [], cell = "", q = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) { if (ch === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === sep) { row.push(cell); cell = ""; }
+    else if (ch === "\n" || ch === "\r") { if (ch === "\r" && text[i + 1] === "\n") i++; row.push(cell); rows.push(row); row = []; cell = ""; }
+    else cell += ch;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(c => c.trim()));
+}
+const showMsg = (html, cls) => { $("#csvMsg").innerHTML = `<div class="callout ${cls}">${html}</div>`; };
+$("#btnJsonExp").onclick = () => download(`configuratore_falcon_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(db, null, 2), "application/json");
+$("#btnJsonImp").onclick = () => $("#fJson").click();
+$("#btnCsvImp").onclick = () => $("#fCsv").click();
+$("#fJson").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  let d;
+  try { d = JSON.parse(await f.text()); if (!Array.isArray(d.items) || !Array.isArray(d.groups) || !Array.isArray(d.params)) throw new Error("formato non valido"); }
+  catch (err) { return ask({title: "Import JSON non riuscito", body: `<p>${esc(err.message)}</p>`, actions: [{label: "OK", value: null, default: true}]}); }
+  const r = await ask({title: "Sostituire l'intero database?", body: `<p>Il file contiene ${d.groups.length} tipologie, ${d.items.length} codici. I dati attuali verranno sostituiti.</p>`,
+    actions: [{label: "Annulla", value: null, default: true}, {label: "Sostituisci", value: "ok", kind: "d"}]});
+  if (r.action !== "ok") return;
+  const snap = snapshot();
+  db = normalize(d); cfg = {name: "", sel: {}, choice: {}, openId: null}; save(); persistDraft(); toast("Database importato", () => restore(snap)); show("conf");
+};
+$("#btnWipe").onclick = async () => {
+  const r = await ask({title: "Svuotare tutto?", body: "<p>Vengono cancellati parametri, tipologie e codici. Fai prima un backup con Esporta JSON.</p>",
+    actions: [{label: "Annulla", value: null, default: true}, {label: "Svuota tutto", value: "ok", kind: "d"}]});
+  if (r.action !== "ok") return;
+  const snap = snapshot();
+  db = normalize({}); cfg = {name: "", sel: {}, choice: {}, openId: null}; save(); persistDraft(); toast("Database svuotato", () => restore(snap));
+};
+$("#btnCsvExp").onclick = () => {
+  const head = ["tipologia", "tipo", "codice", "descrizione", "qta", "note", ...db.params.map(p => p.name)];
+  const rows = db.groups.flatMap(g => [
+    ...db.inter.filter(i => i.groupId === g.id).map(i => [g.name, "interscambio", i.code, i.desc, "", "", ...db.params.map(p => i.cond[p.id] ?? "")]),
+    ...db.items.filter(i => i.groupId === g.id).map(i => [g.name, "codice", i.code, i.desc, String(i.qty).replace(".", ","), i.note, ...db.params.map(p => i.cond[p.id] ?? "")]),
+  ]);
+  download("codici_configuratore_falcon.csv", "﻿" + [head, ...rows].map(r => r.map(x => csvCell(x, ";")).join(";")).join("\r\n") + "\r\n", "text/csv");
+};
+/* ---- import CSV: piano → anteprima → applicazione ---- */
+function planCsv(text) {
+  const rows = parseCsv(text);
+  if (rows.length < 2) throw new Error("il file non contiene righe di dati");
+  const head = rows[0].map(h => h.trim()), low = head.map(h => h.toLowerCase());
+  const ix = (...n) => low.findIndex(h => n.includes(h));
+  const iG = ix("tipologia", "gruppo"), iT = ix("tipo"), iC = ix("codice"), iD = ix("descrizione"), iQ = ix("qta"), iN = ix("note");
+  if (iG < 0 || iC < 0) throw new Error("servono almeno le colonne «tipologia» e «codice»");
+  const fixed = [iG, iT, iC, iD, iQ, iN];
+  const pcols = head.map((h, k) => ({name: h, k})).filter(c => c.name && !fixed.includes(c.k));
+  const anomalies = new Map(), recs = [];
+  const known = name => db.params.find(x => x.name.toLowerCase() === name.toLowerCase());
+  for (const r of rows.slice(1)) {
+    const gname = (r[iG] || "").trim(); if (!gname) continue;
+    const cells = pcols.map(pc => (r[pc.k] || "").split("|").map(s => s.trim()).filter(Boolean));
+    pcols.forEach((pc, j) => cells[j].forEach(v => {
+      if (v === Q) return;
+      const p = known(pc.name); if (p?.values.includes(v)) return;
+      const key = pc.name.toLowerCase() + "\u0001" + v;
+      if (anomalies.has(key)) return;
+      const near = p && findCI(p.values, v);
+      anomalies.set(key, {param: pc.name, value: v, near: near || null, choice: near ? "map" : "new", newParam: !p});
+    }));
+    recs.push({gname, isX: iT >= 0 && /interscamb/i.test(r[iT] || ""), code: (r[iC] || "").trim(), desc: iD >= 0 ? (r[iD] || "").trim() : "",
+      qty: iQ >= 0 ? (parseFloat((r[iQ] || "1").replace(",", ".")) || 1) : 1, note: iN >= 0 ? (r[iN] || "").trim() : "", cells});
+  }
+  return {pcols, recs, anomalies: [...anomalies.values()]};
+}
+function applyPlan(d, plan) {
+  const out = {add: 0, upd: 0, dup: 0, drafts: 0, newGroups: new Set(), newParams: new Set()};
+  const amap = new Map(plan.anomalies.map(a => [a.param.toLowerCase() + "\u0001" + a.value, a]));
+  let sImp = null;
+  const params = plan.pcols.map(pc => {
+    let p = d.params.find(x => x.name.toLowerCase() === pc.name.toLowerCase());
+    if (!p) {
+      if (!sImp) { sImp = d.sections.find(s => s.name === "Importati") || {id: uid(), name: "Importati"}; if (!d.sections.includes(sImp)) d.sections.push(sImp); }
+      p = {id: uid(), sectionId: sImp.id, name: pc.name, values: []}; d.params.push(p); out.newParams.add(pc.name);
+    }
+    return p;
+  });
+  const seen = new Set();
+  for (const rec of plan.recs) {
+    let g = d.groups.find(x => x.name.toLowerCase() === rec.gname.toLowerCase());
+    if (!g) { g = {id: uid(), name: rec.gname, kind: "group", params: [], mode: "all", required: true}; d.groups.push(g); out.newGroups.add(rec.gname); }
+    const cond = {};
+    rec.cells.forEach((vals, j) => {
+      const p = params[j];
+      const mapped = vals.map(v => { const a = amap.get(p.name.toLowerCase() + "\u0001" + v); return a && a.choice === "map" && a.near ? a.near : v; });
+      mapped.forEach(v => { if (v !== Q && !p.values.includes(v)) p.values.push(v); });
+      if (mapped.length) { cond[p.id] = [...new Set(mapped)]; if (!g.params.includes(p.id)) g.params = d.params.map(x => x.id).filter(id => id === p.id || g.params.includes(id)); }
+    });
+    const base = {groupId: g.id, code: rec.code, desc: rec.desc, cond};
+    if (!rec.isX) Object.assign(base, {qty: rec.qty, note: rec.note});
+    const L = rec.isX ? d.inter : d.items;
+    for (const row of expandConds([{id: uid(), ...base}])) {
+      const k = [g.id, rec.isX, row.code.toLowerCase(), JSON.stringify(Object.entries(row.cond).sort())].join("|");
+      if (seen.has(k)) { out.dup++; continue; } seen.add(k);
+      if (!row.code) out.drafts++;
+      const ex = L.find(i => i.groupId === g.id && i.code.toLowerCase() === row.code.toLowerCase() && sameObj(i.cond, row.cond));
+      if (ex) { Object.assign(ex, {...row, id: ex.id, review: false}); out.upd++; } else { L.push(row); out.add++; }
+    }
+  }
+  return out;
+}
+$("#fCsv").onchange = async e => {
+  const f = e.target.files[0]; e.target.value = ""; if (!f) return;
+  let plan;
+  try { plan = planCsv(await f.text()); }
+  catch (err) { showMsg(`Import non riuscito: ${esc(err.message)}`, "er"); return; }
+  const counters = () => { const o = applyPlan(normalize(structuredClone(db)), plan);
+    return `<div class="counters"><div>Nuove<b>${o.add}</b></div><div>Aggiornate<b>${o.upd}</b></div><div class="${plan.anomalies.length || o.drafts || o.dup ? "wa" : ""}">Da verificare<b>${plan.anomalies.length + o.drafts + o.dup}</b></div></div>
+      ${o.newGroups.size ? `<p>Nuove tipologie: <b>${[...o.newGroups].map(esc).join(", ")}</b></p>` : ""}${o.newParams.size ? `<p>Nuovi parametri (sezione “Importati”): <b>${[...o.newParams].map(esc).join(", ")}</b></p>` : ""}
+      ${o.drafts ? `<p class="warn">${plural(o.drafts, "riga senza codice entrerà", "righe senza codice entreranno")} in bozza.</p>` : ""}${o.dup ? `<p class="warn">${plural(o.dup, "riga duplicata nel file verrà ignorata", "righe duplicate nel file verranno ignorate")}.</p>` : ""}`; };
+  const anomTable = plan.anomalies.length ? `<div style="max-height:260px;overflow:auto;border:1px solid var(--bd);border-radius:8px"><table><thead><tr><th>Parametro</th><th>Valore nel file</th><th>Azione</th></tr></thead><tbody>${
+    plan.anomalies.map((a, k) => `<tr><td>${esc(a.param)}${a.newParam ? ' <span class="tag">nuovo</span>' : ""}</td><td class="code">${esc(a.value)}</td><td>${a.near
+      ? `<select data-an="${k}" class="sm"><option value="map" selected>Usa «${esc(a.near)}» (esistente)</option><option value="new">Crea nuovo valore «${esc(a.value)}»</option></select>`
+      : `<span class="mut">nuovo valore: verrà creato</span>`}</td></tr>`).join("")}</tbody></table></div>` : `<p class="ok">Nessun valore sconosciuto.</p>`;
+  const p = ask({title: `Anteprima import: ${f.name}`, wide: true, body: `<div id="impCounters">${counters()}</div>${anomTable}`,
+    actions: [{label: "Annulla", value: null}, {label: "Importa", value: "ok", kind: "p", default: true}]});
+  $("#dlg").onchange = ev => { const k = ev.target.dataset.an; if (k != null) { plan.anomalies[k].choice = ev.target.value; $("#impCounters").innerHTML = counters(); } };
+  const r = await p;
+  if (r.action !== "ok") return;
+  const snap = snapshot();
+  const o = applyPlan(db, plan); db = normalize(db); save();
+  showMsg(`✓ Import completato: <b>${o.add}</b> nuove, <b>${o.upd}</b> aggiornate${o.drafts ? `, ${o.drafts} in bozza` : ""}${o.dup ? `, ${o.dup} duplicate ignorate` : ""}.`, o.drafts || o.dup ? "wa" : "ok");
+  toast("CSV importato", () => { restore(snap); $("#csvMsg").innerHTML = ""; });
+};
+
+/* =================== NAVIGAZIONE =================== */
+let curTab = "conf";
+function rerender() { ({conf: renderConf, params: renderParams, groups: renderGroups, data: () => {}})[curTab](); }
+function show(t) {
+  curTab = t;
+  $$("main > section").forEach(s => s.classList.toggle("hide", s.id !== "t-" + t));
+  $$("#nav button").forEach(b => b.classList.toggle("on", b.dataset.t === t));
+  const sec = $("#t-" + t); sec.classList.remove("view"); void sec.offsetWidth; sec.classList.add("view");
+  if (t === "conf") { animateCards = true; prevKeys = null; }
+  rerender();
+  scrollTo(0, 0);
+}
+$("#nav").onclick = e => { if (e.target.dataset.t) show(e.target.dataset.t); };
+show("conf");
+for (const id of ["chkMiss", "chkMissC"]) $("#" + id).addEventListener("change", e => {
+  showMiss = e.target.checked; try { localStorage.setItem("cf_showmiss", showMiss ? "1" : "0"); } catch {}
+  $("#chkMiss").checked = $("#chkMissC").checked = showMiss; rerender();
+});
+$("#chkMissC").checked = showMiss;
+$("#btnMacroAdd").addEventListener("click", async () => {
+  const mc = await newMacro(); if (!mc) return;
+  save(); renderGroups(); toast(`Macrogruppo «${mc.name}» creato: assegnagli le tipologie dal menu «Macrogruppo» di ciascuna`);
+});
+$("#groupEditor").addEventListener("click", async e => {
+  if (e.target.id !== "gMacroNew") return;
+  const g = G(curG), mc = await newMacro(); if (!mc || !g) return;
+  g.macroId = mc.id; save(); renderGroups();
+});
+</script>
+
+<script>
+/* =================== v15: SALVATAGGIO AUTOMATICO SU FILE (cartella collegata) ===================
+   Chrome/Edge — File System Access API. Il database vive in <cartella>/falcon_db.json;
+   localStorage resta come copia di lavoro. Backup giornaliero in <cartella>/backup_db/. */
+const FS = (() => {
+  const T = window.__FS_TEST__ || {};
+  const FN = "falcon_db.json", BK = "backup_db", KEEP = 30, K_DIRTY = "cf_fs_dirty";
+  const ok = !!(T.picker || window.showDirectoryPicker);
+  let dir = null, state = ok ? "none" : "unsupported", lastMod = 0, lastAt = null, timer = 0, chain = Promise.resolve(), pending = false, quiet = false;
+  // ---- handle persistente (IndexedDB) ----
+  const idb = f => new Promise((res, rej) => { const r = indexedDB.open("cf_fs", 1); r.onupgradeneeded = () => r.result.createObjectStore("h"); r.onsuccess = () => { const tx = r.result.transaction("h", "readwrite"), q = f(tx.objectStore("h")); tx.oncomplete = () => res(q?.result); tx.onerror = () => rej(tx.error); }; r.onerror = () => rej(r.error); });
+  const hGet = () => T.idbGet ? T.idbGet() : idb(s => s.get("dir")).catch(() => null);
+  const hSet = h => T.idbSet ? T.idbSet(h) : idb(s => h ? s.put(h, "dir") : s.delete("dir")).catch(() => {});
+  const dirty = v => { try { v === undefined ? 0 : localStorage.setItem(K_DIRTY, v ? "1" : "0"); return localStorage.getItem(K_DIRTY) === "1"; } catch { return false; } };
+  const hhmm = d => d.toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit"});
+  const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
+  // ---- interfaccia: indicatore in alto + banner + scheda Import/Export ----
+  function ui() {
+    const ss = $("#saveState"), bn = $("#fsBanner"), name = dir ? esc(dir.name) : "";
+    const S = {
+      ok: ["ok", lastAt ? `Salvato su ${FN} alle ${hhmm(lastAt)}` : `Collegato a ${FN}`],
+      none: ["wa", "Solo nel browser"], prompt: ["wa", "Cartella da riconnettere"], unsupported: ["wa", "Solo nel browser"],
+      error: ["er", "Errore salvataggio su file"], conflict: ["er", "File modificato altrove"]}[state];
+    ss.className = "savestate fs-" + S[0]; ss.querySelector("span").textContent = S[1];
+    ss.title = state === "ok" ? `Cartella: ${dir.name} · ogni modifica viene scritta in ${FN}` : "Clic per gestire il salvataggio su file";
+    const msg = {
+      none: `Il database non è collegato a una cartella: le modifiche restano solo in questo browser. <button class="b p s" data-fs="pick">Collega cartella…</button>`,
+      prompt: `Per salvare le modifiche su <b>${FN}</b> riconnetti la cartella <b>${name}</b> (il browser lo chiede a ogni apertura). <button class="b p s" data-fs="grant">Riconnetti</button>`,
+      unsupported: `Questo browser non può salvare su file: apri la pagina con <b>Chrome</b> o <b>Edge</b>. Intanto le modifiche restano solo nel browser.`,
+      error: `Non riesco a scrivere <b>${FN}</b> nella cartella <b>${name}</b>. Le modifiche sono comunque nel browser. <button class="b s" data-fs="retry">Riprova</button> <button class="b s" data-fs="pick">Scegli un'altra cartella…</button>`,
+      conflict: `<b>${FN}</b> è stato modificato da un'altra parte dopo che l'hai aperto. <button class="b s" data-fs="reload">Ricarica dal file</button> <button class="b dz s" data-fs="force">Sovrascrivi il file</button>`}[state];
+    bn.innerHTML = msg ? `<div class="fsb fs-${S[0]}"><span>${msg}</span></div>` : ""; bn.classList.toggle("hide", !msg);
+    const c = $("#fsCard");
+    if (c) c.innerHTML = state === "unsupported" ? `<p class="mut" style="margin:0">Salvataggio su file non disponibile in questo browser: usa Chrome o Edge.</p>`
+      : `<div class="fsrow"><span class="fsdot fs-${S[0]}"></span><div style="flex:1;min-width:0">${dir ? `Cartella <b>${name}</b> · file <span class="code">${FN}</span> · backup giornalieri in <span class="code">${BK}/</span> (ultimi ${KEEP})` : "Nessuna cartella collegata"}<div class="mut">${esc(S[1])}</div></div>
+         ${state === "prompt" ? `<button class="b p" data-fs="grant">Riconnetti</button>` : ""}<button class="b ${dir ? "" : "p"}" data-fs="pick">${dir ? "Cambia cartella…" : "Collega cartella…"}</button>${dir ? `<button class="b dz" data-fs="unlink">Scollega</button>` : ""}</div>`;
+  }
+
+  // ---- lettura / scrittura ----
+  async function readFile() {
+    try { const fh = await dir.getFileHandle(FN); const f = await fh.getFile(); return {f, data: JSON.parse(await f.text())}; }
+    catch (e) { if (e.name === "NotFoundError") return null; throw e; }
+  }
+  function adopt(data, mod) {           // il file diventa il database corrente (senza riscriverlo)
+    const snap = JSON.stringify(db);
+    db = normalize(data); lastMod = mod; quiet = true; save(); quiet = false; dirty(false);
+    prevKeys = null; rerender();
+    return snap;
+  }
+  async function backup(f) {
+    if (!f || !f.size) return;
+    const bd = await dir.getDirectoryHandle(BK, {create: true}), name = `falcon_db_${today()}.json`;
+    try { await bd.getFileHandle(name); return; } catch {}      // già fatto oggi
+    const w = await (await bd.getFileHandle(name, {create: true})).createWritable(); await w.write(await f.text()); await w.close();
+    const names = []; for await (const [n, h] of bd.entries()) if (h.kind === "file" && /^falcon_db_\d{4}-\d\d-\d\d\.json$/.test(n)) names.push(n);
+    names.sort(); for (const n of names.slice(0, Math.max(0, names.length - KEEP))) await bd.removeEntry(n).catch(() => {});
+  }
+  async function write(force) {
+    if (state !== "ok" && !(force && dir)) return;
+    const fh = await dir.getFileHandle(FN, {create: true}); const f = await fh.getFile();
+    if (!force && lastMod && f.size && f.lastModified !== lastMod) { state = "conflict"; ui(); return; }
+    await backup(f);
+    const w = await fh.createWritable(); await w.write(JSON.stringify(db, null, 1)); await w.close();
+    lastMod = (await fh.getFile()).lastModified; lastAt = new Date(); state = "ok"; dirty(false); ui();
+    const ss = $("#saveState"); ss.classList.remove("pulse"); void ss.offsetWidth; ss.classList.add("pulse");
+  }
+  const run = (fn) => (chain = chain.then(fn).catch(e => {
+    state = e.name === "NotAllowedError" || e.name === "SecurityError" ? "prompt" : "error"; ui();
+    if (state === "error") toast("Salvataggio su file non riuscito: " + e.message);
+  }));
+  function schedule() {
+    if (quiet) return;
+    if (state !== "ok") { if (state !== "conflict") dirty(true); ui(); return; }
+    pending = true; clearTimeout(timer);
+    timer = setTimeout(() => run(async () => { await write(false); }).finally(() => pending = false), 350);
+  }
+
+  // ---- collegamento ----
+  async function connect(h, picked) {
+    dir = h; state = "ok";
+    const r = await readFile();
+    if (!r) { await write(true); if (picked) toast(`Creato ${FN} nella cartella «${h.name}»`); return; }
+    if (same(normalize(structuredClone(r.data)), db)) { lastMod = r.f.lastModified; dirty(false); lastAt = new Date(r.f.lastModified); ui(); return; }
+    const local = dirty();
+    const q = picked && !local
+      ? {title: `Nella cartella c'è già ${FN}`, body: `<p>Salvato il ${new Date(r.f.lastModified).toLocaleString("it-IT")}. Vuoi usare quello o sostituirlo con i dati attuali del browser?</p>`,
+         actions: [{label: "Sostituisci con i dati del browser", value: "local", kind: "d"}, {label: "Usa il file", value: "file", kind: "p", default: true}]}
+      : local ? {title: "Modifiche non ancora salvate sul file", body: `<p>Mentre la cartella non era collegata hai fatto modifiche che sono solo nel browser. Il file <b>${FN}</b> è del ${new Date(r.f.lastModified).toLocaleString("it-IT")}.</p><p class="mut">In ogni caso il contenuto attuale del file viene copiato prima in ${BK}/.</p>`,
+         actions: [{label: "Usa il file (scarta le modifiche del browser)", value: "file", kind: "d"}, {label: "Tieni le modifiche del browser", value: "local", kind: "p", default: true}]}
+      : null;
+    const a = q ? (await ask(q)).action : "file";
+    if (a === "local") { lastMod = r.f.lastModified; await write(true); toast(`${FN} aggiornato con i dati del browser`); }
+    else if (a === "file") { const snap = adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); if (q) toast(`Caricato ${FN}`, () => { db = JSON.parse(snap); dirty(true); save(); rerender(); }); }
+    else { dir = h; state = "conflict"; ui(); }        // finestra chiusa senza scegliere
+  }
+  async function pick() {
+    try { const h = await (T.picker || window.showDirectoryPicker)({id: "cf-db", mode: "readwrite"}); await hSet(h); await run(() => connect(h, true)); }
+    catch (e) { if (e.name !== "AbortError") toast("Cartella non collegata: " + e.message); }
+  }
+  async function grant() {
+    try { if ((await dir.requestPermission({mode: "readwrite"})) === "granted") await run(() => connect(dir, false)); }
+    catch (e) { toast("Permesso non concesso: " + e.message); }
+  }
+  async function check() {               // al ritorno sulla pagina: il file è cambiato da un'altra parte?
+    if (state !== "ok" || pending) return;
+    await run(async () => {
+      const r = await readFile(); if (!r || r.f.lastModified === lastMod) return;
+      adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); toast(`${FN} è cambiato: database ricaricato dal file`);
+    });
+  }
+  async function act(k) {
+    if (k === "pick") return pick();
+    if (k === "grant") return grant();
+    if (k === "retry") { state = "ok"; return run(() => write(false)); }
+    if (k === "force") { const r = await ask({title: `Sovrascrivere ${FN}?`, body: "<p>Le modifiche fatte altrove sul file andranno perse (resta la copia di backup di oggi).</p>", actions: [{label: "Annulla", value: null, default: true}, {label: "Sovrascrivi", value: "ok", kind: "d"}]}); if (r.action === "ok") return run(() => write(true)); return; }
+    if (k === "reload") return run(async () => { const r = await readFile(); if (r) { adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); } state = "ok"; ui(); toast("Database ricaricato dal file"); });
+    if (k === "unlink") { const r = await ask({title: "Scollegare la cartella?", body: `<p>Le modifiche resteranno solo nel browser finché non colleghi di nuovo una cartella. Il file <b>${FN}</b> non viene cancellato.</p>`, actions: [{label: "Annulla", value: null, default: true}, {label: "Scollega", value: "ok", kind: "d"}]}); if (r.action === "ok") { await hSet(null); dir = null; state = "none"; ui(); } }
+  }
+  async function init() {
+    document.addEventListener("click", e => { const b = e.target.closest("[data-fs]"); if (b) act(b.dataset.fs); });
+    $("#saveState").addEventListener("click", () => state === "ok" ? show("data") : state === "prompt" ? grant() : state === "none" ? pick() : show("data"));
+    addEventListener("focus", check); document.addEventListener("visibilitychange", () => !document.hidden && check());
+    addEventListener("beforeunload", e => { if (pending) { e.preventDefault(); e.returnValue = ""; } });
+    ui(); if (!ok) return;
+    const h = await hGet(); if (!h) { ui(); return; }
+    dir = h;
+    let p = "prompt"; try { p = await h.queryPermission({mode: "readwrite"}); } catch {}
+    if (p === "granted") await run(() => connect(h, false)); else { state = "prompt"; ui(); }
+  }
+  return {init, schedule, ui, get state() { return state; }};
+})();
+{ const _save = save; save = function () { _save(); FS.schedule(); }; }
+FS.init();
+</script>
+
+<div id="xpop" role="tooltip" aria-hidden="true"></div>
+<script>
+// v11: anteprima assieme di interscambio (hover / focus / tap)
+(() => {
+  const pop = document.getElementById("xpop"); let cur = null, tHide = 0;
+  const html = b => {
+    const g = db.groups.find(x => x.id === b.dataset.xg); if (!g) return "";
+    const ed = `<a class="tlink" data-goedit="${g.id}" href="javascript:void 0">`;
+    if (b.dataset.xs === "ok") {
+      const x = db.inter.find(i => i.id === b.dataset.xi); if (!x) return "";
+      return `<div class="xh">Assieme di interscambio</div><div class="xc code">${esc(x.code)}</div>${x.desc ? `<div class="xd">${esc(x.desc)}</div>` : ""}
+        <div class="xa">${x.link ? `<a class="tlink" href="${esc(x.link)}" target="_blank" rel="noopener">Apri in Windchill</a>` : ""}${ed}Modifica in Tipologie</a></div>`;
+    }
+    const R = resolveAll(cfg.sel, cfg.choice), r = R.res.find(z => z.g.id === g.id);
+    if (b.dataset.xs === "er") return `<div class="xh">Interscambio ambiguo</div><div class="xd">${r ? r.inter.length : ""} interscambi validi per questa combinazione: ne serve uno solo.</div>
+        <div class="xd">${(r?.inter || []).map(i => `<span class="code">${esc(i.code)}</span>`).join(", ")}</div><div class="xa">${ed}Correggi in Tipologie</a></div>`;
+    return `<div class="xh">Interscambio</div><div class="xd">L'assieme di interscambio per questa combinazione non è ancora nel database.</div><div class="xa">${ed}Definiscilo in Tipologie</a></div>`;
+  };
+  const place = b => {
+    const r = b.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+    let left = Math.min(Math.max(8, r.right - w), innerWidth - w - 8), top = r.bottom + 6;
+    if (top + h > innerHeight - 8) top = Math.max(8, r.top - h - 6);
+    pop.style.left = left + "px"; pop.style.top = top + "px";
+  };
+  const open = b => {
+    clearTimeout(tHide); if (cur === b && pop.classList.contains("show")) return;
+    cur?.classList.remove("on"); cur = b; b.classList.add("on");
+    pop.className = b.dataset.xs === "er" ? "er" : ""; pop.innerHTML = html(b);
+    pop.setAttribute("aria-hidden", "false"); place(b); pop.classList.add("show");
+  };
+  const close = (now) => { clearTimeout(tHide); const f = () => { pop.classList.remove("show"); pop.setAttribute("aria-hidden", "true"); cur?.classList.remove("on"); cur = null; }; now ? f() : (tHide = setTimeout(f, 180)); };
+  const root = document.getElementById("cfgGroups");
+  root.addEventListener("pointerover", e => { const b = e.target.closest(".xbtn"); if (b && e.pointerType !== "touch") open(b); });
+  root.addEventListener("pointerout", e => { const b = e.target.closest(".xbtn"); if (b && !b.contains(e.relatedTarget) && !pop.contains(e.relatedTarget)) close(); });
+  root.addEventListener("focusin", e => { const b = e.target.closest(".xbtn"); if (b) open(b); });
+  root.addEventListener("focusout", e => { if (e.target.closest(".xbtn") && !pop.contains(e.relatedTarget)) close(); });
+  root.addEventListener("click", e => { const b = e.target.closest(".xbtn"); if (!b) return; e.stopPropagation(); cur === b && pop.classList.contains("show") ? close(true) : open(b); }, true);
+  pop.addEventListener("pointerenter", () => clearTimeout(tHide));
+  pop.addEventListener("pointerleave", e => { if (!cur?.contains(e.relatedTarget)) close(); });
+  pop.addEventListener("click", e => { if (e.target.closest("[data-goedit]")) { close(true); onConfLinks(e); } });
+  document.addEventListener("pointerdown", e => { if (cur && !pop.contains(e.target) && !e.target.closest(".xbtn")) close(true); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && cur) { const b = cur; close(true); b.focus(); } });
+  addEventListener("scroll", () => cur && close(true), {passive: true, capture: true});
+  addEventListener("resize", () => cur && close(true));
+  new MutationObserver(() => { if (cur && !cur.isConnected) close(true); }).observe(root, {childList: true});
+})();
+</script>
+</body>
+</html>
