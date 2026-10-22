@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Configuratore Falcon</title>
+<title>Configuratore</title>
 <style>
 :root{
   --bg:#eceff2;--surface:#f8f9fa;--surface-2:#f1f3f5;--surface-3:#e8ebef;--field:#fff;
@@ -687,15 +687,177 @@ button.savestate:hover{background:var(--surface-3);color:var(--tx)}
 .ggrid>.mcard{display:flex;flex-direction:column}
 .ggrid>.mcard>.gcard{flex:0 0 auto}
 .ggrid>.mcard>.gcard:not(.hide):not(:has(~ .gcard:not(.hide))){flex:1 0 auto}
+.cbtn{font:inherit;line-height:inherit;color:inherit;font-weight:inherit;letter-spacing:inherit;background:none;border:0;margin:0;padding:0;cursor:pointer;display:inline;vertical-align:baseline;text-align:left;text-decoration:underline dotted var(--bd-2);text-underline-offset:3px;text-decoration-thickness:1px}
+.cbtn:hover,.cbtn.on{color:var(--ac-tx);text-decoration-color:var(--ac)}
+.cbtn.has{text-decoration-style:solid;text-decoration-color:rgba(53,88,168,.35)}
+.cbtn .wci{opacity:0;transition:opacity var(--t2);display:inline-block;width:12px;height:12px;margin-left:3px;vertical-align:-1px}.cbtn .wci svg{width:12px;height:12px;display:block}
+.cbtn:hover .wci,.cbtn:focus-visible .wci,.cbtn.on .wci{opacity:1}
+.cbtn:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+/* allineamento codice / descrizione sulla stessa linea di base */
+.ctab td.code,.ctab td.ds,.ctab td.num{vertical-align:baseline!important;padding-top:4px!important;padding-bottom:4px!important}
+.ctab tr:first-child td.code,.ctab tr:first-child td.ds{padding-top:2px!important}
+button.cbtn,.ctab button.cbtn,.bomt button.cbtn{display:inline!important;height:auto!important;min-height:0!important}
+#cpop{position:fixed;z-index:40;min-width:230px;background:var(--surface);border:1px solid var(--bd);border-radius:10px;box-shadow:0 10px 30px rgba(34,42,51,.16);padding:6px;opacity:0;transform:translateY(-4px);pointer-events:none;transition:opacity 140ms,transform 140ms}
+#cpop.show{opacity:1;transform:none;pointer-events:auto}
+#cpop .ch{padding:6px 10px 8px;border-bottom:1px solid var(--bd);margin-bottom:4px}
+#cpop .ch .code{font-weight:700;font-size:14px}
+#cpop .ch .mut{display:block;max-width:300px}
+#cpop button{display:flex;align-items:center;gap:8px;width:100%;font:inherit;font-size:13px;text-align:left;background:none;border:0;border-radius:6px;padding:7px 10px;color:var(--tx);cursor:pointer}
+#cpop button:hover,#cpop button:focus-visible{background:var(--ac-s);color:var(--ac-tx);outline:none}
+#cpop button .k{margin-left:auto;font-size:11px;color:var(--mut)}
+.ib.lk-on{color:var(--ac)}
+.acts:has(.lk-on){opacity:1}
+/* ---------- v15: Grafo ---------- */
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;padding:0;margin:-1px}
+#t-graph .gtool{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px 16px;margin-bottom:12px}
+.gtl{display:flex;align-items:baseline;gap:12px}
+.gtr{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.gsearch{position:relative;display:flex;align-items:center;gap:2px}
+.gsearch input{width:clamp(180px,22vw,300px);height:34px;padding-right:58px}
+.gsearch #grHits{position:absolute;right:76px;top:50%;transform:translateY(-50%);font-size:11px;font-variant-numeric:tabular-nums;pointer-events:none}
+.ib.sm{width:28px;height:28px;font-size:16px;font-weight:600}
+.ib:disabled{opacity:.35;cursor:default}
+.glev{display:flex;align-items:center;gap:8px}
+#grHlLab.off{opacity:.55;cursor:not-allowed}
+.gzoom{display:flex;align-items:center;gap:2px}.gzoom .ib{font-size:18px;font-weight:600}
+.gmapctl{position:absolute;right:12px;bottom:10px;z-index:2;background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:10px;padding:3px 5px}
+#grZoomPct{min-width:40px;text-align:center;font-size:11px;font-variant-numeric:tabular-nums}
+.gcanvas{position:relative;padding:0;overflow:hidden;height:calc(100vh - 186px);min-height:480px;margin:0;
+  background-color:var(--surface);background-image:radial-gradient(#d9dee5 1px,transparent 1px);background-size:24px 24px}
+#grSvg{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none;outline:none}
+#grSvg:focus-visible{box-shadow:inset 0 0 0 3px rgba(53,88,168,.35)}
+#grSvg.drag{cursor:grabbing}
+#grView.anim{transition:transform 380ms var(--ease-out)}
+/* pannello dettagli sovrapposto */
+.gside{position:absolute;top:12px;right:12px;width:330px;max-height:calc(100% - 24px);overflow:auto;padding:14px 16px 16px;background:var(--surface);border:1px solid var(--bd);border-radius:12px;box-shadow:0 10px 30px rgba(34,42,51,.12);z-index:3;transition:opacity 200ms,transform 240ms var(--ease-out)}
+.gside.closed{opacity:0;transform:translateX(16px);pointer-events:none}
+.gside .gx{position:absolute;top:8px;right:8px}
+.gside h3{font-size:16px;margin:2px 0 4px;padding-right:28px;word-break:break-word}.gside .eyebrow{margin-bottom:2px}
+.gside .crumbs{font-size:11.5px;color:var(--mut);margin:0 28px 8px 0;line-height:1.6}
+.gside .crumbs a{color:var(--tx-2);cursor:pointer;text-decoration:underline;text-decoration-color:var(--bd-2);text-underline-offset:2px}
+.gside .crumbs a:hover{color:var(--ac-tx)}
+.gside .kv{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:13px;margin:12px 0}
+.gside .kv>span:nth-child(odd){color:var(--mut);font-size:12px}
+.gside .sec2{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:14px 0 6px}
+.gside ul{margin:0;padding-left:16px;font-size:13px}.gside li{margin:2px 0}
+.gside .acts2{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+/* legenda */
+.glegend{position:absolute;left:12px;bottom:10px;z-index:2;font-size:11.5px;color:var(--tx-2);background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:10px;max-width:min(560px,calc(100% - 24px))}
+.glegend summary{cursor:pointer;padding:6px 12px;font-weight:600;color:var(--tx-2);list-style-position:inside}
+.glegend[open]{box-shadow:0 8px 24px rgba(34,42,51,.12)}
+.glegend .lgrid{display:grid;grid-template-columns:repeat(3,auto);gap:6px 16px;padding:4px 12px 8px}
+.glegend .lgrid span{display:inline-flex;align-items:center;gap:6px}
+.glegend p{margin:0;padding:6px 12px 10px;border-top:1px solid var(--bd);line-height:1.6}
+.lg{width:14px;height:11px;border-radius:3px;display:inline-block;border:1px solid var(--bd-2);background:#fff;flex:none;font-style:normal}
+.lg.k-mac{background:var(--ac);border-color:var(--ac)}.lg.k-grp{box-shadow:inset 3px 0 0 var(--tx-2)}.lg.k-x{background:#eef6f5;border-color:#5f9b95}
+.lg.k-acc{background:var(--xa-s);border-color:var(--xa)}.lg.draft{border-style:dashed;border-color:#b88a3b;background:var(--wa-s)}
+.lg.st{box-shadow:inset 4px 0 0 var(--c)}.lg.st-ok{--c:var(--ok)}.lg.st-wa{--c:#c9a15c}.lg.st-er{--c:var(--er);box-shadow:inset 6px 0 0 var(--c)}.lg.st-db{--c:var(--db)}
+.lg.hlk{background:var(--ok-s);border-color:var(--ok);color:var(--ok);font-size:9px;font-weight:800;text-align:center;line-height:9px}
+.lg.mt{background:#fff8d6;border-color:#e2b93b;box-shadow:0 0 0 2px #f2d27a}
+/* nodi */
+.gn{transition:transform 380ms var(--ease-out),opacity 300ms;cursor:pointer;outline:none}
+.gn rect.b{fill:#fff;stroke:var(--bd-2);stroke-width:1;transition:stroke 150ms,fill 150ms}
+.gn:hover rect.b{stroke:var(--ac)}
+.gn rect.halo,.gn rect.ring{fill:none;display:none;vector-effect:non-scaling-stroke}
+.gn.match rect.halo{display:block;fill:#fff8d6;stroke:#f2c94c;stroke-width:4}
+.gn.kf rect.ring{display:block;stroke:#1d3f8f;stroke-width:2.5}
+.gn text{font-family:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;font-size:13px;fill:var(--tx);pointer-events:none;transition:opacity 150ms}
+.gn text.sub{font-size:11.5px;fill:#56606b}
+.gn text.mono{font-family:"Cascadia Mono",Consolas,monospace;font-weight:600;font-size:12.5px}
+.gn text.ok{fill:var(--ok);font-weight:800;font-size:13px}
+.gn .stripe{stroke-width:4;stroke:var(--bd-2)}
+.gn.st-ok .stripe{stroke:var(--ok)}.gn.st-wa .stripe{stroke:#c9a15c;stroke-dasharray:5 3}.gn.st-er .stripe{stroke:var(--er);stroke-width:7}.gn.st-db .stripe{stroke:var(--db);stroke-dasharray:2 3}
+.gn.k-root rect.b{fill:var(--tx);stroke:var(--tx)}.gn.k-root text{fill:#fff;font-weight:700;font-size:14px}.gn.k-root text.sub{fill:#c3cad2;font-weight:400;font-size:11.5px}
+.gn.k-mst rect.b{fill:var(--ac-s);stroke:var(--ac)}
+.gn.k-mac rect.b{fill:var(--ac);stroke:var(--ac)}.gn.k-mac text{fill:#fff;font-weight:650}.gn.k-mac text.sub{fill:#dbe3f5;font-weight:500}
+.gn.k-grp text.lbl{font-weight:650}
+.gn.k-x rect.b{fill:#eef6f5;stroke:#7fb2ac}
+.gn.k-acc rect.b{fill:var(--xa-s);stroke:var(--xa-b)}.gn.k-acc text.lbl{fill:var(--xa);font-weight:650}
+.gn.k-acode rect.b{stroke:var(--xa-b)}
+.gn.draft rect.b{stroke:#b88a3b;stroke-dasharray:4 3;fill:var(--wa-s)}
+.gn.hl rect.b{stroke:var(--ok);stroke-width:2}
+.gn.hl.k-code rect.b,.gn.hl.k-acode rect.b,.gn.hl.k-x rect.b{fill:var(--ok-s)}
+.gn.sel rect.b{stroke:var(--ac)!important;stroke-width:2.6!important;filter:drop-shadow(0 2px 6px rgba(53,88,168,.28))}
+/* attenuati senza perdere contrasto del testo */
+.gn.dim rect.b{fill:#f4f5f7;stroke:#dfe3e8}
+.gn.dim text{fill:#5f6975}.gn.dim text.sub{fill:#646d78}.gn.dim text.lbl{font-weight:500}
+.gn.dim .stripe{stroke:#cfd5dc}
+.gn.k-mac.dim rect.b{fill:#e9edf5;stroke:#b9c6e2}.gn.k-mac.dim text{fill:#3558a8}
+.gn.dim .pill rect{fill:#eceff2}
+.gn .tg circle.v{fill:#fff;stroke:#9aa4b0}.gn .tg circle.hit{fill:transparent}
+.gn .tg text{font-size:13px;font-weight:700;fill:var(--tx-2);text-anchor:middle}
+.gn .tg:hover circle.v{stroke:var(--ac);fill:var(--ac-s)}
+.gn .pill rect{fill:#e8ebef;stroke:#d3d8de}.gn .pill text{font-size:11.5px;font-weight:600;fill:var(--tx-2)}
+.gn .tg{cursor:pointer}.gn .tg:hover .pill rect{fill:var(--ac-s);stroke:var(--ac)}
+.ge{fill:none;stroke:#b8c0ca;stroke-width:1.4;transition:d 380ms var(--ease-out),opacity 300ms,stroke 200ms}
+.ge.hl{stroke:var(--ok);stroke-width:2.2}.ge.dim{stroke:#e1e5ea}
+/* zoom semantico */
+.gn text.lblL{display:none;font-size:16px;font-weight:650}
+#grSvg.lod1 .gn text.sub,#grSvg.lod1 .gn text.lbl,#grSvg.lod1 .gn .pill{display:none}
+#grSvg.lod1 .gn text.lblL{display:block}
+#grSvg.lod2 .gn text{display:none}
+#grSvg.lod2 .gn.k-mac text.lblL,#grSvg.lod2 .gn.k-root text.lblL{display:block;font-size:19px}
+.glens{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-2)}.glens select{height:32px;font-size:13px;max-width:230px}
+.gn text.bdg{font-size:11px;font-weight:700}.gn text.b-ok{fill:var(--ok)}.gn text.b-wa{fill:#8a5410}.gn text.b-er{fill:var(--er)}.gn text.b-p{fill:var(--ac-tx)}
+.gn.pk rect.b{stroke:var(--ac);stroke-width:2;fill:var(--ac-s)}.gn.pk.k-mac rect.b{fill:var(--ac)}
+.ge.hp{stroke:var(--ac);stroke-width:2.2}
+.gsum{position:absolute;left:12px;top:10px;z-index:2;max-width:calc(100% - 380px);background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:10px;padding:6px 12px;font-size:13px;color:var(--tx-2)}
+.gsum #grSumTxt{display:block;line-height:1.7}
+.gsum .lgrid.inl{display:flex;flex-wrap:wrap;gap:4px 14px;padding:4px 0 0;font-size:11.5px;color:var(--mut)}
+.gsum .lgrid.inl span{display:inline-flex;align-items:center;gap:5px}
+.sumtog{display:inline-flex;align-items:center;gap:6px;margin-left:6px;padding-left:10px;border-left:1px solid var(--bd);cursor:pointer;font-size:12.5px}
+@media (max-width:1399px){.gsum{max-width:calc(100% - 24px)}.gsum .lgrid.inl{display:none}}
+.gsum .glens{margin-bottom:4px;font-size:12px}
+.haspanel .gmapctl{right:calc(var(--pw) + 24px)}
+.haspanel .gsum{max-width:calc(100% - var(--pw,0px) - 36px)}
+.gside{max-height:calc(100% - 84px)}
+#grSvg.lod1 .gn text.bdg{display:none}
+.gn text tspan.phl{fill:var(--ac-tx);font-weight:700}
+.gn rect.covbg{fill:#e7eaee}.gn rect.cov{fill:var(--ok)}.gn.st-wa rect.cov{fill:#c9a15c}.gn.st-er rect.cov{fill:var(--er)}
+.gn.dim rect.cov{fill:#cfd5dc}
+.lg.covk{background:linear-gradient(90deg,var(--ok) 60%,#e7eaee 60%);height:5px;border:0;width:22px}
+.gside .tag{white-space:normal;height:auto;line-height:1.35;padding:2px 8px}
+.mtab a.mc:focus-visible{outline:2px solid var(--ac)!important;outline-offset:-2px}
+.mwrap{overflow-x:auto}
+.mtab tbody th{max-width:160px;white-space:normal!important}
+#grMini{position:absolute;right:12px;bottom:58px;z-index:2;background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:8px;cursor:crosshair;touch-action:none}
+#grMini.hide{display:none}
+#grMini .mm-n{fill:#b7c0cb}#grMini .mm-d{fill:#dde2e8}#grMini .mm-h{fill:var(--ok)}#grMini .mm-m{fill:var(--ac)}#grMini .mm-s{fill:#e2b93b}
+#grMini .mm-v{fill:rgba(53,88,168,.08);stroke:var(--ac);stroke-width:1.2}
+.mmtog{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.lg.dimk{background:#f4f5f7;border-color:#dfe3e8}.lg.pkk{background:var(--ac-s);border-color:var(--ac)}
+.bk{font-size:11px;font-weight:700;color:#8a5410;min-width:34px;display:inline-block}.bk.p{color:var(--ac-tx);min-width:0}
+.gside.wide{width:440px}
+.gside .pmore{display:none;margin-top:8px}
+@media (max-width:1399px){.gside .pmore{display:inline-flex}.gside:not(.open) .pbody{display:none}.gside:not(.open){width:300px}}
+.mpiv{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--tx-2);margin-bottom:6px}.mpiv select{height:28px;font-size:12px}
+.mwrap{overflow:auto;max-height:320px;border:1px solid var(--bd);border-radius:8px}
+.mtab{border-collapse:collapse;width:100%;font-size:12px}
+.mtab th,.mtab td{border-bottom:1px solid var(--bd);padding:4px 6px;text-align:left;vertical-align:top}
+.mtab thead th{position:sticky;top:0;background:var(--surface-2);font-size:11px;color:var(--tx-2);z-index:1}
+.mtab tbody th{font-weight:500;color:var(--tx-2);white-space:nowrap;background:var(--surface)}
+.mtab td.gap{background:var(--wa-s);color:#8a5410;text-align:center;font-weight:700}
+.mtab td.gap.dr{background:#fff6e0}
+.mtab td.multi{background:var(--er-s)}
+.mtab a.mc{display:block;color:var(--tx);text-decoration:none;font-size:11.5px;border-radius:4px;padding:1px 3px}
+.mtab a.mc:hover,.mtab a.mc:focus-visible{background:var(--ac-s);color:var(--ac-tx);outline:none}
+@media (prefers-reduced-motion:reduce){.gn,.ge,#grView.anim,.gside{transition:none}}
+
+button.brand{background:none;border:0;cursor:pointer;font:inherit;color:inherit;padding:4px 8px 4px 4px;margin-left:-4px;border-radius:9px;transition:background var(--t2)}
+button.brand:hover,button.brand:focus-visible{background:var(--surface-2)}
+button.brand:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+button.brand .pen{width:14px;height:14px;opacity:0;color:var(--mut);transition:opacity var(--t2)}
+button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand"><div class="logo">F</div><b>Configuratore Falcon</b></div>
+  <button type="button" class="brand" id="appBrand" title="Clic per cambiare il nome del configuratore"><div class="logo" id="appLogo">C</div><b id="appTitle">Configuratore</b><svg class="i pen" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></svg></button>
   <nav id="nav">
     <button data-t="conf" class="on">Configuratore</button>
     <button data-t="params">Parametri</button>
     <button data-t="groups">Tipologie e codici</button>
+    <button data-t="graph">Grafo</button>
     <button data-t="data">Import / Export</button>
   </nav>
   <button type="button" class="savestate" id="saveState"><i></i><span>Salvato nel browser</span></button>
@@ -760,13 +922,52 @@ button.savestate:hover{background:var(--surface-3);color:var(--tx)}
   </div>
 </section>
 
+<!-- ============ GRAFO ============ -->
+<section id="t-graph" class="view hide">
+  <div class="gtool card">
+    <div class="gtl"><h1 style="font-size:18px;margin:0">Grafo</h1><span class="mut" id="grStats"></span></div>
+    <div class="gtr">
+      <div class="gsearch" role="search">
+        <input id="grSearch" type="search" aria-label="Cerca nel grafo" placeholder="Cerca codice, tipologia, descrizione… ( / )" autocomplete="off">
+        <span id="grHits" class="mut" aria-live="polite"></span>
+        <button class="ib sm" id="grPrev" title="Risultato precedente (Maiusc+Invio)" aria-label="Risultato precedente" disabled>‹</button><button class="ib sm" id="grNext" title="Risultato successivo (Invio)" aria-label="Risultato successivo" disabled>›</button>
+      </div>
+      <div class="glev"><div class="seg sm" id="grLevel" role="group" aria-label="Livello di dettaglio"><button data-l="1" aria-pressed="false">Macrogruppi</button><button data-l="2" class="on" aria-pressed="true">Tipologie</button><button data-l="9" aria-pressed="false">Tutto</button></div><span id="grCustom" class="mut hide" aria-hidden="true">·&nbsp;personalizzato</span></div>
+    </div>
+  </div>
+  <div class="gview" id="grViewWrap">
+    <div class="gcanvas card" id="grCanvas">
+      <svg id="grSvg" tabindex="0" role="tree" aria-label="Struttura macchina. Frecce per muoversi, Invio per i dettagli, Spazio per aprire o chiudere un ramo." aria-describedby="grKeysHelp"><g id="grView"><g id="grEdges" aria-hidden="true"></g><g id="grNodes"></g></g></svg>
+      <details class="glegend">
+        <summary>Legenda e comandi</summary>
+        <div class="lgrid">
+          <span><i class="lg k-mac"></i>Macrogruppo</span><span><i class="lg k-grp"></i>Tipologia</span><span><i class="lg k-x"></i>Interscambio (.ASM)</span><span><i class="lg k-code"></i>Codice</span><span><i class="lg k-acc"></i>Accessorio</span><span><i class="lg draft"></i>Bozza / da revisionare</span>
+          <span><i class="lg mt"></i>Risultato ricerca</span><label class="mmtog"><input type="checkbox" id="grMiniOn" checked> Minimappa</label>
+        </div>
+        <p id="grKeysHelp" class="mut">Mouse: rotella zoom · trascina per spostare · clic dettagli · ⊕/⊖ apre o chiude · doppio clic apre tutto il ramo.<br>Tastiera: ↑↓ muovi · → apri / primo figlio · ← chiudi / genitore · Invio dettagli · Spazio apri/chiudi · * apri tutto · + − zoom · . adatta · PagSu/PagGiù macrogruppo · / cerca · Esc deseleziona · Maiusc+frecce sposta la vista · lettere: salta al nodo che inizia così.</p>
+      </details>
+      <div class="gsum" id="grSum"><div class="glens"><span id="grLensLab">Colora per</span><div class="seg sm" id="grLensSeg" role="group" aria-labelledby="grLensLab"><button data-lens="cfg" aria-pressed="false">Configurazione</button><button data-lens="data" aria-pressed="false">Completezza</button><button data-lens="par" aria-pressed="false">Parametro</button></div><select id="grLensPar" class="hide" aria-label="Parametro da evidenziare"></select></div><div id="grSumTxt"></div><div class="lgrid inl" id="grLegLens" aria-label="Legenda"></div></div>
+      <svg id="grMini" class="hide" aria-hidden="true" width="200" height="130"></svg>
+      <div class="gzoom gmapctl" role="group" aria-label="Zoom"><button class="ib" id="grOut" title="Riduci ( - )" aria-label="Riduci zoom">−</button><span id="grZoomPct" class="mut">100%</span><button class="ib" id="grIn" title="Ingrandisci ( + )" aria-label="Aumenta zoom">+</button><button class="b s" id="grFit" title="Adatta alla finestra ( . )">Adatta</button></div>
+      <aside class="gside" id="grSide" role="region" aria-label="Dettagli nodo"></aside>
+      <div id="grLive" class="sr-only" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ DATI ============ -->
 <section id="t-data" class="view hide">
   <div class="pagehead"><h1>Import / Export</h1></div>
   <div class="card">
     <div class="cardhead"><h2>Salvataggio automatico su file</h2></div>
-    <p class="mut" style="margin:0 0 12px">Collega la cartella del configuratore: ogni modifica viene scritta subito in <span class="code">falcon_db.json</span> e all'apertura il database viene letto da lì. Una volta al giorno viene salvata una copia in <span class="code">backup_db/</span>.</p>
+    <p class="mut" style="margin:0 0 12px">Collega la cartella del configuratore: ogni modifica viene scritta subito in <span class="code">configuratore_db.json</span> (oppure <span class="code">falcon_db.json</span> se c'è già) e all'apertura il database viene letto da lì. Una volta al giorno viene salvata una copia in <span class="code">backup_db/</span>.</p>
     <div id="fsCard"></div>
+  </div>
+  <div class="card">
+    <div class="cardhead"><h2>Collegamento Windchill</h2></div>
+    <p class="mut" style="margin:0 0 10px">Ogni codice e interscambio può avere un suo link (icona <b>catena</b> sulla riga in “Tipologie e codici”). Per i codici senza link puoi impostare qui un <b>modello di ricerca</b>: fai una ricerca di un codice in Windchill, copia l'indirizzo dalla barra del browser e sostituisci il codice con <span class="code">{codice}</span>.</p>
+    <div class="row"><input id="wcTplIn" placeholder="https://…/Windchill/…{codice}…" style="flex:1;min-width:320px"><button class="b p" id="wcTplSave">Salva</button><button class="b" id="wcTplTest">Prova</button></div>
+    <div id="wcTplMsg" class="mut" style="margin-top:8px"></div>
   </div>
   <div class="card">
     <div class="cardhead"><h2>Database completo (JSON)</h2></div>
@@ -806,7 +1007,12 @@ button.savestate:hover{background:var(--surface-3);color:var(--tx)}
    cond[pid]: valore singolo | "?" (da definire) | assente = "—" (vale per ogni valore)
    Bozza = codice vuoto, oppure un "?", oppure review=true → ignorata da configuratore e copertura.
    ===================================================================== */
-const KEY = "configuratore_falcon_v4", KEY_OLD = null, KEY_DRAFT = "configuratore_falcon_draft_v4";
+// Ogni copia dell'HTML è un configuratore indipendente: memoria del browser e cartella collegata
+// sono legate al percorso del file, così una copia in un'altra cartella riparte da zero.
+const INST = decodeURIComponent(location.pathname || "/");
+const INST_DIR = (INST.split(/[\\/]/).slice(-2, -1)[0] || "");
+const KEY = "cf_db@" + INST, KEY_DRAFT = "cf_draft@" + INST;
+const LEGACY = {db: "configuratore_falcon_v4", draft: "configuratore_falcon_draft_v4"};
 const Q = "?";
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -814,6 +1020,8 @@ const uid = () => Math.random().toString(36).slice(2, 10);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const svg = d => `<svg class="i" viewBox="0 0 24 24">${d}</svg>`;
 const IC = {
+  link: svg('<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>'),
+  ext: svg('<path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>'),
   up: svg('<path d="m6 15 6-6 6 6"/>'),
   del: svg('<path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/>'),
   dup: svg('<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>'),
@@ -856,9 +1064,7 @@ function ask({title, body = "", actions, input, wide}) {
 }
 
 /* ---------- seed / migrazione ---------- */
-// Database Falcon importato da configuratore-prelim.xlsx (fogli BS/TS/LS/CF/MV/TP, RIFERIMENTI .ASM)
-const FALCON_DB = {"sections":[{"id":"s08dd647f","name":"Dati macchina base"},{"id":"s68559f4b","name":"Tagliacuce"},{"id":"s9ca237e1","name":"Gruppo ruote"},{"id":"sad2be42c","name":"Convogliamento film"},{"id":"s46551f90","name":"Tappeto uscita"}],"params":[{"id":"pb8ed88a6","sectionId":"s08dd647f","name":"Versione","values":["DX","SX"]},{"id":"p6a8a8a3b","sectionId":"s08dd647f","name":"Materiale","values":["INOX","FE"]},{"id":"p73b0116f","sectionId":"s08dd647f","name":"Altezza lavoro","values":["765","850","900"]},{"id":"p8cc04cf3","sectionId":"s08dd647f","name":"Motorizzazione","values":["SIEMENS","AB","CMZ"]},{"id":"pc528d7c0","sectionId":"s68559f4b","name":"Ø tagliacuce","values":["170","200"]},{"id":"pda085593","sectionId":"s68559f4b","name":"Incavo","values":["SI","NO"]},{"id":"p43fb4e2c","sectionId":"s68559f4b","name":"Ø spatole","values":["140","150","170","200"]},{"id":"p4cb4a977","sectionId":"s68559f4b","name":"Numero spatole","values":["1","2"]},{"id":"p0b77a632","sectionId":"s68559f4b","name":"Larghezza spatole","values":["190","250","350","400","420"]},{"id":"p9fbd3fb9","sectionId":"s68559f4b","name":"Profilo saldatura","values":["2X90 10/5/10","1,5X90 10/5/10","1,5X90 6/5/6"]},{"id":"pc31c2bef","sectionId":"s68559f4b","name":"Tipo coltello","values":["INCLINATA","ZIG-ZAG"]},{"id":"p4a37d2e5","sectionId":"s68559f4b","name":"Altezza lama","values":["15","20"]},{"id":"pa562b8d2","sectionId":"s68559f4b","name":"Nastro rullini","values":["SI","NO"]},{"id":"pffd85499","sectionId":"s68559f4b","name":"Trasmissione movimenti","values":["CINGHIA","CATENA"]},{"id":"p996e57f6","sectionId":"s9ca237e1","name":"Altezza sald. ruote","values":["10","12"]},{"id":"p5eb663ba","sectionId":"s9ca237e1","name":"Altezza sald. pattini","values":["9","15"]},{"id":"p1647d211","sectionId":"s9ca237e1","name":"Numero ruote","values":["3","4"]},{"id":"p797b5d5e","sectionId":"s9ca237e1","name":"Materiale ruote","values":["INOX","FE"]},{"id":"p346bc0e9","sectionId":"sad2be42c","name":"Stampatore","values":["SMARTDATE 5","VIDEOJET","DOMINO VX150I","DOMINO V300"]},{"id":"p5d1be123","sectionId":"sad2be42c","name":"W rulli","values":["527","620","720"]},{"id":"p89081cee","sectionId":"s46551f90","name":"Tensionamento tappeto","values":["PNEUMATICO","MANUALE"]},{"id":"p5103eafa","sectionId":"s46551f90","name":"Colore tappeti","values":["BIANCO","BLU"]}],"groups":[{"id":"g65f9d739","name":"Assieme master","kind":"master","params":["pb8ed88a6"],"mode":"one","required":true},{"id":"g67e017a6","name":"Basamento","kind":"group","params":["p6a8a8a3b","pb8ed88a6"],"mode":"all","required":true},{"id":"gf6f0412d","name":"Gambe basamento","kind":"group","params":["p6a8a8a3b","p73b0116f"],"mode":"all","required":true},{"id":"g003575b6","name":"Piastra principale","kind":"group","params":["pb8ed88a6"],"mode":"all","required":true},{"id":"g0e57f2bb","name":"Gruppo tagliacuce","kind":"group","params":["pc528d7c0","pda085593","p8cc04cf3","pb8ed88a6"],"mode":"all","required":true},{"id":"g4c9be3e1","name":"Gruppo spatole","kind":"group","params":["pc528d7c0","p43fb4e2c","pda085593","p4cb4a977","p0b77a632","p9fbd3fb9"],"mode":"all","required":true},{"id":"g50e5f8af","name":"Kit coltelli","kind":"group","params":["p0b77a632","pc31c2bef","p4a37d2e5"],"mode":"all","required":true},{"id":"gfc36be2f","name":"Movimenti","kind":"group","params":["pb8ed88a6","pffd85499","p8cc04cf3","p1647d211"],"mode":"all","required":true},{"id":"g48ae8456","name":"Ruote traino","kind":"group","params":["p797b5d5e","pb8ed88a6","p996e57f6"],"mode":"all","required":true},{"id":"g4d524fe2","name":"Ruote saldanti","kind":"group","params":["p797b5d5e","pb8ed88a6","p996e57f6"],"mode":"all","required":true},{"id":"g053ec840","name":"Ruote piegatrici","kind":"group","params":["pb8ed88a6"],"mode":"all","required":true},{"id":"g53502d1d","name":"Saldatura a pattini","kind":"group","params":["pb8ed88a6","p5eb663ba"],"mode":"all","required":true},{"id":"g08b8246f","name":"Gruppo colonna","kind":"group","params":["p6a8a8a3b","pb8ed88a6"],"mode":"all","required":true},{"id":"g964602a2","name":"Braccio formatore","kind":"group","params":["pb8ed88a6"],"mode":"all","required":true},{"id":"g66b226f5","name":"Calandra stampatore","kind":"group","params":["pb8ed88a6","p346bc0e9","p5d1be123"],"mode":"all","required":true},{"id":"g73f3ea8b","name":"Motorizzazione convogliamento film","kind":"group","params":["p8cc04cf3"],"mode":"all","required":true},{"id":"g93e7dc63","name":"Tappeto uscita","kind":"group","params":["p6a8a8a3b","p89081cee","p5103eafa"],"mode":"all","required":false}],"items":[{"id":"i43a8cc30","groupId":"g65f9d739","code":"CS1XD0DXXX","desc":"Assieme master Falcon DX","qty":1,"note":"","cond":{"pb8ed88a6":"DX"}},{"id":"i18cb7389","groupId":"g65f9d739","code":"CS1XD0SXXX","desc":"Assieme master Falcon SX","qty":1,"note":"","cond":{"pb8ed88a6":"SX"}},{"id":"i4c743ff1","groupId":"g67e017a6","code":"BS18CSH008","desc":"BASAMENTO FALCON INOX DX","qty":1,"note":"BS1XD0XXX r2","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"DX"}},{"id":"ifecf62a0","groupId":"g67e017a6","code":"BS18CSH009","desc":"BASAMENTO FALCON INOX SX","qty":1,"note":"BS1XD0XXX r3","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"SX"}},{"id":"iab3dea0f","groupId":"g67e017a6","code":"BS17CSH047","desc":"BASAMENTO FALCON DX FE","qty":1,"note":"BS1XD0XXX r12","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"DX"}},{"id":"if73b98f2","groupId":"g67e017a6","code":"BS17CSH061","desc":"BASAMENTO FALCON SX FE","qty":1,"note":"BS1XD0XXX r13","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"SX"}},{"id":"if64d0be6","groupId":"gf6f0412d","code":"","desc":"GAMBA BASAMENTO H=765 INOX (DA FARE)","qty":1,"note":"BS1XD0XXX r5: codice DA FARE","cond":{"p6a8a8a3b":"INOX","p73b0116f":"765"}},{"id":"i45527697","groupId":"gf6f0412d","code":"8194015","desc":"GAMBA BASAMENTO H=850 INOX","qty":1,"note":"BS1XD0XXX r6","cond":{"p6a8a8a3b":"INOX","p73b0116f":"850"}},{"id":"ibd469377","groupId":"gf6f0412d","code":"BS17CS0529","desc":"GAMBE BASAMENTO H=900 +-50 INOX","qty":1,"note":"BS1XD0XXX r7","cond":{"p6a8a8a3b":"INOX","p73b0116f":"900"}},{"id":"ie3080d12","groupId":"gf6f0412d","code":"8182201","desc":"GAMBA BASAMENTO H=765","qty":1,"note":"BS1XD0XXX r15","cond":{"p6a8a8a3b":"FE","p73b0116f":"765"}},{"id":"i7c0cbde6","groupId":"gf6f0412d","code":"BS19CS0517","desc":"GAMBA BASAMENTO H=900","qty":1,"note":"BS1XD0XXX r16: attributo 850 ma descrizione H=900, da verificare","cond":{"p6a8a8a3b":"FE","p73b0116f":"850"},"review":true},{"id":"i1030f6aa","groupId":"gf6f0412d","code":"8192500","desc":"GAMBA BASAMENTO H=900 FE","qty":1,"note":"BS1XD0XXX r17","cond":{"p6a8a8a3b":"FE","p73b0116f":"900"}},{"id":"i23837bad","groupId":"g003575b6","code":"8194444","desc":"PIASTRA VERTICALE DX","qty":1,"note":"BS1XD0XXX r22 (AL)","cond":{"pb8ed88a6":"DX"}},{"id":"ib73e413f","groupId":"g003575b6","code":"8194017","desc":"PIASTRA VERTICALE SX","qty":1,"note":"BS1XD0XXX r23 (AL)","cond":{"pb8ed88a6":"SX"}},{"id":"i3dcb3691","groupId":"g0e57f2bb","code":"ST17CSG079","desc":"TC. FALCON D=170 1 SP I=265 DX SIEMENS","qty":1,"note":"TS1XD0XXX r3","cond":{"pc528d7c0":"170","pda085593":"NO","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"}},{"id":"if48f96ef","groupId":"g0e57f2bb","code":"ST17CSG073","desc":"TC. FALCON D=170 SP I=265 SIEMENS DX","qty":1,"note":"TS1XD0XXX r4","cond":{"pc528d7c0":"170","pda085593":"SI","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"}},{"id":"i7b3a5828","groupId":"g0e57f2bb","code":"ST17CSG074","desc":"TC. FALCON D=170 SP I=265 SIEMENS SX","qty":1,"note":"TS1XD0XXX r5","cond":{"pc528d7c0":"170","pda085593":"SI","p8cc04cf3":"SIEMENS","pb8ed88a6":"SX"}},{"id":"i0d738481","groupId":"g0e57f2bb","code":"ST17CSG078","desc":"SUP.TC.FALCON D=170 2SP I=265 SX NO MOT","qty":1,"note":"TS1XD0XXX r6: senza motore, motorizzazione da definire","cond":{"pc528d7c0":"170","pda085593":"NO","p8cc04cf3":"?","pb8ed88a6":"SX"},"review":true},{"id":"ic7c42470","groupId":"g0e57f2bb","code":"ST17CSG076","desc":"TC.FALCON D=200 SP I=265 SIEMENS DX","qty":1,"note":"TS1XD0XXX r17","cond":{"pc528d7c0":"200","pda085593":"SI","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"}},{"id":"ic8a32c41","groupId":"g0e57f2bb","code":"ST17CS0118","desc":"TC. FALCON SERVO I=265 SIEMENS DX","qty":1,"note":"TS1XD0XXX r18: incavo \"?\"","cond":{"pc528d7c0":"200","pda085593":"?","p8cc04cf3":"SIEMENS","pb8ed88a6":"DX"},"review":true},{"id":"i4480c65f","groupId":"g4c9be3e1","code":"TC15B14021","desc":"SPATOLE D=140X250 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r8","cond":{"pc528d7c0":"170","p43fb4e2c":"140","pda085593":"NO","p4cb4a977":"1","p0b77a632":"250","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i7a6debfc","groupId":"g4c9be3e1","code":"TC17CSH070","desc":"SPATOLE D=150X190 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r9","cond":{"pc528d7c0":"170","p43fb4e2c":"150","pda085593":"NO","p4cb4a977":"1","p0b77a632":"190","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i72f722a8","groupId":"g4c9be3e1","code":"TC17CSH071","desc":"SPATOLE D=170X250 TRASV. 1,5X90 10/5/10","qty":1,"note":"TS1XD0XXX r10","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"1","p0b77a632":"250","p9fbd3fb9":"1,5X90 10/5/10"}},{"id":"i53294953","groupId":"g4c9be3e1","code":"TC15B17021","desc":"SPATOLE D=170X250 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r11","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"1","p0b77a632":"250","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i8d3fc2f0","groupId":"g4c9be3e1","code":"TC15B17019","desc":"SPATOLE D=170X250 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r12","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"2","p0b77a632":"250","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i45770107","groupId":"g4c9be3e1","code":"TC17CSH030","desc":"SPATOLE D=170X350 TRAS 2X90° 10/5/10","qty":1,"note":"TS1XD0XXX r13","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"1","p0b77a632":"350","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i0be8463f","groupId":"g4c9be3e1","code":"TC15B17040","desc":"SPATOLE D=170X350 TRAS 2X90° 10/5/10","qty":1,"note":"TS1XD0XXX r14","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"NO","p4cb4a977":"2","p0b77a632":"350","p9fbd3fb9":"2X90 10/5/10"}},{"id":"ibb5281e9","groupId":"g4c9be3e1","code":"TC15Z17011","desc":"SPATOLE D=170X400 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r15: profilo 1,5X90 in tabella ma 2X90 in descrizione","cond":{"pc528d7c0":"170","p43fb4e2c":"170","pda085593":"SI","p4cb4a977":"1","p0b77a632":"400","p9fbd3fb9":"1,5X90 10/5/10"},"review":true},{"id":"icb9b908a","groupId":"g4c9be3e1","code":"TC15A20014","desc":"SPATOLE D=200X350 TRAS 2X90° 10/5/10","qty":1,"note":"TS1XD0XXX r20","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"NO","p4cb4a977":"1","p0b77a632":"350","p9fbd3fb9":"2X90 10/5/10"}},{"id":"i5f3f14a0","groupId":"g4c9be3e1","code":"TC15Z200016","desc":"SPATOLE D=200X420 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r21: codice con uno 0 in più? verificare","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"SI","p4cb4a977":"1","p0b77a632":"420","p9fbd3fb9":"2X90 10/5/10"},"review":true},{"id":"if67ac959","groupId":"g4c9be3e1","code":"SP17CSH007","desc":"BARRE SALDANTI D=200X400 1.5X90° 6/5/6*","qty":1,"note":"TS1XD0XXX r22","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"SI","p4cb4a977":"1","p0b77a632":"400","p9fbd3fb9":"1,5X90 6/5/6"}},{"id":"i8328e50e","groupId":"g4c9be3e1","code":"TC15Z20008","desc":"SPATOLE D=200X400 TRAS 2X90° 10/5/10*","qty":1,"note":"TS1XD0XXX r23","cond":{"pc528d7c0":"200","p43fb4e2c":"200","pda085593":"SI","p4cb4a977":"1","p0b77a632":"400","p9fbd3fb9":"2X90 10/5/10"}},{"id":"ib8a8cc23","groupId":"g50e5f8af","code":"LM04191550","desc":"KIT LAMA INCLINATA 190X15X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r25","cond":{"p0b77a632":"190","pc31c2bef":"INCLINATA","p4a37d2e5":"15"}},{"id":"ibb021f3e","groupId":"g50e5f8af","code":"LM04251550","desc":"KIT LAMA INCLINATA 250X15X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r26","cond":{"p0b77a632":"250","pc31c2bef":"INCLINATA","p4a37d2e5":"15"}},{"id":"i7b4b571f","groupId":"g50e5f8af","code":"LM04252050","desc":"KIT LAMA INCLINATA 250X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r27","cond":{"p0b77a632":"250","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"i5e824114","groupId":"g50e5f8af","code":"LM04351550","desc":"KIT LAMA INCLINATA 350X15X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r28","cond":{"p0b77a632":"350","pc31c2bef":"INCLINATA","p4a37d2e5":"15"}},{"id":"ie280039c","groupId":"g50e5f8af","code":"LM04352050","desc":"KIT LAMA INCLINATA 350X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r29","cond":{"p0b77a632":"350","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"if40ead7c","groupId":"g50e5f8af","code":"LM06252052","desc":"KIT LAMA ZIG-ZAG D=70 250X20X5 SPESSORE","qty":1,"note":"TS1XD0XXX r30","cond":{"p0b77a632":"250","pc31c2bef":"ZIG-ZAG","p4a37d2e5":"20"}},{"id":"i7f571769","groupId":"g50e5f8af","code":"LM04402050","desc":"KIT LAMA INCLINATA 400X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r31","cond":{"p0b77a632":"400","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"i6a9cb5d7","groupId":"g50e5f8af","code":"LM04422050","desc":"KIT LAMA INCLINATA 420X20X5 A SPESSORE","qty":1,"note":"TS1XD0XXX r32","cond":{"p0b77a632":"420","pc31c2bef":"INCLINATA","p4a37d2e5":"20"}},{"id":"i4c6170b0","groupId":"gfc36be2f","code":"MV17CSH020","desc":"MOVIM. 3 RUOTE T.S. SIEMENS CINGHIA DX","qty":1,"note":"MV1XD0XXX r2","cond":{"pb8ed88a6":"DX","pffd85499":"CINGHIA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"i8a6dcd1a","groupId":"gfc36be2f","code":"MV17CSH020-SX","desc":"MOVIM. 3 RUOTE T.S. SIEMENS CINGHIA SX","qty":1,"note":"MV1XD0XXX r3","cond":{"pb8ed88a6":"SX","pffd85499":"CINGHIA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"i78c9e84d","groupId":"gfc36be2f","code":"MV17KT0107","desc":"MOVIMENTO RUOTE T.S. SERVO SIEMENS","qty":1,"note":"MV1XD0XXX r5","cond":{"pb8ed88a6":"DX","pffd85499":"CATENA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"ie86d6c47","groupId":"gfc36be2f","code":"MV17KT0107-SX","desc":"MOVIMENTO RUOTE T.S. SERVO SIEMENS","qty":1,"note":"MV1XD0XXX r6","cond":{"pb8ed88a6":"SX","pffd85499":"CATENA","p8cc04cf3":"SIEMENS","p1647d211":"3"}},{"id":"iabd1d635","groupId":"gfc36be2f","code":"MV17KT0109","desc":"MOVIM. 4 RUOTE T.S.SIEMENS CINGHIA DX","qty":1,"note":"MV1XD0XXX r8","cond":{"pb8ed88a6":"DX","pffd85499":"CINGHIA","p8cc04cf3":"SIEMENS","p1647d211":"4"}},{"id":"i89362069","groupId":"gfc36be2f","code":"MV17CSH013","desc":"MOVIM. 4 RUOTE T.S. A.B. CINGHIA SX","qty":1,"note":"MV1XD0XXX r10","cond":{"pb8ed88a6":"SX","pffd85499":"CINGHIA","p8cc04cf3":"AB","p1647d211":"4"}},{"id":"ib1482efa","groupId":"g48ae8456","code":"BRT2621540","desc":"TRAI.IN.INOX 1,5X90° H=10 I=265 1AP.P","qty":1,"note":"LS1XD0XXX r2","cond":{"p797b5d5e":"INOX","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"ie5486085","groupId":"g48ae8456","code":"BRT2621540","desc":"TRAI.IN.INOX 1,5X90° H=10 I=265 1AP.P","qty":1,"note":"LS1XD0XXX r3","cond":{"p797b5d5e":"INOX","pb8ed88a6":"SX","p996e57f6":"10"}},{"id":"ia7d0c98c","groupId":"g48ae8456","code":"BRT00MG0003","desc":"RUOTE TRAINO FE 1.5X90° H=10 I=265 DX","qty":1,"note":"LS1XD0XXX r4","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"ib69c67f3","groupId":"g48ae8456","code":"BRT00MG0033","desc":"RUOTE TRAINO FE 1.5X90° H=12 I=265 DX","qty":1,"note":"LS1XD0XXX r5","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"12"}},{"id":"iccc05187","groupId":"g4d524fe2","code":"BRS00MG0033","desc":"RUOTE SALD. INOX 1.5X90° H=10 I=265 2AP","qty":1,"note":"LS1XD0XXX r6","cond":{"p797b5d5e":"INOX","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"i7e477fce","groupId":"g4d524fe2","code":"BRS00MG0033","desc":"RUOTE SALD. INOX 1.5X90° H=10 I=265 2AP","qty":1,"note":"LS1XD0XXX r7","cond":{"p797b5d5e":"INOX","pb8ed88a6":"SX","p996e57f6":"10"}},{"id":"i0663784f","groupId":"g4d524fe2","code":"BRS00MG0062","desc":"RUOTE SALD. FE 1.5X90° H=10 I=265 DX","qty":1,"note":"LS1XD0XXX r9","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"10"}},{"id":"i713e4f56","groupId":"g4d524fe2","code":"BRS00MG0053","desc":"RUOTE SALD. FE 1.5X90° H=12 I=265 DX","qty":1,"note":"LS1XD0XXX r10","cond":{"p797b5d5e":"FE","pb8ed88a6":"DX","p996e57f6":"12"}},{"id":"i3260ec57","groupId":"g053ec840","code":"RP261A2021","desc":"GR. RUOTE PIEGATORI I=265 AL86,5X2 DX FP","qty":1,"note":"LS1XD0XXX r11","cond":{"pb8ed88a6":"DX"}},{"id":"i1b14bc1d","groupId":"g053ec840","code":"RP265A2020","desc":"GR.RUOTE PIEGATORI I=265 AL86.5X2 SX FP SX","qty":1,"note":"LS1XD0XXX r12","cond":{"pb8ed88a6":"SX"}},{"id":"i4312d7b8","groupId":"g53502d1d","code":"SL00CSG002-SX","desc":"SALDATURA LONG.A PATTINI L=85 SMC H=9 SX","qty":1,"note":"LS1XD0XXX r14","cond":{"pb8ed88a6":"SX","p5eb663ba":"9"}},{"id":"i58070ff4","groupId":"g53502d1d","code":"SL00CSG002","desc":"SALDATURA LONG.A PATTINI L=85 SMC H=9 DX","qty":1,"note":"LS1XD0XXX r15","cond":{"pb8ed88a6":"DX","p5eb663ba":"9"}},{"id":"id7579320","groupId":"g53502d1d","code":"SL15CS0002","desc":"SALDATURA LONG.A PATTINI L=85 SMC H=15 DX","qty":1,"note":"LS1XD0XXX r16","cond":{"pb8ed88a6":"DX","p5eb663ba":"15"}},{"id":"i2f34bbce","groupId":"g08b8246f","code":"PB18CSG002","desc":"GR. COLONNA CON PORTA LEXAN DX","qty":1,"note":"CF1XD0XXX r2","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"DX"}},{"id":"i472e7841","groupId":"g08b8246f","code":"PB18CSG003","desc":"GR. COLONNA CON PORTA LEXAN SX","qty":1,"note":"CF1XD0XXX r3","cond":{"p6a8a8a3b":"INOX","pb8ed88a6":"SX"}},{"id":"iad0cdf76","groupId":"g08b8246f","code":"PB17CSG048","desc":"GR. COLONNA FE DX","qty":1,"note":"CF1XD0XXX r5","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"DX"}},{"id":"i26714612","groupId":"g08b8246f","code":"PB17CSG049","desc":"GR. COLONNA FE SX","qty":1,"note":"CF1XD0XXX r6","cond":{"p6a8a8a3b":"FE","pb8ed88a6":"SX"}},{"id":"i3328446c","groupId":"g964602a2","code":"CL17CSH065","desc":"BRACCIO FORMATORE REGOLAB. DX","qty":1,"note":"CF1XD0XXX r8","cond":{"pb8ed88a6":"DX"}},{"id":"ifb02b0f7","groupId":"g964602a2","code":"CL17CSH066","desc":"BRACCIO FORMATORE REGOLAB. SX","qty":1,"note":"CF1XD0XXX r9","cond":{"pb8ed88a6":"SX"}},{"id":"i8f6e0bb7","groupId":"g66b226f5","code":"CL17CSG028","desc":"CALANDRA PRED STAMPATORE VIDEOJET DX","qty":1,"note":"CF1XD0XXX r11","cond":{"pb8ed88a6":"DX","p346bc0e9":"VIDEOJET","p5d1be123":"720"}},{"id":"i2fd39182","groupId":"g66b226f5","code":"CL17CSG028-SX","desc":"CALANDRA PRED STAMPATORE VIDEOJET SX","qty":1,"note":"CF1XD0XXX r12","cond":{"pb8ed88a6":"SX","p346bc0e9":"VIDEOJET","p5d1be123":"720"}},{"id":"i948ef6e1","groupId":"g66b226f5","code":"CL17CS0016","desc":"CALANDRA PRED STAMP NIMAX DOMINO V300* DX","qty":1,"note":"CF1XD0XXX r13","cond":{"pb8ed88a6":"DX","p346bc0e9":"DOMINO V300","p5d1be123":"527"}},{"id":"i3d119564","groupId":"g66b226f5","code":"CL17CSH008","desc":"CALANDRA DOMINO VX150I DX","qty":1,"note":"CF1XD0XXX r14","cond":{"pb8ed88a6":"DX","p346bc0e9":"DOMINO VX150I","p5d1be123":"620"}},{"id":"i4ba0a6d5","groupId":"g66b226f5","code":"CL17CSH008-SX","desc":"CALANDRA DOMINO VX150I SX","qty":1,"note":"CF1XD0XXX r15","cond":{"pb8ed88a6":"SX","p346bc0e9":"DOMINO VX150I","p5d1be123":"620"}},{"id":"i54e40cd1","groupId":"g66b226f5","code":"CL17CSG013","desc":"CALANDRA STAMPATORE SMARTDATE 5 DX W620","qty":1,"note":"CF1XD0XXX r16","cond":{"pb8ed88a6":"DX","p346bc0e9":"SMARTDATE 5","p5d1be123":"620"}},{"id":"i9c3f936e","groupId":"g66b226f5","code":"CL17CS0037","desc":"CALANDRA STAMPATORE SMARTDATE 5 DX W720","qty":1,"note":"CF1XD0XXX r17","cond":{"pb8ed88a6":"DX","p346bc0e9":"SMARTDATE 5","p5d1be123":"720"}},{"id":"i6f32fdd7","groupId":"g66b226f5","code":"CL17CSG013-SX","desc":"CALANDRA STAMPATORE SMARTDATE 5 SX W720","qty":1,"note":"CF1XD0XXX r18","cond":{"pb8ed88a6":"SX","p346bc0e9":"SMARTDATE 5","p5d1be123":"720"}},{"id":"i967f188f","groupId":"g73f3ea8b","code":"CB18CSH001","desc":"GR. MOT. C.B. MP060 TECNOING-SIEMENS","qty":1,"note":"CF1XD0XXX r20","cond":{"p8cc04cf3":"SIEMENS"}},{"id":"ibc2bd6f2","groupId":"g73f3ea8b","code":"CB17CSH020","desc":"KIT MOTORIZZAZIONE CB CMZ","qty":1,"note":"CF1XD0XXX r21","cond":{"p8cc04cf3":"CMZ"}},{"id":"ia72d4c7e","groupId":"g73f3ea8b","code":"CB17CSH002","desc":"KIT MOTORIZZAZIONE CB TECNOING-AB VPL","qty":1,"note":"CF1XD0XXX r22","cond":{"p8cc04cf3":"AB"}}],"inter":[{"id":"xde20dfdf","groupId":"g67e017a6","code":"BASAMENTO_FALCON_DX.ASM","desc":"Interscambio basamento DX","cond":{"pb8ed88a6":"DX"},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6036509170&u8=1"},{"id":"xacc9f7de","groupId":"gf6f0412d","code":"GAMBE_BASAMENTO_FALCON.ASM","desc":"Interscambio gambe basamento","cond":{},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6036650652&u8=1"},{"id":"x6241154d","groupId":"g08b8246f","code":"CONV_FILM_FALCON_DX.ASM","desc":"Interscambio convogliamento film DX","cond":{"pb8ed88a6":"DX"},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6039712830&u8=1"},{"id":"x1b3949be","groupId":"g66b226f5","code":"CALANDRA_STAMP_FALCON_DX.ASM","desc":"Interscambio calandra stampatore DX","cond":{"pb8ed88a6":"DX"},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6040049946&u8=1"},{"id":"xc595515d","groupId":"g66b226f5","code":"CALANDRA_STAMP_FALCON_SX.ASM","desc":"Interscambio calandra stampatore SX","cond":{"pb8ed88a6":"SX"}},{"id":"xf0a83145","groupId":"g73f3ea8b","code":"MOTORIZZ_CONV_FILM.ASM","desc":"Interscambio motorizzazione convogliamento film","cond":{},"link":"https://pdmlink12.pfm.it/Windchill/app/#ptc1/tcomp/infoPage?ContainerOid=OR%3Awt.pdmlink.PDMLinkProduct%3A48640&oid=VR%3Awt.epm.EPMDocument%3A6039866767&u8=1"}],"acc":[{"id":"a49b827ab","groupId":"gf6f0412d","name":"Prolunga gambe","values":["H=50","H=125","H=150"],"params":["p6a8a8a3b"],"required":false},{"id":"a5aa541a5","groupId":"g0e57f2bb","name":"Sollevamento","values":["MANUALE","PNEUMATICO"],"params":["pb8ed88a6"],"required":true}],"accItems":[{"id":"c45ec5f2a","groupId":"a49b827ab","code":"8194492","desc":"PROLUNGA PIEDE H=50 INOX","qty":1,"note":"BS1XD0XXX r9","cond":{"a49b827ab":"H=50","p6a8a8a3b":"INOX"}},{"id":"c563b62e6","groupId":"a49b827ab","code":"8195616","desc":"PROLUNGA PIEDI H=125 INOX","qty":1,"note":"BS1XD0XXX r10","cond":{"a49b827ab":"H=125","p6a8a8a3b":"INOX"}},{"id":"c12f6c19a","groupId":"a49b827ab","code":"8121279","desc":"PROLUNGA PIEDE H=50 FE","qty":1,"note":"BS1XD0XXX r19","cond":{"a49b827ab":"H=50","p6a8a8a3b":"FE"}},{"id":"cf7c90dca","groupId":"a49b827ab","code":"BS15CS0557","desc":"PROLUNGA PIEDI H=150 FE","qty":1,"note":"BS1XD0XXX r20","cond":{"a49b827ab":"H=150","p6a8a8a3b":"FE"}},{"id":"c0c5abcbb","groupId":"a5aa541a5","code":"ST17KT0006","desc":"REGOLAZIONE VERT.TC SERVO E EL.CON PLC","qty":1,"note":"TS1XD0XXX r34","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"DX"}},{"id":"c525bfeff","groupId":"a5aa541a5","code":"ST17KT0006-SX","desc":"REGOLAZIONE VERT.TC SERVO E EL.CON PLC","qty":1,"note":"TS1XD0XXX r35","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"SX"}},{"id":"cbcec57b1","groupId":"a5aa541a5","code":"ST17CS0003","desc":"CONTROLLO REGOLAZIONE AUTOMATICA T.C.","qty":1,"note":"TS1XD0XXX r36","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"DX"}},{"id":"c6d84d26e","groupId":"a5aa541a5","code":"ST17CS0003","desc":"CONTROLLO REGOLAZIONE AUTOMATICA T.C.","qty":1,"note":"TS1XD0XXX r36","cond":{"a5aa541a5":"PNEUMATICO","pb8ed88a6":"SX"}},{"id":"c0aa55ae8","groupId":"a5aa541a5","code":"RV15CS0001-DX","desc":"REGOLAZIONE VERTICALE TC MANUALE","qty":1,"note":"TS1XD0XXX r38","cond":{"a5aa541a5":"MANUALE","pb8ed88a6":"DX"}},{"id":"c8d102124","groupId":"a5aa541a5","code":"RV15CS0001","desc":"REGOLAZIONE VERTICALE TC MANUALE","qty":1,"note":"TS1XD0XXX r37","cond":{"a5aa541a5":"MANUALE","pb8ed88a6":"SX"}}],"configs":[],"version":4,"source":"configuratore-prelim.xlsx"};
-function seed() { return normalize(JSON.parse(JSON.stringify(FALCON_DB))); }
+function seed() { return normalize({}); }   // nuova copia: database vuoto
 // Condizioni a più valori (versioni precedenti / CSV con "|") → una riga per valore.
 function expandConds(list) {
   const out = [];
@@ -885,6 +1091,7 @@ const MACRO_DEFAULT = [
 function migrateMacros(d) {
   if (d.macrosInit) return;                              // una sola volta: poi decide l'utente
   d.macrosInit = true;
+  if (d.source !== "configuratore-prelim.xlsx") return;   // macrogruppi predefiniti solo per il database Falcon originale
   if (d.macros.length) return;
   for (const [name, code, gnames] of MACRO_DEFAULT) {
     const gs = d.groups.filter(g => g.kind !== "master" && gnames.some(n => n.toLowerCase() === g.name.toLowerCase()));
@@ -895,6 +1102,7 @@ function migrateMacros(d) {
 }
 function normalize(d) {
   for (const k of ["sections", "params", "groups", "items", "inter", "acc", "accItems", "configs", "macros"]) d[k] ??= [];
+  d.settings ??= {};
   migrateMacros(d);
   d.acc.forEach(a => { a.values ??= []; a.params ??= []; a.required ??= false; });
   d.accItems.forEach(i => { i.qty ??= 1; i.note ??= ""; i.code ??= ""; i.desc ??= ""; });
@@ -908,15 +1116,13 @@ function normalize(d) {
     const pv = d.params.find(p => /versione/i.test(p.name));
     const gm = {id: uid(), name: "Assieme master", kind: "master", params: pv ? [pv.id] : [], mode: "one", required: true};
     d.groups.unshift(gm);
-    if (pv) for (const v of ["DX", "SX"]) if (pv.values.includes(v))
-      d.items.push({id: uid(), groupId: gm.id, code: `CS1XD0${v}XXX`, desc: `Assieme master Falcon ${v}`, qty: 1, note: "", cond: {[pv.id]: v}});
   }
   d.groups.sort((a, b) => (b.kind === "master") - (a.kind === "master"));
   d.version = 4;
   return d;
 }
 function load() {
-  for (const k of [KEY, KEY_OLD].filter(Boolean)) { try { const d = JSON.parse(localStorage.getItem(k)); if (d) return normalize(d); } catch {} }
+  try { const d = JSON.parse(localStorage.getItem(KEY)); if (d) return normalize(d); } catch {}
   return seed();
 }
 let db = load();
@@ -930,10 +1136,27 @@ function save() {
 }
 save();
 const byId = (arr, id) => arr.find(x => x.id === id);
+/* ---- nome del configuratore (salvato nel database) ---- */
+const appTitle = () => String(db.settings?.title || "").trim() || (db.source === "configuratore-prelim.xlsx" ? "Configuratore Falcon" : "Nuovo configuratore");
+const machineName = () => appTitle().replace(/^configuratore\s*/i, "").trim() || appTitle();
+const machineSlug = () => machineName().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+function titleUi() {
+  const t = appTitle(); document.title = t;
+  const el = document.getElementById("appTitle"); if (el) el.textContent = t;
+  const lg = document.getElementById("appLogo"); if (lg) lg.textContent = (machineName()[0] || "C").toUpperCase();
+}
 const P = id => byId(db.params, id) || byId(db.acc, id), G = id => byId(db.groups, id);
 const accsOf = g => db.acc.filter(a => a.groupId === g.id);
 const accPseudo = a => ({id: a.id, name: a.name, kind: "acc", params: [a.id, ...a.params], mode: "all", required: a.required});
 const allRows = () => [...db.items, ...db.inter, ...db.accItems];
+/* ---- collegamento Windchill: link specifico della riga, altrimenti modello di ricerca con {codice} ---- */
+const wcTpl = () => String(db.settings?.wcSearch || "").trim();
+const wcUrl = r => { const own = String(r?.link || "").trim(); if (own) return own; const t = wcTpl(), c = String(r?.code || "").trim(); return t && c ? t.replace(/\{codice\}/gi, encodeURIComponent(c)) : ""; };
+const rowByCode = code => { const c = String(code || "").trim().toLowerCase(); if (!c) return null; const rs = allRows().filter(r => String(r.code).trim().toLowerCase() === c); return rs.find(r => r.link) || rs[0] || {code}; };
+const wcBase = () => { const l = allRows().map(r => r.link).find(Boolean) || wcTpl(); const m = String(l || "").match(/^(https?:\/\/[^/]+\/Windchill\/)/i); return m ? m[1] + "app/" : ""; };
+// ogni codice è un pulsante: il clic apre un menu (Windchill, ricerca, copia, imposta link)
+const codeLink = (r, text = r?.code) => { const c = String(r?.code || "").trim(); if (!c) return esc(text);
+  return `<button type="button" class="cbtn ${r.link ? "has" : ""}" data-code="${esc(c)}" title="Azioni su ${esc(c)}">${esc(text)}<span class="wci" aria-hidden="true">${r.link ? IC.ext : IC.link}</span></button>`; };
 const master = () => db.groups.find(g => g.kind === "master");
 const normalGroups = () => db.groups.filter(g => g.kind !== "master");
 const macroOf = g => g.macroId ? byId(db.macros, g.macroId) : null;
@@ -1128,6 +1351,7 @@ function renderResult() {
   else if (m.state === "choose") { mTitle = `${m.cands.length} master validi: scegline uno`;
     mDesc = `<div class="seg mseg" id="mSeg">${m.cands.map(i => `<button data-mpick="${i.id}" class="code">${esc(i.code)}</button>`).join("")}</div>`; }
   else if (m.state === "draft") { mTitle = "Master in bozza: da completare"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Completalo in Tipologie</a>`; }
+  else if (!db.items.some(i => i.groupId === m.g.id)) { mCls = "ne"; mTitle = "Assieme master non ancora definito"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Definiscilo in Tipologie</a>`; }
   else { mCls = "er"; mTitle = "Nessun master per questi parametri"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Aggiungilo in Tipologie</a>`; }
   const mPop = prevStates.__m && prevStates.__m !== mCls ? "pop" : ""; prevStates.__m = mCls;
   const nGap = R.res.filter(hiddenGap).length, notReady = R.total - R.ready - nGap;
@@ -1157,6 +1381,7 @@ function renderResult() {
           ? "manca " + i.missing.map(p => `<a data-param="${p}" href="javascript:void 0">${esc(P(p)?.name)}</a>`).join(", ") : esc(i.text)}</li>`).join("")}</ul></details></div>`
     : `<div class="issuebar okbar"><span class="st ok" aria-hidden="true">✓</span>${nGap ? `Nessuna scelta da fare <span class="mut">· ${nGap} ${nGap === 1 ? "tipologia" : "tipologie"} con dati ancora da inserire, nascoste</span>` : "Configurazione completa: master, interscambi e codici definiti."}</div>`;
   if (!started) {
+    if (!db.params.length) { $("#cfgGroups").innerHTML = `<div class="card startcard" style="grid-column:1/-1"><div class="ic">${IC.asm}</div><b>Configuratore vuoto</b>Inizia da <a class="tlink" href="javascript:void 0" onclick="show('params')">Parametri</a> (es. Versione, Materiale), poi crea le tipologie e i codici in <a class="tlink" href="javascript:void 0" onclick="show('groups')">Tipologie e codici</a>. Il nome in alto si cambia con un clic.</div>`; $("#cfgBom").innerHTML = ""; prevKeys = new Set(); animateCards = true; return; }
     $("#cfgGroups").innerHTML = `<div class="card startcard" style="grid-column:1/-1"><div class="ic">${IC.asm}</div><b>Scegli i parametri per iniziare</b>Parti da <b style="display:inline;font-size:inherit">${esc(m?.g.params.map(p => P(p)?.name).join(", ") || "Versione")}</b>: il master Creo, gli interscambi e i codici compariranno qui.</div>`;
     $("#cfgBom").innerHTML = '<div class="empty">Imposta i parametri per generare la distinta.</div>';
     $("#fltSeg").classList.add("hide");
@@ -1191,7 +1416,7 @@ function renderResult() {
       const lab = x ? `Interscambio: ${x.code}` : r.inter.length ? "Interscambio ambiguo" : "Interscambio mancante";
       inter = `<button type="button" class="xbtn ${st} ${x ? fresh("x" + x.id) : ""}" data-xg="${g.id}" data-xs="${st}" ${x ? `data-xi="${x.id}"` : ""} aria-label="${esc(lab)}">${IC.asm}</button>`;
     }
-    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${esc(i.code)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="num"><span class="q">${i.qty}</span></td>`;
+    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td>`;
     const note = (c, t) => `<div class="note ${c}">${t}</div>`;
     if (r.state === "missing") body = ""; // i parametri mancanti sono già evidenziati (cliccabili) nella riga attributi
     else if (r.state === "none" && gap) body = lrow("Codici", note("ne", "Codice non ancora inserito."));
@@ -1228,10 +1453,10 @@ function renderResult() {
   // ---- distinta: colonna Tipo esplicita, accessori marcati, tipologia ripetuta solo quando cambia
   const TY = {Master: "Master", Macrogruppo: "Macrogruppo", Interscambio: "Interscambio", Codice: "Codice", Accessorio: "Accessorio"};
   let prevG = null;
-  $("#cfgBom").innerHTML = `<div class="scroll"><table class="bomt"><thead><tr><th style="width:40px">Liv.</th><th>Codice</th><th>Descrizione</th><th>Tipo</th><th>Tipologia</th><th class="num">Q.tà</th></tr></thead><tbody>${
+  $("#cfgBom").innerHTML = `<div class="scroll"><table class="bomt"><thead><tr><th style="width:40px">Liv.</th><th>Codice</th><th>Descrizione</th><th>Tipo</th><th>Tipologia</th></tr></thead><tbody>${
     R.lines.map(l => { const gname = l.lvl <= 1 && l.type !== "NON RISOLTO" ? "" : (l.group !== prevG ? esc(l.group) : ""); if (l.lvl > 1 || l.type === "NON RISOLTO") prevG = l.group; if (l.type === "Macrogruppo") prevG = null;
       const acc = l.type === "Accessorio" || (l.unres && l.acc);
-      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + esc(l.code)}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}</td><td class="mut">${gname}</td><td class="num">${l.qty}</td></tr>`; }).join("")}</tbody></table></div>`;
+      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + (l.code ? codeLink(rowByCode(l.code), l.code) : "")}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}</td><td class="mut">${gname}</td></tr>`; }).join("")}</tbody></table></div>`;
 
   prevKeys = keys; animateCards = false;
 }
@@ -1239,7 +1464,7 @@ function accHtml(x, keys, fresh) {
   const a = x.a, v = cfg.sel[a.id] && a.values.includes(cfg.sel[a.id]) ? cfg.sel[a.id] : "";
   const seg = `<div class="seg sm ${!v && a.required ? "unset req" : ""}" data-accsel="${a.id}" role="group" aria-label="Opzione accessorio ${esc(a.name)}">${a.required ? "" : `<button data-v="" class="none ${v ? "" : "on"}">Nessuno</button>`}${a.values.map(o => `<button data-v="${esc(o)}" class="${v === o ? "on" : ""}">${esc(o)}</button>`).join("")}</div>`;
   let body = "";
-  if (x.state === "ok") body = `<table class="ctab"><tbody>${x.items.map(i => { keys.add("a" + i.id); return `<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${esc(i.code)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="num"><span class="q">${i.qty}</span></td></tr>`; }).join("")}</tbody></table>`;
+  if (x.state === "ok") body = `<table class="ctab"><tbody>${x.items.map(i => { keys.add("a" + i.id); return `<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td></tr>`; }).join("")}</tbody></table>`;
   else if (x.state === "missing") body = `<div class="note wa">Scegli ${x.missing.map(p => `<a class="tlink" data-param="${p}" href="javascript:void 0"><b>${esc(P(p)?.name)}</b></a>`).join(", ")} nei parametri.</div>`;
   else if (x.state === "draft") body = `<div class="note wa">Righe dell'accessorio in bozza · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Completale in Tipologie</a></div>`;
   else if (x.state === "none") body = `<div class="note er">Nessun codice per «${esc(v)}» · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Aggiungilo in Tipologie</a></div>`;
@@ -1342,10 +1567,10 @@ async function guardExport(fn) {
 function bomTable(sep, lines = resolveAll(cfg.sel, cfg.choice).lines, name = cfg.name, sel = cfg.sel) {
   const num = n => sep === ";" ? String(n).replace(".", ",") : String(n);
   const head = [...db.params, ...db.acc].filter(p => sel[p.id]).map(p => [db.acc.includes(p) ? `Accessorio ${G(p.groupId)?.name} · ${p.name}` : p.name, sel[p.id]]);
-  const rows = [["Configurazione", name], ...head, [], ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione", "Qta"], ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc, num(l.qty)])];
+  const rows = [["Configurazione", name], ...head, [], ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione"], ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc])];
   return rows.map(r => r.map(x => csvCell(x, sep)).join(sep)).join("\r\n") + "\r\n";
 }
-const defName = () => { const v = db.params.filter(p => cfg.sel[p.id]).map(p => cfg.sel[p.id]); return v.length ? "distinta_falcon_" + v.join("_") : "distinta_falcon"; };
+const defName = () => { const v = db.params.filter(p => cfg.sel[p.id]).map(p => cfg.sel[p.id]); return ["distinta", machineSlug(), ...v].filter(Boolean).join("_"); };
 $("#btnCopy").onclick = () => guardExport(() => navigator.clipboard.writeText(bomTable("\t")).then(() => toast("Distinta copiata: incollala in Excel"), () => toast("Copia non consentita dal browser")));
 $("#btnCsvBom").onclick = () => guardExport(() => download(defName() + ".csv", "﻿" + bomTable(";"), "text/csv"));
 $("#btnPrint").onclick = () => guardExport(() => { const v = viewMode; setView("bom"); setTimeout(() => { print(); setView(v); }, 60); });
@@ -1569,15 +1794,14 @@ function rowsHtml(g, arr, kind) {
   };
   // elenco a griglia: su schermi larghi una riga sola (codice · descrizione · attributi · q.tà · note),
   // su schermi più stretti gli attributi scendono sotto la descrizione. Colonne allineate fra le righe.
-  const cls = isItem ? "ci" : "cx", ta = (f, v, ph) => `<textarea class="ghost wrapta" rows="1" data-k="${f === "note" ? "i" : kind}" data-f="${f}" data-i="__ID__" title="${esc(v)}" placeholder="${ph}">${esc(v)}</textarea>`;
-  const head = `<div class="chead"><span class="c-code">Codice</span><span class="c-desc">Descrizione</span>${g.params.length ? `<span class="c-attrs">Attributi</span>` : ""}${isItem ? '<span class="c-qty">Q.tà</span>' : ""}<span class="c-act"></span></div>`;
+  const cls = "cx", ta = (f, v, ph) => `<textarea class="ghost wrapta" rows="1" data-k="${f === "note" ? "i" : kind}" data-f="${f}" data-i="__ID__" title="${esc(v)}" placeholder="${ph}">${esc(v)}</textarea>`;
+  const head = `<div class="chead"><span class="c-code">Codice</span><span class="c-desc">Descrizione</span>${g.params.length ? `<span class="c-attrs">Attributi</span>` : ""}<span class="c-act"></span></div>`;
   return `<div class="clist ${cls} ${g.params.length ? "" : "noattr"}">${head}
     ${list.map(i => `<div class="crow ${i.review ? "review" : ""} ${i.id === flashId ? "flash" : ""} ${i.id === flashOk ? "flashok" : ""}" data-row="${i.id}">
       <div class="c-code"><input class="ghost code ${String(i.code).trim() ? "" : "draftcode"}" data-k="${kind}" data-f="code" data-i="${i.id}" value="${esc(i.code)}" title="${esc(i.code)}" placeholder="Codice da inserire">${mark(i) ? `<div class="cmark">${mark(i)}</div>` : ""}</div>
       <div class="c-desc">${ta("desc", i.desc, "Descrizione").replace("__ID__", i.id)}</div>
       ${g.params.length ? `<div class="c-attrs">${g.params.map(pid => `<span class="at"><span class="al">${esc(P(pid)?.name)}</span>${attrCell(i, pid, kind)}</span>`).join("")}</div>` : ""}
-      ${isItem ? `<div class="c-qty"><input class="ghost" type="number" min="0" step="any" data-k="i" data-f="qty" data-i="${i.id}" value="${i.qty}" title="Quantità"></div>` : ""}
-      <div class="c-act"><div class="acts">${i.review ? `<button class="ib" data-ok="${i.id}" data-k="${kind}" title="Segna come revisionata">${IC.check}</button>` : ""}<button class="ib" data-dup="${i.id}" data-k="${kind}" title="Duplica (codice da inserire)">${IC.dup}</button><button class="ib del" data-del="${i.id}" data-k="${kind}" title="Elimina">${IC.del}</button></div></div>
+      <div class="c-act"><div class="acts">${i.review ? `<button class="ib" data-ok="${i.id}" data-k="${kind}" title="Segna come revisionata">${IC.check}</button>` : ""}<button class="ib ${i.link ? "lk-on" : ""}" data-wl="${i.id}" data-k="${kind}" title="${i.link ? "Link Windchill impostato: clic per modificarlo" : "Aggiungi il link Windchill di questo codice"}">${IC.link}</button><button class="ib" data-dup="${i.id}" data-k="${kind}" title="Duplica (codice da inserire)">${IC.dup}</button><button class="ib del" data-del="${i.id}" data-k="${kind}" title="Elimina">${IC.del}</button></div></div>
     </div>`).join("") || `<div class="empty" style="padding:14px">${onlyDraft || q ? "Nessuna riga corrisponde al filtro." : "Nessuna riga."}</div>`}</div>`;
 }
 function accEditorHtml(g) {
@@ -1796,9 +2020,20 @@ ge.addEventListener("click", async e => {
     ge.querySelector(`input[data-i="${rec.id}"][data-f="code"]`)?.focus();
   }
   if (d.dup) {
-    const L = listOf(d.k), s = byId(L, d.dup), c = {...structuredClone(s), id: uid(), code: "", review: false};
+    const L = listOf(d.k), s = byId(L, d.dup), c = {...structuredClone(s), id: uid(), code: "", review: false}; delete c.link;
     L.splice(L.indexOf(s) + 1, 0, c); flashId = c.id; save(); refreshGroups();
     ge.querySelector(`input[data-i="${c.id}"][data-f="code"]`)?.focus();
+  }
+  if (d.wl) {
+    const it = byId(listOf(d.k), d.wl);
+    const r = await ask({title: `Link Windchill di ${it.code || "questa riga"}`, input: {value: it.link || "", placeholder: "Incolla l'indirizzo della pagina info di Windchill"},
+      body: `<p>Apri il codice in Windchill e copia l'indirizzo della sua pagina (infoPage). Lascia vuoto per togliere il link${wcTpl() ? " e usare la ricerca automatica" : ""}.</p>`,
+      actions: [{label: "Annulla", value: null}, {label: "Salva", value: "ok", kind: "p", default: true}]});
+    if (r.action !== "ok") return;
+    const v = (r.value || "").trim();
+    if (v && !/^https?:\/\//i.test(v)) return toast("Il link deve iniziare con http:// o https://");
+    if (v) it.link = v; else delete it.link;
+    save(); refreshGroups(); toast(v ? "Link Windchill salvato" : "Link rimosso"); return;
   }
   if (d.ok) { const it = byId(listOf(d.k), d.ok); it.review = false; if (Object.values(it.cond).includes(Q)) toast("Imposta prima gli attributi con «?»"); save(); flashOk = it.id; refreshGroups(); }
   if (d.del) {
@@ -1853,7 +2088,7 @@ function parseCsv(text) {
   return rows.filter(r => r.some(c => c.trim()));
 }
 const showMsg = (html, cls) => { $("#csvMsg").innerHTML = `<div class="callout ${cls}">${html}</div>`; };
-$("#btnJsonExp").onclick = () => download(`configuratore_falcon_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(db, null, 2), "application/json");
+$("#btnJsonExp").onclick = () => download(`${machineSlug() || "configuratore"}_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(db, null, 2), "application/json");
 $("#btnJsonImp").onclick = () => $("#fJson").click();
 $("#btnCsvImp").onclick = () => $("#fCsv").click();
 $("#fJson").onchange = async e => {
@@ -1972,7 +2207,31 @@ $("#fCsv").onchange = async e => {
 
 /* =================== NAVIGAZIONE =================== */
 let curTab = "conf";
-function rerender() { ({conf: renderConf, params: renderParams, groups: renderGroups, data: () => {}})[curTab](); }
+$("#appBrand").onclick = async () => {
+  const r = await ask({title: "Nome del configuratore", input: {value: appTitle(), placeholder: "es. Configuratore Falcon"},
+    body: "<p>Compare in alto, nella scheda del browser, nel grafo e nei nomi dei file esportati. Viene salvato nel database di questa cartella.</p>",
+    actions: [{label: "Annulla", value: null}, {label: "Salva", value: "ok", kind: "p", default: true}]});
+  if (r.action !== "ok" || !r.value) return;
+  db.settings.title = r.value; save(); titleUi(); rerender(); toast("Nome aggiornato");
+};
+function wcTplUi() {
+  const i = $("#wcTplIn"); if (!i) return; i.value = wcTpl();
+  const n = allRows().filter(r => r.link).length;
+  $("#wcTplMsg").textContent = `${plural(n, "riga ha", "righe hanno")} un link specifico. ` + (wcTpl() ? "Gli altri codici aprono la ricerca." : "Nessun modello di ricerca: i codici senza link restano testo semplice.");
+}
+$("#wcTplSave").onclick = () => {
+  const v = $("#wcTplIn").value.trim();
+  if (v && !/^https?:\/\//i.test(v)) return toast("Il modello deve iniziare con http:// o https://");
+  if (v && !/\{codice\}/i.test(v)) return toast("Nel modello manca {codice}");
+  db.settings.wcSearch = v; save(); wcTplUi(); toast(v ? "Modello di ricerca salvato" : "Modello di ricerca rimosso");
+};
+$("#wcTplTest").onclick = () => {
+  const v = $("#wcTplIn").value.trim(); if (!/\{codice\}/i.test(v)) return toast("Inserisci un modello con {codice}");
+  const c = db.items.find(i => i.code && i.groupId !== master()?.id)?.code || "TEST";
+  open(v.replace(/\{codice\}/gi, encodeURIComponent(c)), "_blank", "noopener");
+};
+function rerender() { titleUi(); rerender0(); }
+function rerender0() { ({conf: renderConf, params: renderParams, groups: renderGroups, data: wcTplUi, graph: () => window.renderGraph && renderGraph()})[curTab](); }
 function show(t) {
   curTab = t;
   $$("main > section").forEach(s => s.classList.toggle("hide", s.id !== "t-" + t));
@@ -2002,21 +2261,29 @@ $("#groupEditor").addEventListener("click", async e => {
 
 <script>
 /* =================== v15: SALVATAGGIO AUTOMATICO SU FILE (cartella collegata) ===================
-   Chrome/Edge — File System Access API. Il database vive in <cartella>/falcon_db.json;
+   Chrome/Edge — File System Access API. Il database vive in <cartella>/configuratore_db.json
+   (o falcon_db.json per la cartella Falcon esistente); ogni copia dell'HTML ha la sua cartella;
    localStorage resta come copia di lavoro. Backup giornaliero in <cartella>/backup_db/. */
 const FS = (() => {
   const T = window.__FS_TEST__ || {};
-  const FN = "falcon_db.json", BK = "backup_db", KEEP = 30, K_DIRTY = "cf_fs_dirty";
+  const NEW_FN = "configuratore_db.json", OLD_FN = "falcon_db.json", BK = "backup_db", KEEP = 30, K_DIRTY = "cf_fs_dirty@" + INST;
+  let FN = NEW_FN;
+  const stem = () => FN.replace(/\.json$/, "");
   const ok = !!(T.picker || window.showDirectoryPicker);
   let dir = null, state = ok ? "none" : "unsupported", lastMod = 0, lastAt = null, timer = 0, chain = Promise.resolve(), pending = false, quiet = false;
   // ---- handle persistente (IndexedDB) ----
   const idb = f => new Promise((res, rej) => { const r = indexedDB.open("cf_fs", 1); r.onupgradeneeded = () => r.result.createObjectStore("h"); r.onsuccess = () => { const tx = r.result.transaction("h", "readwrite"), q = f(tx.objectStore("h")); tx.oncomplete = () => res(q?.result); tx.onerror = () => rej(tx.error); }; r.onerror = () => rej(r.error); });
-  const hGet = () => T.idbGet ? T.idbGet() : idb(s => s.get("dir")).catch(() => null);
-  const hSet = h => T.idbSet ? T.idbSet(h) : idb(s => h ? s.put(h, "dir") : s.delete("dir")).catch(() => {});
+  const HK = "dir@" + INST;
+  const hGet = () => T.idbGet ? T.idbGet() : idb(s => s.get(HK)).catch(() => null);
+  const hSet = h => T.idbSet ? T.idbSet(h) : idb(s => h ? s.put(h, HK) : s.delete(HK)).catch(() => {});
+  const hLegacy = () => idb(s => s.get("dir")).catch(() => null);
+  const hasFile = async (d, n) => { try { await d.getFileHandle(n); return true; } catch { return false; } };
+  async function chooseFN(d) { FN = (await hasFile(d, NEW_FN)) ? NEW_FN : (await hasFile(d, OLD_FN)) ? OLD_FN : NEW_FN; }
   const dirty = v => { try { v === undefined ? 0 : localStorage.setItem(K_DIRTY, v ? "1" : "0"); return localStorage.getItem(K_DIRTY) === "1"; } catch { return false; } };
   const hhmm = d => d.toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit"});
   const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const isEmptyDb = () => !db.params.length && !normalGroups().length && !db.items.length;
 
   // ---- interfaccia: indicatore in alto + banner + scheda Import/Export ----
   function ui() {
@@ -2028,7 +2295,8 @@ const FS = (() => {
     ss.className = "savestate fs-" + S[0]; ss.querySelector("span").textContent = S[1];
     ss.title = state === "ok" ? `Cartella: ${dir.name} · ogni modifica viene scritta in ${FN}` : "Clic per gestire il salvataggio su file";
     const msg = {
-      none: `Il database non è collegato a una cartella: le modifiche restano solo in questo browser. <button class="b p s" data-fs="pick">Collega cartella…</button>`,
+      none: isEmptyDb() ? `<b>Nuovo configuratore.</b> Collega la cartella di questo file (<b>${esc(INST_DIR)}</b>): se contiene un database lo apro, altrimenti creo <span class="code">${NEW_FN}</span> vuoto e inizi a inserire i dati. <button class="b p s" data-fs="pick">Collega cartella…</button>`
+        : `Il database non è collegato a una cartella: le modifiche restano solo in questo browser. <button class="b p s" data-fs="pick">Collega cartella…</button>`,
       prompt: `Per salvare le modifiche su <b>${FN}</b> riconnetti la cartella <b>${name}</b> (il browser lo chiede a ogni apertura). <button class="b p s" data-fs="grant">Riconnetti</button>`,
       unsupported: `Questo browser non può salvare su file: apri la pagina con <b>Chrome</b> o <b>Edge</b>. Intanto le modifiche restano solo nel browser.`,
       error: `Non riesco a scrivere <b>${FN}</b> nella cartella <b>${name}</b>. Le modifiche sono comunque nel browser. <button class="b s" data-fs="retry">Riprova</button> <button class="b s" data-fs="pick">Scegli un'altra cartella…</button>`,
@@ -2053,10 +2321,10 @@ const FS = (() => {
   }
   async function backup(f) {
     if (!f || !f.size) return;
-    const bd = await dir.getDirectoryHandle(BK, {create: true}), name = `falcon_db_${today()}.json`;
+    const bd = await dir.getDirectoryHandle(BK, {create: true}), name = `${stem()}_${today()}.json`;
     try { await bd.getFileHandle(name); return; } catch {}      // già fatto oggi
     const w = await (await bd.getFileHandle(name, {create: true})).createWritable(); await w.write(await f.text()); await w.close();
-    const names = []; for await (const [n, h] of bd.entries()) if (h.kind === "file" && /^falcon_db_\d{4}-\d\d-\d\d\.json$/.test(n)) names.push(n);
+    const names = []; for await (const [n, h] of bd.entries()) if (h.kind === "file" && n.startsWith(stem() + "_") && /_\d{4}-\d\d-\d\d\.json$/.test(n)) names.push(n);
     names.sort(); for (const n of names.slice(0, Math.max(0, names.length - KEEP))) await bd.removeEntry(n).catch(() => {});
   }
   async function write(force) {
@@ -2074,16 +2342,18 @@ const FS = (() => {
   }));
   function schedule() {
     if (quiet) return;
-    if (state !== "ok") { if (state !== "conflict") dirty(true); ui(); return; }
+    if (state !== "ok") { if (state !== "conflict" && !isEmptyDb()) dirty(true); ui(); return; }
     pending = true; clearTimeout(timer);
     timer = setTimeout(() => run(async () => { await write(false); }).finally(() => pending = false), 350);
   }
 
   // ---- collegamento ----
   async function connect(h, picked) {
-    dir = h; state = "ok";
+    dir = h; state = "ok"; await chooseFN(h);
     const r = await readFile();
-    if (!r) { await write(true); if (picked) toast(`Creato ${FN} nella cartella «${h.name}»`); return; }
+    if (!r) { await write(true); if (picked) toast(`Creato ${FN} nella cartella «${h.name}»: puoi iniziare a inserire i dati`); return; }
+    // database del browser vuoto (copia nuova o primo avvio): il file nella cartella vince sempre, senza domande
+    if (isEmptyDb()) { adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); if (picked) toast(`Caricato ${FN} dalla cartella «${h.name}»`); return; }
     if (same(normalize(structuredClone(r.data)), db)) { lastMod = r.f.lastModified; dirty(false); lastAt = new Date(r.f.lastModified); ui(); return; }
     const local = dirty();
     const q = picked && !local
@@ -2098,7 +2368,20 @@ const FS = (() => {
     else { dir = h; state = "conflict"; ui(); }        // finestra chiusa senza scegliere
   }
   async function pick() {
-    try { const h = await (T.picker || window.showDirectoryPicker)({id: "cf-db", mode: "readwrite"}); await hSet(h); await run(() => connect(h, true)); }
+    try {
+      // il browser non accetta un percorso: si parte dalla cartella nota più vicina all'HTML (Desktop, Documenti, Download…);
+      // l'id ricorda poi l'ultima cartella scelta per questa copia, quindi dalla seconda volta si apre già lì
+      const P_ = INST.toLowerCase(), startIn = /\/(desktop|scrivania)\//.test(P_) ? "desktop" : /\/(documents|documenti)\//.test(P_) ? "documents" : /\/(downloads|download)\//.test(P_) ? "downloads" : /\/(pictures|immagini)\//.test(P_) ? "pictures" : /\/(music|musica)\//.test(P_) ? "music" : /\/(videos|video)\//.test(P_) ? "videos" : undefined;
+      if (!T.picker && INST_DIR) toast(`Scegli la cartella «${INST_DIR}»`);
+      const h = await (T.picker || window.showDirectoryPicker)({id: ("cf-" + INST_DIR.replace(/[^a-zA-Z0-9]/g, "")).slice(0, 32), mode: "readwrite", ...(startIn ? {startIn} : {})});
+      const htmlName = INST.split(/[\\/]/).pop();
+      if (htmlName && !(await hasFile(h, htmlName))) {
+        const r = await ask({title: `La cartella «${h.name}» non contiene questo file`, body: `<p>Di solito si collega la cartella in cui si trova <b>${esc(htmlName)}</b> (${esc(INST_DIR || "?")}), così il database resta accanto al configuratore.</p>`,
+          actions: [{label: "Scegli un'altra cartella", value: null}, {label: "Usa comunque questa", value: "ok", kind: "p", default: true}]});
+        if (r.action !== "ok") return pick();
+      }
+      await hSet(h); await run(() => connect(h, true));
+    }
     catch (e) { if (e.name !== "AbortError") toast("Cartella non collegata: " + e.message); }
   }
   async function grant() {
@@ -2126,7 +2409,16 @@ const FS = (() => {
     addEventListener("focus", check); document.addEventListener("visibilitychange", () => !document.hidden && check());
     addEventListener("beforeunload", e => { if (pending) { e.preventDefault(); e.returnValue = ""; } });
     ui(); if (!ok) return;
-    const h = await hGet(); if (!h) { ui(); return; }
+    let h = await hGet();
+    if (!h) {   // migrazione dalla versione precedente: il collegamento valeva per tutte le copie
+      const old = await hLegacy();
+      if (old && old.name === INST_DIR) {
+        h = old; await hSet(h);
+        try { const d = JSON.parse(localStorage.getItem(LEGACY.db)); if (d && isEmptyDb()) { db = normalize(d); localStorage.setItem(KEY, JSON.stringify(db)); dirty(false); rerender(); } } catch {}
+        try { const c = localStorage.getItem(LEGACY.draft); if (c && !localStorage.getItem(KEY_DRAFT)) localStorage.setItem(KEY_DRAFT, c); } catch {}
+      }
+    }
+    if (!h) { ui(); return; }
     dir = h;
     let p = "prompt"; try { p = await h.queryPermission({mode: "readwrite"}); } catch {}
     if (p === "granted") await run(() => connect(h, false)); else { state = "prompt"; ui(); }
@@ -2148,7 +2440,7 @@ FS.init();
     if (b.dataset.xs === "ok") {
       const x = db.inter.find(i => i.id === b.dataset.xi); if (!x) return "";
       return `<div class="xh">Assieme di interscambio</div><div class="xc code">${esc(x.code)}</div>${x.desc ? `<div class="xd">${esc(x.desc)}</div>` : ""}
-        <div class="xa">${x.link ? `<a class="tlink" href="${esc(x.link)}" target="_blank" rel="noopener">Apri in Windchill</a>` : ""}${ed}Modifica in Tipologie</a></div>`;
+        <div class="xa">${wcUrl(x) ? `<a class="tlink" href="${esc(wcUrl(x))}" target="_blank" rel="noopener">Apri in Windchill</a>` : ""}${ed}Modifica in Tipologie</a></div>`;
     }
     const R = resolveAll(cfg.sel, cfg.choice), r = R.res.find(z => z.g.id === g.id);
     if (b.dataset.xs === "er") return `<div class="xh">Interscambio ambiguo</div><div class="xd">${r ? r.inter.length : ""} interscambi validi per questa combinazione: ne serve uno solo.</div>
@@ -2182,6 +2474,718 @@ FS.init();
   addEventListener("scroll", () => cur && close(true), {passive: true, capture: true});
   addEventListener("resize", () => cur && close(true));
   new MutationObserver(() => { if (cur && !cur.isConnected) close(true); }).observe(root, {childList: true});
+})();
+</script>
+<div id="cpop" role="menu" aria-hidden="true"></div>
+<script>
+// v13: clic su un codice nel configuratore → menu azioni Windchill
+(() => {
+  const pop = document.getElementById("cpop"); let cur = null;
+  const copy = async t => { try { await navigator.clipboard.writeText(t); return true; } catch { const a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); const ok = document.execCommand("copy"); a.remove(); return ok; } };
+  const close = () => { pop.classList.remove("show"); pop.setAttribute("aria-hidden", "true"); cur?.classList.remove("on"); cur = null; };
+  const openFor = b => {
+    const code = b.dataset.code, r = rowByCode(code) || {code}, base = wcBase(), tpl = wcTpl();
+    const items = [];
+    if (r.link) items.push(["link", "Apri pagina in Windchill", "↗"]);
+    if (tpl) items.push(["search", "Cerca in Windchill", "↗"]);
+    if (base) items.push(["copyopen", "Copia codice e apri Windchill", ""]);
+    items.push(["copy", "Copia codice", ""]);
+    items.push(["set", r.link ? "Modifica link Windchill…" : "Imposta link Windchill…", ""]);
+    pop.innerHTML = `<div class="ch"><span class="code">${esc(code)}</span>${r.desc ? `<span class="mut">${esc(r.desc)}</span>` : ""}</div>` +
+      items.map(([k, t, x]) => `<button role="menuitem" data-ca="${k}">${t}${x ? `<span class="k">${x}</span>` : ""}</button>`).join("");
+    cur?.classList.remove("on"); cur = b; b.classList.add("on");
+    const rc = b.getBoundingClientRect(); pop.classList.add("show"); pop.setAttribute("aria-hidden", "false");
+    const w = pop.offsetWidth, h = pop.offsetHeight;
+    pop.style.left = Math.min(Math.max(8, rc.left), innerWidth - w - 8) + "px";
+    pop.style.top = (rc.bottom + h + 8 > innerHeight ? Math.max(8, rc.top - h - 6) : rc.bottom + 6) + "px";
+    pop.querySelector("button")?.focus({preventScroll: true});
+  };
+  document.addEventListener("click", e => {
+    const b = e.target.closest?.(".cbtn"); if (!b) return;
+    e.preventDefault(); e.stopPropagation();
+    cur === b ? close() : openFor(b);
+  }, true);
+  pop.addEventListener("click", async e => {
+    const k = e.target.closest("[data-ca]")?.dataset.ca; if (!k || !cur) return;
+    const code = cur.dataset.code, r = rowByCode(code) || {code}; close();
+    if (k === "link") open(r.link, "_blank", "noopener");
+    if (k === "search") open(wcTpl().replace(/\{codice\}/gi, encodeURIComponent(code)), "_blank", "noopener");
+    if (k === "copy") toast(await copy(code) ? `${code} copiato` : "Copia non consentita dal browser");
+    if (k === "copyopen") { await copy(code); open(wcBase(), "_blank", "noopener"); toast(`${code} copiato: incollalo nella ricerca di Windchill`); }
+    if (k === "set") {
+      const rows = allRows().filter(x => String(x.code).trim().toLowerCase() === code.toLowerCase());
+      const res = await ask({title: `Link Windchill di ${code}`, input: {value: r.link || "", placeholder: "Incolla l'indirizzo della pagina info di Windchill"},
+        body: `<p>In Windchill apri la pagina del codice e copia l'indirizzo dalla barra del browser. Lascia vuoto per togliere il link.</p>`,
+        actions: [{label: "Annulla", value: null}, {label: "Salva", value: "ok", kind: "p", default: true}]});
+      if (res.action !== "ok") return;
+      const v = (res.value || "").trim();
+      if (v && !/^https?:\/\//i.test(v)) return toast("Il link deve iniziare con http:// o https://");
+      rows.forEach(x => { if (v) x.link = v; else delete x.link; });
+      save(); rerender(); toast(v ? `Link salvato su ${code}` : "Link rimosso");
+    }
+  });
+  document.addEventListener("pointerdown", e => { if (cur && !pop.contains(e.target) && !e.target.closest(".cbtn")) close(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape" && cur) { const b = cur; close(); b.focus(); } });
+  addEventListener("scroll", () => cur && close(), {passive: true, capture: true});
+  addEventListener("resize", () => cur && close());
+})();
+</script>
+<script>
+// v19: scheda Grafo — albero interattivo accessibile con lenti (configurazione / completezza / parametro), matrice combinazioni, minimappa
+(() => {
+  const NS = "http://www.w3.org/2000/svg";
+  const COLW = 320, ROWH = 46, NH = 38;
+  const W = {root: 180, mst: 215, mac: 225, grp: 245, x: 260, code: 260, acc: 235, acode: 260};
+  const KIND = {root: "macchina", mst: "assieme master", mac: "macrogruppo", grp: "tipologia", x: "assieme di interscambio", code: "codice", acc: "accessorio", acode: "codice accessorio"};
+  const STN = {ok: "pronta", wa: "da completare", er: "ambigua", db: "senza codice", ne: ""};
+  const RM = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const svgEl = $("#grSvg"), view = $("#grView"), layN = $("#grNodes"), layE = $("#grEdges"), side$ = $("#grSide"), mini = $("#grMini");
+  const nodeEls = new Map(), edgeEls = new Map(), matPivot = new Map(), matAll = new Set();
+  let expanded = new Set(), level = 2, selId = null, focId = "root", lens = null, lensPid = null, firstFit = true, custom = false, panelOpen = false, onlyBad = false;
+  let hCache = {rev: -1, m: new Map()};
+  { const _s = save; save = function () { _s(); window.__dbRev = (window.__dbRev || 0) + 1; }; }
+  let Z = {k: 1, x: 40, y: 40}, hits = [], hitIdx = 0, lastQ = "", T = null, expBeforeSearch = null, sideSig = "";
+  const safe = id => "gn-" + String(id).replace(/[^a-zA-Z0-9_-]/g, "_");
+  const trunc = (s, n) => { s = String(s ?? ""); n = Math.max(4, n); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
+  const el = (tag, attrs = {}) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  const wOf = n => W[n.kind] || 220;
+  const kbFocus = () => document.activeElement === svgEl && svgEl.matches(":focus-visible");
+  const covTitle = h => {
+    const p = [`codici ${Math.floor(100 * h.ri)}%` + (h.xtotal ? `, interscambi ${Math.floor(100 * h.rx)}%` : "")];
+    if (h.miss) p.push(`${h.miss} combinazioni su ${h.total} senza codice`);
+    if (h.xmiss) p.push(`${h.xmiss} senza interscambio`);
+    if (h.drafts) p.push(`${h.drafts} in bozza`);
+    if (h.ambig) p.push(`${h.ambig} ambigue`);
+    if (h.accN) p.push(`accessori: ${h.accN} da sistemare`);
+    return p.join(" · ");
+  };
+  const curLens = () => {
+    const started = Object.keys(cfg.sel).length > 0;
+    if (lens === "par") { if (lensPid && P(lensPid) && db.params.includes(P(lensPid))) return "p:" + lensPid; lensPid = db.params[0]?.id || null; return lensPid ? "p:" + lensPid : "data"; }
+    if (lens === "cfg" && started) return "cfg";
+    if (lens === "data") return "data";
+    return started ? "cfg" : "data";
+  };
+  // salute delle tipologie in cache, invalidata da ogni salvataggio del database
+  const healthOf = g => {
+    if (hCache.rev !== (window.__dbRev || 0)) hCache = {rev: window.__dbRev || 0, m: new Map()};
+    let h = hCache.m.get(g.id);
+    if (!h) {
+      const ci = coverage(g, db.items), cx = g.kind !== "master" && needsInter(g) ? coverage(g, db.inter) : null;
+      const ri = ci.missing ? 1 - ci.missing.length / (ci.total || 1) : 1, rx = cx && cx.missing ? 1 - cx.missing.length / (cx.total || 1) : 1;
+      let accN = 0; for (const a of accsOf(g)) { const ps = accPseudo(a), cv = coverage(ps, db.accItems); accN += (cv.missing?.length || 0) + rowsOf(ps).filter(isDraft).length; }
+      h = {...groupHealth(g), total: ci.total || 0, miss: ci.missing ? ci.missing.length : 0, xmiss: cx?.missing ? cx.missing.length : 0, xtotal: cx?.total || 0, cov: Math.min(ri, rx), ri, rx, accN};
+      hCache.m.set(g.id, h);
+    }
+    return h;
+  };
+
+  // ---------- struttura ----------
+  function buildTree() {
+    const R = resolveAll(cfg.sel, cfg.choice), used = new Set(), gstate = {}, reason = {};
+    const started = Object.keys(cfg.sel).length > 0, L = curLens();
+    const pid = L.startsWith("p:") ? L.slice(2) : null;
+    if (R.m && isReady(R.m)) used.add("i:" + R.m.items[0].id);
+    for (const r of R.res) {
+      r.items.forEach(i => used.add("i:" + i.id));
+      if (r.inter.length === 1) used.add("x:" + r.inter[0].id);
+      (r.acc || []).forEach(x => { if (x.state !== "off") used.add("a:" + x.a.id); x.items.forEach(i => used.add("c:" + i.id)); });
+      let st = isReady(r) ? "ok" : r.state === "none" ? "db" : "wa";
+      if (r.state === "ok" && needsInter(r.g) && r.inter.length > 1) st = "er";
+      gstate[r.g.id] = started ? st : "ne";
+      reason[r.g.id] = r.state === "missing" ? "manca " + r.missing.map(p => P(p)?.name).join(", ")
+        : r.items.length ? "" : r.state === "draft" ? "righe in bozza da completare" : "nessun codice per i parametri attuali";
+    }
+
+    const byGroup = (arr, k) => { const m = new Map(); for (const r of arr) { const a = m.get(r[k]) || []; a.push(r); m.set(r[k], a); } return m; };
+    const itemsBy = byGroup(db.items, "groupId"), interBy = byGroup(db.inter, "groupId"), accItemsBy = byGroup(db.accItems, "groupId");
+    const condTxt = r => Object.entries(r.cond).map(([p, v]) => v === Q ? "?" : v).join(" · ") || "tutte le combinazioni";
+    const codeNode = (r, kind, pfx, parent) => ({id: pfx + r.id, kind, row: r, label: r.code || "codice da inserire", sub: condTxt(r), desc: r.desc, mono: !!r.code,
+      draft: isDraft(r), parent, children: [], pk: !!(pid && r.cond[pid] != null)});
+    const covPct = h => Math.floor(100 * h.cov);
+    // la percentuale compare solo se è la copertura a mancare; altrimenti si mostra il motivo
+    const badgeOf = h => {
+      const b = [];
+      if (h.ri < 1) b.push(Math.floor(100 * h.ri) + "%");
+      if (h.rx < 1) b.push("ASM " + Math.floor(100 * h.rx) + "%");
+      if (h.ambig) b.push("≠ASM"); else if (h.cov >= 1 && h.accN) b.push("acc.");
+      if (h.drafts) b.push("✎" + h.drafts);
+      return b.join(" ") || "100%";
+    };
+    const grpNode = (g, parent) => {
+      if (onlyBad && L === "data" && healthOf(g).badge === "ok") return null;
+      const n = {id: "g:" + g.id, kind: "grp", g, label: g.name, sub: g.params.map(p => P(p)?.name).join(" · ") || "senza attributi", parent, children: []};
+      if (L === "data") { const h = healthOf(g); n.st = h.badge; n.badge = badgeOf(h); n.bcls = h.badge; n.htitle = covTitle(h); n.cov = h.cov; }
+      else n.st = gstate[g.id] || "ne";
+      n.reason = reason[g.id] || "";
+      if (pid) {
+        n.viaAcc = !g.params.includes(pid) && accsOf(g).some(a => a.params.includes(pid));
+        n.pk = g.params.includes(pid) || n.viaAcc;
+        n.subParts = g.params.map(p => ({t: P(p)?.name, hl: p === pid}));
+        if (n.viaAcc) n.subParts.push({t: "acc.: " + P(pid)?.name, hl: true});
+      }
+      if (needsInter(g)) (interBy.get(g.id) || []).forEach(x => n.children.push(codeNode(x, "x", "x:", n)));
+      (itemsBy.get(g.id) || []).forEach(i => n.children.push(codeNode(i, "code", "i:", n)));
+      accsOf(g).forEach(a => {
+        const an = {id: "a:" + a.id, kind: "acc", a, label: a.name, sub: a.values.join(" / ") || "nessuna opzione", parent: n, children: [], pk: !!(pid && a.params.includes(pid))};
+        (accItemsBy.get(a.id) || []).forEach(i => an.children.push(codeNode(i, "acode", "c:", an)));
+        n.children.push(an);
+      });
+      return n;
+    };
+    const mg = master();
+    const root = {id: "root", kind: "root", label: machineName(), sub: `${normalGroups().length} tipologie`, children: []};
+    if (mg) {
+      const mn = {id: "mst", kind: "mst", g: mg, label: mg.name, sub: mg.params.map(p => P(p)?.name).join(" · "), parent: root, children: [], pk: !!(pid && mg.params.includes(pid))};
+      (itemsBy.get(mg.id) || []).forEach(i => mn.children.push(codeNode(i, "code", "i:", mn)));
+      root.children.push(mn);
+    }
+    const macNode = (id, label, sub, mc, gs) => {
+      const mn = {id, kind: "mac", mc, label, sub, monoSub: !!mc?.code, parent: root, children: []};
+      gs.forEach(g => { const c = grpNode(g, mn); if (c) mn.children.push(c); });
+      if (onlyBad && L === "data" && !mn.children.length) return;
+      if (L === "data") { const bad = gs.filter(g => healthOf(g).badge !== "ok").length; mn.sub = (mc?.code ? mc.code + " · " : "") + (bad ? `${bad} da completare` : "completo"); mn.monoSub = false; }
+      root.children.push(mn);
+    };
+    for (const mc of db.macros || []) { const gs = normalGroups().filter(g => g.macroId === mc.id); macNode("m:" + mc.id, mc.name, mc.code || `${gs.length} tipologie`, mc, gs); }
+    const loose = normalGroups().filter(g => !g.macroId || !byId(db.macros || [], g.macroId));
+    if (loose.length) macNode("nomac", "Senza macrogruppo", `${loose.length} tipologie`, null, loose);
+    const all = [], byNode = new Map();
+    (function walk(n, d) { n.depth = d; all.push(n); byNode.set(n.id, n); n.children.forEach((c, i) => { c.pos = i + 1; c.size = n.children.length; walk(c, d + 1); }); })(root, 0);
+    root.pos = 1; root.size = 1;
+    return {root, all, byNode, used, started, R, L, pid};
+  }
+  function applyLevel() {
+    expanded = new Set();
+    for (const n of T.all) if (n.children.length && (n.kind === "root" || (level >= 2 && n.kind === "mac") || level >= 9)) expanded.add(n.id);
+    custom = false;
+  }
+  // ---------- layout ----------
+  function layout() {
+    let cur = 0; const vis = [];
+    (function lay(n) {
+      vis.push(n);
+      const kids = expanded.has(n.id) ? n.children : [];
+      n.x = n.depth * COLW;
+      if (!kids.length) { n.y = cur; cur += ROWH; }
+      else { kids.forEach(lay); n.y = (kids[0].y + kids[kids.length - 1].y) / 2; if (n.depth <= 1) cur += ROWH * 0.45; }
+    })(T.root);
+    T.vis = vis; T.visIdx = new Map(vis.map((n, i) => [n.id, i]));
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const n of vis) { x0 = Math.min(x0, n.x); x1 = Math.max(x1, n.x + wOf(n) + 70); y0 = Math.min(y0, n.y); y1 = Math.max(y1, n.y + NH); }
+    T.bb = {x0, x1, y0, y1};
+    return vis;
+  }
+  const inCfg = n => T.started && T.used.has(n.id);
+  const dimReason = n => {
+    if (T.L !== "cfg" || !T.started || inCfg(n)) return "";
+    if (n.kind === "grp") return n.reason;
+    if (n.kind === "code" || n.kind === "x" || n.kind === "acode") return "non corrisponde ai parametri attuali";
+    if (n.kind === "acc") return "accessorio non scelto";
+    return "";
+  };
+  function ariaLabel(n) {
+    const parts = [n.label, KIND[n.kind]];
+    if (n.kind === "grp") { parts.push(n.sub); if (T.L === "data") parts.push(n.htitle); else if (STN[n.st]) parts.push("stato " + STN[n.st]); }
+    else if (n.kind === "code" || n.kind === "x" || n.kind === "acode") parts.push(n.desc, "condizioni " + n.sub);
+    else if (n.sub && n.kind !== "root") parts.push(n.sub);
+    if (n.draft) parts.push(n.row?.review ? "da revisionare" : "bozza");
+    if (inCfg(n)) parts.push("nella configurazione"); else { const r = dimReason(n); if (r) parts.push("non usato: " + r); }
+    if (T.pid && n.pk) parts.push("dipende da " + P(T.pid)?.name + (n.viaAcc ? " tramite un accessorio" : ""));
+    if (n.children.length) parts.push(`${n.children.length} elementi`);
+    return parts.filter(Boolean).join(", ");
+  }
+  // ---------- rendering nodo ----------
+  function nodeInner(g, n) {
+    const w = wOf(n), kids = n.children.length, open = expanded.has(n.id), ok = T.L === "cfg" && inCfg(n) && !["grp", "mac", "root"].includes(n.kind);
+    const sig = [n.label, n.sub, open, kids, ok, n.kind, n.badge || "", n.cov ?? "", JSON.stringify(n.subParts || "")].join("|");
+    if (g.dataset.sig === sig) return;
+    g.dataset.sig = sig; g.textContent = "";
+    g.append(el("rect", {class: "halo", x: -5, y: -5, width: w + 10, height: NH + 10, rx: 12}));
+    g.append(el("rect", {class: "b", width: w, height: NH, rx: 8}));
+    g.append(el("rect", {class: "ring", x: -4, y: -4, width: w + 8, height: NH + 8, rx: 11}));
+    if (n.kind === "grp") g.append(el("line", {class: "stripe", x1: 3, y1: 4, x2: 3, y2: NH - 4}));
+    const tx = n.kind === "grp" ? 13 : 10, bw = n.badge ? n.badge.length * 6.6 + 10 : 0, room = w - tx - (ok ? 30 : 14);
+    const l = el("text", {class: "lbl" + (n.mono ? " mono" : ""), x: tx, y: 16}); l.textContent = trunc(n.label, Math.floor(room / (n.mono ? 7.8 : 7.9)));
+    const s = el("text", {class: "sub" + (n.monoSub ? " mono" : ""), x: tx, y: 31});
+    const subMax = Math.floor((w - tx - 12 - bw) / (n.monoSub ? 7 : 6.4));
+    if (n.subParts) { let left = subMax; n.subParts.forEach((p, i) => { if (left <= 0) return; const t = (i ? " · " : "") + p.t, sp = el("tspan", p.hl ? {class: "phl"} : {}); sp.textContent = trunc(t, left); left -= t.length; s.append(sp); }); }
+    else s.textContent = trunc(n.sub, subMax);
+    const Lb = el("text", {class: "lblL", x: tx, y: 24}); Lb.textContent = trunc(n.label, Math.floor((w - tx - 14) / 9.6));
+    g.append(l, s, Lb);
+    if (n.badge) { const b = el("text", {class: "bdg b-" + n.bcls, x: w - 10, y: 31, "text-anchor": "end", "aria-hidden": "true"}); b.textContent = n.badge; g.append(b); }
+    if (n.cov != null) { g.append(el("rect", {class: "covbg", x: 6, y: NH - 4, width: w - 12, height: 3, rx: 1.5}), el("rect", {class: "cov", x: 6, y: NH - 4, width: Math.max(0, (w - 12) * n.cov), height: 3, rx: 1.5})); }
+    if (ok) { const c = el("text", {class: "ok", x: w - 22, y: 24, "aria-hidden": "true"}); c.textContent = "✓"; g.append(c); }
+    if (kids) {
+      const tg = el("g", {class: "tg", transform: `translate(${w},${NH / 2})`, "data-tg": n.id, "aria-hidden": "true"});
+      tg.append(el("circle", {class: "hit", r: 15}), el("circle", {class: "v", r: 10}));
+      const tt = el("text", {y: 4.5}); tt.textContent = open ? "−" : "+"; tg.append(tt);
+      if (!open) {
+        const txt = `+${kids}`, pw = 12 + txt.length * 7;
+        const pill = el("g", {class: "pill", transform: `translate(18,-10)`});
+        pill.append(el("rect", {width: pw, height: 20, rx: 10}));
+        const pt = el("text", {x: pw / 2, y: 14, "text-anchor": "middle"}); pt.textContent = txt; pill.append(pt);
+        tg.append(pill);
+      }
+      g.append(tg);
+    }
+  }
+  function edgeD(p, c) {
+    const x1 = p.x + wOf(p) + (p.children.length ? 10 : 0), y1 = p.y + NH / 2, x2 = c.x, y2 = c.y + NH / 2, mx = (x1 + x2) / 2;
+    return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
+  }
+  const setD = (e, d) => { e.setAttribute("d", d); e.style.d = `path("${d}")`; };
+  // ---------- render ----------
+  function render() {
+    T = buildTree();
+    if (firstFit) applyLevel();
+    if (selId && !T.byNode.has(selId)) selId = null;
+    if (!T.byNode.has(focId)) focId = "root";
+    const vis = layout(), ids = new Set(vis.map(n => n.id));
+    const L = T.L, searching = hits.length > 0, rm = RM();
+    const cfgOn = L === "cfg" && T.started, parOn = !!T.pid;
+    const keep = new Set(), up = id => { for (let p = T.byNode.get(id); p; p = p.parent) keep.add(p.id); };
+    if (searching) hits.forEach(up);
+    else if (cfgOn) T.used.forEach(up);
+    else if (parOn) T.all.filter(n => n.pk).forEach(n => up(n.id));
+    const dimOn = searching || cfgOn || parOn, hitSet = new Set(hits);
+    for (const n of vis) {
+      let g = nodeEls.get(n.id);
+      const pos = `translate(${n.x}px,${n.y}px)`;
+      if (!g) {
+        g = el("g", {"data-id": n.id, id: safe(n.id), role: "treeitem"});
+        layN.append(g); nodeEls.set(n.id, g);
+        if (rm) g.style.transform = pos;
+        else {
+          const pp = n.parent && nodeEls.get(n.parent.id);
+          g.style.transform = pp ? pp.style.transform : pos; g.style.opacity = 0;
+          requestAnimationFrame(() => requestAnimationFrame(() => { g.style.transform = pos; g.style.opacity = ""; }));
+        }
+      } else { g.style.transform = pos; g.style.opacity = ""; delete g.dataset.dying; }
+      g.setAttribute("class", ["gn", "k-" + n.kind, n.st ? "st-" + n.st : "", n.draft ? "draft" : "", n.id === selId ? "sel" : "", hitSet.has(n.id) ? "match" : "",
+        n.id === focId && kbFocus() ? "kf" : "", parOn && n.pk && !searching ? "pk" : "",
+        cfgOn && !searching && T.used.has(n.id) && n.kind !== "grp" ? "hl" : "", dimOn && !keep.has(n.id) && n.kind !== "root" ? "dim" : ""].join(" "));
+      g.setAttribute("aria-level", n.depth + 1); g.setAttribute("aria-setsize", n.size); g.setAttribute("aria-posinset", n.pos);
+      g.setAttribute("aria-selected", n.id === selId ? "true" : "false");
+      if (n.children.length) g.setAttribute("aria-expanded", expanded.has(n.id) ? "true" : "false"); else g.removeAttribute("aria-expanded");
+      g.setAttribute("aria-label", ariaLabel(n));
+      nodeInner(g, n);
+    }
+    for (const n of vis) {
+      if (!n.parent) continue;
+      let e = edgeEls.get(n.id); const d = edgeD(n.parent, n);
+      if (!e) {
+        e = el("path", {class: "ge"}); layE.append(e); edgeEls.set(n.id, e);
+        if (rm) setD(e, d);
+        else {
+          const pe = n.parent; setD(e, edgeD(pe, {x: pe.x + wOf(pe) + 10, y: pe.y})); e.style.opacity = 0;
+          requestAnimationFrame(() => requestAnimationFrame(() => { setD(e, d); e.style.opacity = ""; }));
+        }
+      } else { setD(e, d); e.style.opacity = ""; delete e.dataset.dying; }
+      e.setAttribute("class", "ge" + (!searching && keep.has(n.id) && cfgOn ? " hl" : !searching && keep.has(n.id) && parOn ? " hp" : dimOn && !keep.has(n.id) ? " dim" : ""));
+    }
+    const anc = id => { let n = T.byNode.get(id); while (n && !ids.has(n.id)) n = n.parent; return n; };
+    for (const [id, g] of nodeEls) if (!ids.has(id) && !g.dataset.dying) {
+      g.dataset.dying = 1; g.removeAttribute("role");
+      if (rm) { g.remove(); nodeEls.delete(id); continue; }
+      const a = anc(id); if (a) g.style.transform = `translate(${a.x}px,${a.y}px)`; g.style.opacity = 0;
+      setTimeout(() => { if (g.dataset.dying) { g.remove(); nodeEls.delete(id); } }, 380);
+    }
+    for (const [id, e] of edgeEls) if (!ids.has(id) && !e.dataset.dying) {
+      e.dataset.dying = 1; if (rm) { e.remove(); edgeEls.delete(id); continue; }
+      e.style.opacity = 0; setTimeout(() => { if (e.dataset.dying) { e.remove(); edgeEls.delete(id); } }, 380);
+    }
+    let prev = null, ordered = true;
+    for (const n of vis) { const g = nodeEls.get(n.id); if (prev && prev.nextSibling !== g) { ordered = false; break; } prev = g; }
+    if (!ordered) vis.forEach(n => layN.append(nodeEls.get(n.id)));
+    if (ids.has(focId)) svgEl.setAttribute("aria-activedescendant", safe(focId)); else svgEl.removeAttribute("aria-activedescendant");
+    $("#grStats").textContent = `${(db.macros || []).length} macrogruppi · ${normalGroups().length} tipologie · ${db.acc.length} accessori · ${db.items.length + db.inter.length + db.accItems.length} codici`;
+    lensUi(); levelUi(); side(); ctxUi();
+    const cv = $("#grCanvas"), open = !side$.classList.contains("closed");
+    cv.classList.toggle("haspanel", open); cv.style.setProperty("--pw", open ? side$.offsetWidth + "px" : "0px");
+    drawMini();
+    if (firstFit) { firstFit = false; requestAnimationFrame(() => fit(false, 0.8)); }
+  }
+  // ---------- lente e legenda ----------
+  function lensUi() {
+    const L = T.L, mode = L.startsWith("p:") ? "par" : L;
+    $$("#grLensSeg button").forEach(b => { const on = b.dataset.lens === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    const cb = $('#grLensSeg [data-lens="cfg"]'); cb.disabled = !T.started; cb.title = T.started ? "Parti usate dalla configurazione impostata nel Configuratore" : "Imposta prima dei parametri nel Configuratore";
+    const s = $("#grLensPar"), opts = db.params.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    if (s.dataset.sig !== opts) { s.innerHTML = opts; s.dataset.sig = opts; }
+    s.classList.toggle("hide", mode !== "par"); if (T.pid) s.value = T.pid;
+    // riepilogo in una frase
+    let sum = "";
+    if (mode === "data") {
+      const gs = normalGroups(), hs = gs.map(healthOf), bad = hs.filter(h => h.badge !== "ok").length, dr = hs.reduce((a, h) => a + h.drafts, 0), am = hs.filter(h => h.ambig).length;
+      sum = `<b>${bad} di ${gs.length}</b> tipologie incomplete · ${dr} righe in bozza${am ? ` · ${am} ambigue` : ""} <label class="sumtog"><input type="checkbox" id="grOnlyBad" ${onlyBad ? "checked" : ""}> Solo da sistemare</label>`;
+    } else if (mode === "cfg") {
+      const c = {ok: 0, wa: 0, db: 0, er: 0}; T.R.res.forEach(r => { const st = isReady(r) ? "ok" : r.state === "none" ? "db" : r.state === "ok" && needsInter(r.g) && r.inter.length > 1 ? "er" : "wa"; c[st]++; });
+      sum = `Configurazione: <b>${c.ok} pronte</b>, ${c.wa} da completare, ${c.db} senza codice${c.er ? `, ${c.er} ambigue` : ""}`;
+    } else {
+      const n = normalGroups().filter(g => g.params.includes(T.pid) || accsOf(g).some(a => a.params.includes(T.pid))).length;
+      sum = `<b>${esc(P(T.pid)?.name)}</b>: usato da ${n} tipologie su ${normalGroups().length}`;
+    }
+    $("#grSumTxt").innerHTML = sum;
+    T.sumPlain = $("#grSumTxt").textContent.replace(/Solo da sistemare/, "").replace(/\s+/g, " ").trim();
+    const lg = {
+      cfg: `<span><i class="lg hlk">✓</i>Nella configurazione</span><span><i class="lg dimk"></i>Non usato (motivo nei dettagli)</span><span><i class="lg st st-ok"></i>Tipologia pronta</span><span><i class="lg st st-wa"></i>Da completare</span><span><i class="lg st st-er"></i>Ambigua</span><span><i class="lg st st-db"></i>Senza codice</span>`,
+      data: `<span><i class="lg covk"></i>% combinazioni con codice · ASM % con interscambio</span><span><b class="bk">✎n</b>righe in bozza</span><span><b class="bk">≠n</b>ambigue</span><span><i class="lg st st-ok"></i>completa</span><span><i class="lg st st-wa"></i>incompleta</span>`,
+      par: `<span><i class="lg pkk"></i>Dipende dal parametro (nome in <b style="color:var(--ac-tx)">blu</b>)</span><span><i class="lg dimk"></i>Non dipende</span>`,
+    }[L.startsWith("p:") ? "par" : L];
+    $("#grLegLens").innerHTML = lg;
+  }
+  // ---------- contesto (macrogruppo corrente) ----------
+  function curMacro() { let n = (selId && T.byNode.get(selId)) || T.byNode.get(focId); while (n && n.kind !== "mac") n = n.parent; return n; }
+  function ctxUi() {}
+  function stepMacro(d) {
+    const macs = T.root.children.filter(c => c.kind === "mac"), m = curMacro(), i = m ? macs.indexOf(m) : -1;
+    const t = macs[Math.max(0, Math.min(macs.length - 1, i + d))]; if (!t) return;
+    expanded.add(t.id); custom = true; focId = t.id; render(); revealSubtree(T.byNode.get(t.id), false); setFocus(t.id, false);
+    $("#grLive").textContent = "Macrogruppo " + t.label;
+  }
+  const announce = pre => { $("#grLive").textContent = pre + T.sumPlain + (onlyBad && T.L === "data" ? `. Filtro: solo da sistemare, ${T.all.filter(n => n.kind === "grp").length} tipologie visibili.` : ""); };
+  $("#grSum").addEventListener("change", e => {
+    if (e.target.id === "grOnlyBad") { onlyBad = e.target.checked; render(); setTimeout(() => fit(true, 0.8), 40); announce(""); }
+    if (e.target.id === "grLensPar") { lensPid = e.target.value; lens = "par"; render(); announce(""); }
+  });
+  $("#grSum").addEventListener("click", e => { const b = e.target.closest("[data-lens]"); if (!b || b.disabled) return; lens = b.dataset.lens; render(); announce(b.textContent + ": "); });
+  // ---------- matrice combinazioni ----------
+  function valueCoverage(params, rows) {
+    const act = rows.filter(r => !isDraft(r));
+    return `<div class="sec2">Copertura per valore</div><p class="mut" style="margin:0 0 6px">Quanti codici coprono ogni valore (una riga con “—” vale per tutti). Gli zeri sono i valori senza nessun codice.</p>
+      <div class="mwrap"><table class="mtab"><thead><tr><th scope="col">Attributo</th><th scope="col">Valore</th><th scope="col">Codici</th></tr></thead><tbody>${
+      params.map(pid => { const p = P(pid); return p.values.map((v, i) => { const n = act.filter(r => r.cond[pid] == null || r.cond[pid] === v).length;
+        return `<tr>${i ? "" : `<th scope="rowgroup" rowspan="${p.values.length}">${esc(p.name)}</th>`}<td>${esc(v)}</td><td class="${n ? "" : "gap"}">${n || "0"}</td></tr>`; }).join(""); }).join("")}</tbody></table></div>`;
+  }
+  function interList(g) {
+    if (!needsInter(g)) return "";
+    const xs = db.inter.filter(x => x.groupId === g.id);
+    return `<div class="sec2">Interscambi (.ASM)</div><ul>${xs.map(x => `<li><a class="tlink code" data-gsel="x:${x.id}" href="javascript:void 0">${esc(x.code || "da inserire")}</a> <span class="mut">${Object.entries(x.cond).map(([p, v]) => esc(P(p)?.name) + " " + esc(v)).join(" · ") || "tutte le combinazioni"}</span></li>`).join("") || "<li class='warn'>nessun interscambio</li>"}</ul>`;
+  }
+  function matrixHtml(ownerId, params, rows, pfx, mode) {
+    if (!params.length) return "";
+    if (params.length > 3 || combos(params).length > 120) return valueCoverage(params, rows);
+    const ps = params.map(P).filter(Boolean);
+    let piv = matPivot.get(ownerId);
+    if (!piv || !params.includes(piv)) piv = (ps.find(p => /versione/i.test(p.name)) || [...ps].reverse().find(p => p.values.length <= 4) || ps[0]).id;
+    const others = params.filter(p => p !== piv), pv = P(piv).values;
+    const cs = combos(others);
+    if (cs.length * pv.length > 2400) return `<div class="sec2">Matrice</div><p class="mut">Troppe combinazioni (${cs.length * pv.length}) da mostrare.</p>`;
+    const act = rows.filter(r => !isDraft(r)), drafts = rows.filter(isDraft);
+    let gaps = 0;
+    const body = cs.map(c => {
+      let rowGap = false;
+      const cells = pv.map(v => {
+        const sel = {...c, [piv]: v};
+        const m = act.filter(r => matches(r, sel));
+        if (!m.length) {
+          rowGap = true; gaps++;
+          const dr = drafts.some(r => partialMatch(r, sel));
+          return `<td class="gap${dr ? " dr" : ""}" aria-label="${dr ? "in bozza" : "manca"}">${dr ? "✎" : "—"}</td>`;
+        }
+        return `<td class="${m.length > 1 && mode !== "all" ? "multi" : ""}">${m.map(r => `<a class="mc code" data-gsel="${pfx}${r.id}" href="javascript:void 0" title="${esc(r.desc)}">${esc(r.code)}</a>`).join("")}</td>`;
+      });
+      return {rowGap, html: `<tr><th scope="row">${others.map(p => esc(c[p])).join(" · ") || "—"}</th>${cells.join("")}</tr>`};
+    });
+    const showAll = matAll.has(ownerId) || body.length <= 40, list = showAll ? body : body.filter(b => b.rowGap);
+    return `<div class="sec2">Matrice combinazioni</div>
+      <label class="mpiv">Colonne: <select data-mpiv="${esc(ownerId)}">${ps.map(p => `<option value="${p.id}"${p.id === piv ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select>
+      <span class="mut">${gaps ? `${gaps} vuote` : "nessuna vuota"}</span></label>
+      <div class="mwrap"><table class="mtab"><caption class="sr-only">Codici per combinazione: righe ${others.map(p => P(p).name).join(", ") || "nessun altro parametro"}, colonne ${esc(P(piv).name)}</caption>
+      <thead><tr><th scope="col">${others.map(p => esc(P(p).name)).join(" · ") || ""}</th>${pv.map(v => `<th scope="col">${esc(v)}</th>`).join("")}</tr></thead>
+      <tbody>${list.map(b => b.html).join("") || `<tr><td colspan="${pv.length + 1}" class="mut">Nessuna riga con buchi.</td></tr>`}</tbody></table></div>
+      ${!showAll ? `<a class="tlink" data-mall="${esc(ownerId)}" href="javascript:void 0">Mostra tutte le ${body.length} righe</a>` : ""}`;
+  }
+  // ---------- pannello ----------
+  function crumbs(n) {
+    const path = []; for (let p = n.parent; p; p = p.parent) path.unshift(p);
+    return path.length ? `<nav class="crumbs" aria-label="Percorso">${path.map(p => `<a data-gsel="${esc(p.id)}" href="javascript:void 0">${esc(p.label)}</a>`).join(" › ")}</nav>` : "";
+  }
+  let lastAnn = null;
+  function side() {
+    const n = selId && T.byNode.get(selId);
+    side$.classList.toggle("closed", !n);
+    if (!n) { side$.innerHTML = ""; sideSig = ""; panelOpen = false; side$.setAttribute("aria-hidden", "true"); return; }
+    side$.removeAttribute("aria-hidden");
+    const sig = [selId, expanded.has(selId), T.started, T.L, JSON.stringify(cfg.sel), panelOpen, [...matPivot].join(), [...matAll].join(), db.items.length + db.inter.length + db.accItems.length].join("|");
+    if (sig === sideSig) return; sideSig = sig;
+    const reasonTxt = dimReason(n);
+    const cfgTag = T.started ? (inCfg(n) ? '<span class="tag alt">✓ nella configurazione</span>' : reasonTxt ? `<span class="tag" title="Motivo">non usato: ${esc(reasonTxt)}</span>` : "") : "";
+    const cond = r => Object.entries(r.cond).map(([pid, v]) => `<li>${esc(P(pid)?.name || "?")}: <b>${esc(v)}</b>${cfg.sel[pid] ? (cfg.sel[pid] === v ? ' <span class="ok" aria-label="corrisponde">✓</span>' : ` <span class="warn">≠ scelto ${esc(cfg.sel[pid])}</span>`) : ""}</li>`).join("") || "<li class='mut'>vale per tutte le combinazioni</li>";
+    const close = `<button class="ib gx" data-gclose title="Chiudi (Esc)" aria-label="Chiudi dettagli">×</button>`;
+    const branch = n.children.length ? `<button class="b s" data-gexp="${esc(n.id)}">${expanded.has(n.id) ? "Chiudi ramo" : "Apri ramo"}</button><button class="b s" data-gall="${esc(n.id)}">Apri tutto il ramo</button>` : "";
+    let head = "", body = "", wide = false;
+    if (n.kind === "code" || n.kind === "x" || n.kind === "acode") {
+      const r = n.row, own = n.kind === "acode" ? byId(db.acc, r.groupId) : G(r.groupId);
+      head = `<div class="eyebrow">${KIND[n.kind]}</div><h3 class="code">${r.code ? codeLink(r) : '<span class="warn">codice da inserire</span>'}</h3><div>${esc(r.desc || "")}</div>
+        <div style="margin-top:8px">${cfgTag} ${isDraft(r) ? `<span class="tag wa">${r.review ? "da revisionare" : "bozza"}</span>` : ""}</div>`;
+      body = `<div class="kv"><span>${n.kind === "acode" ? "Accessorio" : "Tipologia"}</span><span>${esc(own?.name || "")}</span>
+        ${r.note ? `<span>Note</span><span>${esc(r.note)}</span>` : ""}<span>Windchill</span><span>${r.link ? "link salvato" : wcTpl() ? "ricerca automatica" : '<span class="mut">nessun link (clic sul codice)</span>'}</span></div>
+        <div class="sec2">Condizioni</div><ul>${cond(r)}</ul>
+        <div class="acts2"><button class="b s" data-gedit="${esc(n.kind === "acode" ? own?.groupId : r.groupId)}">Modifica in Tipologie</button><button class="b s" data-gsel="${esc(n.parent.id)}">Vai a ${esc(n.parent.label)}</button></div>`;
+    } else if (n.kind === "grp" || n.kind === "mst") {
+      const g = n.g, h0 = groupHealth(g), nx = db.inter.filter(x => x.groupId === g.id).length, rows = db.items.filter(i => i.groupId === g.id);
+      const r = T.R.res.find(z => z.g.id === g.id) || (n.kind === "mst" ? T.R.m : null);
+      head = `<div class="eyebrow">${KIND[n.kind]}</div><h3>${esc(g.name)}</h3>
+        <div style="margin-top:4px">${T.started && r ? (isReady(r) ? '<span class="tag alt">✓ pronta</span>' : `<span class="tag wa">${esc(issueText(r))}</span>`) : ""} <span class="tag ${h0.badge === "ok" ? "" : "wa"}">${esc(covTitle(healthOf(g)))}</span></div>`;
+      const mat = matrixHtml(g.id, g.params, rows, "i:", n.kind === "mst" ? "one" : g.mode) + (n.kind === "grp" ? interList(g) : ""); wide = g.params.length > 1;
+      body = `<div class="kv"><span>Codici</span><span>${rows.length}</span>${n.kind === "grp" ? `<span>Interscambi</span><span>${needsInter(g) ? nx : "non previsto"}</span><span>Accessori</span><span>${accsOf(g).map(a => esc(a.name)).join(", ") || "—"}</span><span>Più codici validi</span><span>${g.mode === "one" ? "se ne sceglie uno" : "inseriti tutti"}</span><span>Obbligatoria</span><span>${g.required ? "sì" : "no"}</span>` : ""}</div>
+        <div class="sec2">Attributi</div><ul>${g.params.map(pid => { const p = P(pid); return `<li>${esc(p?.name)}: <span class="mut">${(p?.values || []).map(esc).join(", ")}</span>${cfg.sel[pid] ? ` → <b>${esc(cfg.sel[pid])}</b>` : ""}</li>`; }).join("") || "<li class='mut'>nessuno</li>"}</ul>
+        ${r && r.items.length ? `<div class="sec2">Codici con i parametri attuali</div><ul>${r.items.map(i => `<li>${codeLink(i)} <span class="mut">${esc(i.desc)}</span></li>`).join("")}</ul>` : ""}
+        ${mat}
+        <div class="acts2"><button class="b s" data-gedit="${esc(g.id)}">Modifica in Tipologie</button>${branch}</div>`;
+    } else if (n.kind === "acc") {
+      const a = n.a, v = cfg.sel[a.id], rows = db.accItems.filter(i => i.groupId === a.id);
+      head = `<div class="eyebrow">accessorio</div><h3>${esc(a.name)}</h3><div>${a.required ? '<span class="tag wa">obbligatorio</span>' : '<span class="tag">opzionale</span>'} ${v ? `<span class="tag alt">scelto: ${esc(v)}</span>` : ""}</div>`;
+      const mat = matrixHtml(a.id, [a.id, ...a.params], rows, "c:", "all"); wide = !!mat && a.params.length > 0;
+      body = `<div class="kv"><span>Tipologia</span><span>${esc(G(a.groupId)?.name || "")}</span><span>Opzioni</span><span>${a.values.map(esc).join(", ") || "—"}</span><span>Dipende anche da</span><span>${a.params.map(p => esc(P(p)?.name)).join(", ") || "—"}</span><span>Codici</span><span>${n.children.length}</span></div>
+        ${mat}<div class="acts2"><button class="b s" data-gedit="${esc(a.groupId)}">Modifica in Tipologie</button>${branch}</div>`;
+    } else if (n.kind === "mac") {
+      head = `<div class="eyebrow">macrogruppo</div><h3>${esc(n.label)}</h3>${n.mc?.code ? `<div class="code">${esc(n.mc.code)}</div>` : ""}`;
+      body = `<div class="sec2">Tipologie</div><ul>${n.children.map(c => `<li><a class="tlink" data-gsel="${esc(c.id)}" href="javascript:void 0">${esc(c.label)}</a> <span class="mut">${c.children.length} elementi${T.L === "data" ? " · " + esc(c.htitle) : STN[c.st] ? " · " + STN[c.st] : ""}</span></li>`).join("")}</ul>
+        <div class="acts2">${branch}</div>`;
+    } else { head = `<div class="eyebrow">macchina</div><h3>${esc(machineName())}</h3><p class="mut">${esc(n.sub)}</p>`; body = `<div class="acts2">${branch}</div>`; }
+    const ae = document.activeElement, keep = side$.contains(ae) ? Object.entries(ae.dataset)[0] : null;
+    side$.classList.toggle("wide", wide); side$.classList.toggle("open", panelOpen);
+    side$.innerHTML = close + crumbs(n) + `<div class="phead">${head}</div><button class="b s pmore" data-pmore aria-expanded="${panelOpen}">${panelOpen ? "Meno dettagli ▴" : "Dettagli ▾"}</button><div class="pbody">${body}</div>`;
+    if (keep) side$.querySelector(`[data-${keep[0].replace(/[A-Z]/g, c => "-" + c.toLowerCase())}="${CSS.escape(keep[1])}"]`)?.focus();
+    if (lastAnn !== selId) { lastAnn = selId; $("#grLive").textContent = "Dettagli: " + ariaLabel(n); }
+  }
+  // ---------- minimappa ----------
+  function drawMini() {
+    if (!T?.bb || !$("#grMiniOn").checked) { mini.classList.add("hide"); return; }
+    const {x0, x1, y0, y1} = T.bb, r = svgEl.getBoundingClientRect();
+    const big = innerWidth >= 1400 && ((x1 - x0) * Z.k > r.width * 1.6 || (y1 - y0) * Z.k > r.height * 1.6);
+    mini.classList.toggle("hide", !big); if (!big) return;
+    const MW = 200, MH = 130, s = Math.min(MW / (x1 - x0), MH / (y1 - y0));
+    mini.setAttribute("viewBox", `0 0 ${MW} ${MH}`);
+    const paths = {};
+    for (const n of T.vis) {
+      const g = nodeEls.get(n.id), cls = !g ? "n" : g.classList.contains("dim") ? "d" : g.classList.contains("hl") || g.classList.contains("pk") ? "h" : n.kind === "mac" ? "m" : g.classList.contains("match") || g.classList.contains("sel") ? "s" : "n";
+      const x = (n.x - x0) * s, y = (n.y - y0) * s, w = Math.max(2, wOf(n) * s), h = Math.max(1.5, NH * s);
+      (paths[cls] ||= []).push(`M${x.toFixed(1)},${y.toFixed(1)}h${w.toFixed(1)}v${h.toFixed(1)}h${(-w).toFixed(1)}z`);
+    }
+    mini.dataset.s = s; mini.dataset.x0 = x0; mini.dataset.y0 = y0;
+    mini.innerHTML = Object.entries(paths).map(([c, d]) => `<path class="mm-${c}" d="${d.join("")}"/>`).join("") + `<rect id="grMiniV" class="mm-v"/>`;
+    miniView();
+  }
+  function miniView() {
+    const v = $("#grMiniV"); if (!v || mini.classList.contains("hide")) return;
+    const s = +mini.dataset.s, r = svgEl.getBoundingClientRect();
+    v.setAttribute("x", ((-Z.x / Z.k) - mini.dataset.x0) * s); v.setAttribute("y", ((-Z.y / Z.k) - mini.dataset.y0) * s);
+    v.setAttribute("width", r.width / Z.k * s); v.setAttribute("height", r.height / Z.k * s);
+  }
+  let mdrag = false;
+  const miniGo = e => {
+    const b = mini.getBoundingClientRect(), s = +mini.dataset.s, sc = b.width / 200, r = svgEl.getBoundingClientRect();
+    const wx = (e.clientX - b.left) / sc / s + +mini.dataset.x0, wy = (e.clientY - b.top) / sc / s + +mini.dataset.y0;
+    Z.x = r.width / 2 - wx * Z.k; Z.y = r.height / 2 - wy * Z.k; apply(false);
+  };
+  mini.addEventListener("pointerdown", e => { mdrag = true; mini.setPointerCapture(e.pointerId); miniGo(e); e.stopPropagation(); });
+  mini.addEventListener("pointermove", e => { if (mdrag) miniGo(e); });
+  mini.addEventListener("pointerup", () => mdrag = false);
+  $("#grMiniOn").addEventListener("change", drawMini);
+  // ---------- zoom / pan ----------
+  const lod = () => { svgEl.classList.toggle("lod1", Z.k < 0.7); svgEl.classList.toggle("lod2", Z.k < 0.42); };
+  let miniT = 0;
+  const apply = anim => {
+    view.classList.toggle("anim", !!anim && !RM());
+    view.style.transform = `translate(${Z.x}px,${Z.y}px) scale(${Z.k})`; view.style.transformOrigin = "0 0";
+    lod(); $("#grZoomPct").textContent = Math.round(Z.k * 100) + "%";
+    cancelAnimationFrame(miniT); miniT = requestAnimationFrame(() => { if (T?.bb) { const was = mini.classList.contains("hide"); drawMiniVisibility(); if (!mini.classList.contains("hide")) was ? drawMini() : miniView(); } });
+  };
+  function drawMiniVisibility() {
+    if (!$("#grMiniOn").checked || !T?.bb) return mini.classList.add("hide");
+    const {x0, x1, y0, y1} = T.bb, r = svgEl.getBoundingClientRect();
+    mini.classList.toggle("hide", !(innerWidth >= 1400 && ((x1 - x0) * Z.k > r.width * 1.6 || (y1 - y0) * Z.k > r.height * 1.6)));
+  }
+  function zoomAt(f, cx, cy, anim) { const k = Math.min(3, Math.max(0.15, Z.k * f)); f = k / Z.k; Z.x = cx - (cx - Z.x) * f; Z.y = cy - (cy - Z.y) * f; Z.k = k; apply(anim); }
+  const panelW = () => side$.classList.contains("closed") ? 0 : side$.offsetWidth + 24;
+  const sumH = () => { const s = $("#grSum"), c = svgEl.getBoundingClientRect(); return s ? Math.max(32, s.getBoundingClientRect().bottom - c.top + 14) : 32; };
+  function fit(anim = true, minK = 0.15) {
+    if (!T) return; if (!T.bb) layout();
+    const {x0: minX, x1: maxX, y0: minY, y1: maxY} = T.bb;
+    const r = svgEl.getBoundingClientRect(), pad = 32, top = sumH(), bw = r.width - pad * 2 - panelW(), bh = r.height - pad - top - 52;
+    const k = Math.min(1.3, Math.max(minK, Math.min(bw / (maxX - minX), bh / (maxY - minY))));
+    Z.k = k; Z.x = pad - minX * k + Math.max(0, (bw - (maxX - minX) * k) / 2); Z.y = top - minY * k + Math.max(0, (bh - (maxY - minY) * k) / 2); apply(anim);
+  }
+  function centerOn(n, anim = true) {
+    const r = svgEl.getBoundingClientRect(); if (Z.k < 0.8) Z.k = 1;
+    Z.x = (r.width - panelW()) / 2 - (n.x + wOf(n) / 2) * Z.k; Z.y = r.height / 2 - (n.y + NH / 2) * Z.k; apply(anim && !RM());
+  }
+  function revealSubtree(n, keepZoom, anim = true) {
+    if (!n) return;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    (function w(m) { x0 = Math.min(x0, m.x); x1 = Math.max(x1, m.x + wOf(m) + 70); y0 = Math.min(y0, m.y); y1 = Math.max(y1, m.y + NH); if (expanded.has(m.id)) m.children.forEach(w); })(n);
+    const r = svgEl.getBoundingClientRect(), pad = 32, top = sumH(), bw = r.width - pad * 2 - panelW(), bh = r.height - pad - top - 52;
+    const lead = n.parent ? 0.4 * COLW : 0;
+    const k = keepZoom ? Z.k : Math.min(1, Math.max(0.8, bw / (x1 - x0 + lead)));
+    if (keepZoom) {
+      const sx0 = Z.x + x0 * k, sx1 = Z.x + x1 * k, sy0 = Z.y + y0 * k, sy1 = Z.y + y1 * k;
+      if (sx0 >= pad && sx1 <= pad + bw && sy0 >= top && sy1 <= top + bh) return;
+      if (sx1 > pad + bw || sx0 < pad) Z.x = (x1 - x0) * k <= bw ? pad + bw - x1 * k : pad - x0 * k;
+    } else { Z.k = k; Z.x = pad + lead * k - x0 * k; }
+    Z.y = (y1 - y0) * k <= bh ? Math.min(Math.max(Z.y, top + bh - y1 * k), top - y0 * k) : r.height / 2 - (n.y + NH / 2) * k;
+    if (!keepZoom && (y1 - y0) * k <= bh) Z.y = top - y0 * k + (bh - (y1 - y0) * k) / 2;
+    apply(anim && !RM());
+  }
+  function setFocus(id, reveal = true) {
+    nodeEls.get(focId)?.classList.remove("kf");
+    focId = id; const g = nodeEls.get(id);
+    if (g && kbFocus()) g.classList.add("kf");
+    if (g) svgEl.setAttribute("aria-activedescendant", safe(id));
+    const n = T.byNode.get(id); if (n && reveal) ensureVisible(n);
+    ctxUi();
+  }
+  // tiene il nodo nella vista evitando il pannello dettagli e i comandi zoom
+  function ensureVisible(n) {
+    if (!n) return;
+    const r = svgEl.getBoundingClientRect(), m = 40;
+    const sx = Z.x + n.x * Z.k, sy = Z.y + n.y * Z.k, ex = sx + (wOf(n) + 30) * Z.k, ey = sy + NH * Z.k;
+    let right = r.width, bottom = r.height - 12, top = m;
+    if (!side$.classList.contains("closed")) { const p = side$.getBoundingClientRect(); if (sy < p.bottom - r.top && ey > p.top - r.top) right = p.left - r.left; }
+    const sm = $("#grSum").getBoundingClientRect(); if (sx < sm.right - r.left) top = Math.max(top, sm.bottom - r.top + 8);
+    for (const o of [$(".gmapctl"), mini, $(".glegend")]) { if (!o || o.classList.contains("hide")) continue; const q = o.getBoundingClientRect(); if (q.width && ex > q.left - r.left && sx < q.right - r.left) bottom = Math.min(bottom, q.top - r.top); }
+    let dx = 0, dy = 0;
+    if (sx < m) dx = m - sx; else if (ex > right - m) dx = right - m - ex;
+    if (sy < top) dy = top - sy; else if (ey > bottom - 8) dy = bottom - 8 - ey;
+    if (dx || dy) { Z.x += dx; Z.y += dy; apply(!RM()); }
+  }
+  svgEl.addEventListener("wheel", e => { e.preventDefault(); const r = svgEl.getBoundingClientRect(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.clientX - r.left, e.clientY - r.top, false); }, {passive: false});
+  let drag = null;
+  svgEl.addEventListener("pointerdown", e => { if (e.button !== 0) return; drag = {x: e.clientX, y: e.clientY, zx: Z.x, zy: Z.y, moved: false}; });
+  addEventListener("pointermove", e => {
+    if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+    if (!drag.moved) { drag.moved = true; svgEl.classList.add("drag"); }
+    Z.x = drag.zx + dx; Z.y = drag.zy + dy; apply(false);
+  });
+  addEventListener("pointerup", () => { if (drag) { setTimeout(() => drag = null, 0); svgEl.classList.remove("drag"); } });
+  // ---------- azioni ----------
+  function toggle(id, fromKey) {
+    if (expanded.has(id)) {
+      expanded.delete(id);
+      const n = T.byNode.get(id), under = x => { for (let p = T.byNode.get(x)?.parent; p; p = p.parent) if (p === n) return true; return false; };
+      if (selId && under(selId)) selId = id;
+      if (under(focId)) focId = id;
+    } else expanded.add(id);
+    const opened = expanded.has(id);
+    custom = true; render();
+    if (opened) setTimeout(() => fromKey ? ensureVisible(T.byNode.get(id)?.children[0]) : revealSubtree(T.byNode.get(id), true), 20);
+  }
+  function expandAll(id) { const n = T.byNode.get(id); (function w(m) { if (m.children.length) expanded.add(m.id); m.children.forEach(w); })(n); custom = true; render(); setTimeout(() => revealSubtree(T.byNode.get(id), true), 20); }
+  function select(id, center) { if (selId !== id) panelOpen = false; selId = id; focId = id; const n0 = T.byNode.get(id); if (n0) for (let p = n0.parent; p; p = p.parent) expanded.add(p.id); render(); const n = T.byNode.get(id); if (n && center) centerOn(n); else if (n) ensureVisible(n); }
+  svgEl.addEventListener("click", e => {
+    if (drag?.moved || e.detail > 1) return;
+    const tg = e.target.closest("[data-tg]"); if (tg) { focId = tg.dataset.tg; return toggle(tg.dataset.tg); }
+    const g = e.target.closest(".gn");
+    if (!g) { if (selId) { selId = null; render(); } return; }
+    if (selId !== g.dataset.id) panelOpen = false;
+    selId = focId = g.dataset.id; render(); ensureVisible(T.byNode.get(selId));
+  });
+  svgEl.addEventListener("dblclick", e => { const g = e.target.closest(".gn"); if (g) { e.preventDefault(); expandAll(g.dataset.id); } });
+  svgEl.addEventListener("focus", () => requestAnimationFrame(() => setFocus(focId, false)));
+  svgEl.addEventListener("blur", () => nodeEls.get(focId)?.classList.remove("kf"));
+  let ta = "", taT = 0;
+  svgEl.addEventListener("keydown", e => {
+    if (!T) return;
+    const vis = T.vis, i = T.visIdx.get(focId) ?? 0, n = vis[i];
+    const go = m => { e.preventDefault(); if (m) setFocus(m.id); };
+    const r = svgEl.getBoundingClientRect();
+    if (e.shiftKey && e.key.startsWith("Arrow")) {
+      e.preventDefault(); const d = 80;
+      if (e.key === "ArrowLeft") Z.x += d; if (e.key === "ArrowRight") Z.x -= d; if (e.key === "ArrowUp") Z.y += d; if (e.key === "ArrowDown") Z.y -= d;
+      return apply(false);
+    }
+    if (e.key.length === 1 && /[\p{L}\p{N}]/u.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      clearTimeout(taT); ta += e.key.toLowerCase(); taT = setTimeout(() => ta = "", 500);
+      const order = [...vis.slice(i + (ta.length === 1 ? 1 : 0)), ...vis.slice(0, i + (ta.length === 1 ? 1 : 0))];
+      const m = order.find(x => String(x.label).toLowerCase().startsWith(ta)); if (m) setFocus(m.id);
+      e.preventDefault(); return;
+    }
+    switch (e.key) {
+      case "ArrowDown": return go(vis[i + 1]);
+      case "ArrowUp": return go(vis[i - 1]);
+      case "Home": return go(vis[0]);
+      case "End": return go(vis[vis.length - 1]);
+      case "PageDown": e.preventDefault(); return stepMacro(1);
+      case "PageUp": e.preventDefault(); return stepMacro(-1);
+      case "ArrowRight": e.preventDefault(); if (n.children.length && !expanded.has(n.id)) return toggle(n.id, true); return go(n.children[0]);
+      case "ArrowLeft": e.preventDefault(); if (n.children.length && expanded.has(n.id)) return toggle(n.id, true); return go(n.parent);
+      case "Enter": e.preventDefault(); selId = n.id; panelOpen = true; render(); return ensureVisible(n);
+      case " ": e.preventDefault(); if (n.children.length) toggle(n.id, true); return;
+      case "*": e.preventDefault(); return expandAll(n.id);
+      case "+": case "=": e.preventDefault(); return zoomAt(1.25, r.width / 2, r.height / 2, true);
+      case "-": e.preventDefault(); return zoomAt(0.8, r.width / 2, r.height / 2, true);
+      case ".": e.preventDefault(); return fit(true);
+      case "/": e.preventDefault(); return $("#grSearch").focus();
+      case "Escape": e.preventDefault(); if (selId) return escPanel(); if (hits.length) { sIn.value = ""; search("", 0); } return;
+    }
+  });
+  side$.addEventListener("click", e => {
+    const d = e.target.closest("[data-gedit],[data-gexp],[data-gsel],[data-gall],[data-gclose],[data-pmore],[data-mall]")?.dataset; if (!d) return;
+    if (d.gclose !== undefined) { selId = null; render(); svgEl.focus({preventScroll: true}); return; }
+    if (d.pmore !== undefined) { panelOpen = !panelOpen; render(); side$.querySelector("[data-pmore]")?.focus(); return; }
+    if (d.mall) { matAll.add(d.mall); render(); return; }
+    if (d.gedit) { curG = d.gedit; show("groups"); }
+    if (d.gexp) toggle(d.gexp);
+    if (d.gall) expandAll(d.gall);
+    if (d.gsel) select(d.gsel, true);
+  });
+  side$.addEventListener("change", e => { const p = e.target.dataset.mpiv; if (p) { matPivot.set(p, e.target.value); render(); side$.querySelector(`[data-mpiv="${CSS.escape(p)}"]`)?.focus(); } });
+  side$.addEventListener("keydown", e => { if (e.key === "Escape") { e.preventDefault(); escPanel(); } });
+  function escPanel() { if (selId && panelOpen && innerWidth < 1400) panelOpen = false; else selId = null; render(); svgEl.focus({preventScroll: true}); }
+  // ---------- controlli ----------
+  function levelUi() {
+    $$("#grLevel button").forEach(b => { const on = !custom && +b.dataset.l === level; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false"); });
+    $("#grCustom").classList.toggle("hide", !custom);
+    $("#grLevel").title = custom ? "Vista personalizzata: hai aperto o chiuso rami a mano" : "";
+  }
+  $("#grLevel").addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    level = +b.dataset.l; applyLevel(); render();
+    setTimeout(() => {
+      if (level === 9) { const n = (selId && T.byNode.get(selId)) || T.root.children.find(c => c.kind === "mac") || T.root; revealSubtree(n, false); }
+      else fit(true, 0.8);
+    }, 60);
+  });
+  $("#grIn").onclick = () => { const r = svgEl.getBoundingClientRect(); zoomAt(1.25, r.width / 2, r.height / 2, true); };
+  $("#grOut").onclick = () => { const r = svgEl.getBoundingClientRect(); zoomAt(0.8, r.width / 2, r.height / 2, true); };
+  $("#grFit").onclick = () => fit(true);
+  function search(q, dir) {
+    if (!T) render();
+    q = q.trim().toLowerCase();
+    if (!q) {
+      if (expBeforeSearch) { expanded = expBeforeSearch.exp; custom = expBeforeSearch.custom; expBeforeSearch = null; }
+      hits = []; lastQ = ""; $("#grHits").textContent = ""; $("#grPrev").disabled = $("#grNext").disabled = true; render(); return;
+    }
+    if (!expBeforeSearch) expBeforeSearch = {exp: new Set(expanded), custom};
+    if (q !== lastQ || !dir) { hits = T.all.filter(n => n.kind !== "root" && [n.label, n.sub, n.desc].join(" ").toLowerCase().includes(q)).map(n => n.id); hitIdx = 0; lastQ = q; }
+    else if (hits.length) hitIdx = (hitIdx + dir + hits.length) % hits.length;
+    $("#grHits").textContent = hits.length ? `${hitIdx + 1}/${hits.length}` : "0 risultati";
+    $("#grPrev").disabled = $("#grNext").disabled = hits.length < 2;
+    if (!hits.length) { render(); return; }
+    const id = hits[hitIdx];
+    for (let p = T.byNode.get(id).parent; p; p = p.parent) expanded.add(p.id);
+    custom = true; selId = focId = id; render(); setTimeout(() => centerOn(T.byNode.get(id)), 30);
+    $("#grLive").textContent = `Risultato ${hitIdx + 1} di ${hits.length}: ${ariaLabel(T.byNode.get(id))}`;
+  }
+  let st = 0;
+  const sIn = $("#grSearch");
+  sIn.addEventListener("input", e => { clearTimeout(st); st = setTimeout(() => search(e.target.value, 0), 220); });
+  sIn.addEventListener("keydown", e => {
+    if (e.key === "Enter") { e.preventDefault(); clearTimeout(st); search(sIn.value, e.shiftKey ? -1 : 1); }
+    if (e.key === "Escape") { sIn.value = ""; search("", 0); }
+    if (e.key === "ArrowDown") { e.preventDefault(); svgEl.focus(); }
+  });
+  $("#grPrev").onclick = () => search(sIn.value, -1);
+  $("#grNext").onclick = () => search(sIn.value, 1);
+  addEventListener("keydown", e => { if (curTab === "graph" && e.key === "/" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName) && document.activeElement !== svgEl) { e.preventDefault(); sIn.focus(); } });
+  const sizeCanvas = () => { const c = $("#grCanvas"); if (!c || !c.offsetParent) return; const top = c.getBoundingClientRect().top + scrollY; c.style.height = `max(480px, calc(100dvh - ${Math.round(top) + 16}px))`; };
+  addEventListener("resize", () => { if (curTab === "graph") sizeCanvas(); });
+  new ResizeObserver(() => { if (curTab !== "graph" || !T) return; drawMini(); if (selId) ensureVisible(T.byNode.get(selId)); }).observe($("#grCanvas"));
+  window.renderGraph = () => { sizeCanvas(); sideSig = ""; apply(false); render(); };
 })();
 </script>
 </body>

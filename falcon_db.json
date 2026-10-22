@@ -64,7 +64,7 @@
   {
    "id": "pc528d7c0",
    "sectionId": "s68559f4b",
-   "name": "Ø tagliacuce",
+   "name": "Ø Tagliacuce",
    "values": [
     "170",
     "200"
@@ -516,7 +516,8 @@
    "cond": {
     "p6a8a8a3b": "FE",
     "pb8ed88a6": "SX"
-   }
+   },
+   "link": "https://www.google.com/"
   },
   {
    "id": "if64d0be6",
@@ -1694,5 +1695,6 @@
    "code": "TP1XD0XXX"
   }
  ],
- "macrosInit": true
+ "macrosInit": true,
+ "settings": {}
 }
