@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Configuratore</title>
+<script>try{var _t=localStorage.getItem("cf_theme");if(!_t&&matchMedia("(prefers-color-scheme:dark)").matches)_t="dark";document.documentElement.dataset.theme=_t==="dark"?"dark":"light"}catch(e){}</script>
 <style>
 :root{
   --bg:#eceff2;--surface:#f8f9fa;--surface-2:#f1f3f5;--surface-3:#e8ebef;--field:#fff;
@@ -12,12 +13,40 @@
   --ok:#2a7349;--ok-s:#e5f2ea;--wa:#8a5410;--wa-s:#fbf3e4;--er:#a63b2b;--er-s:#f9e8e5;
   --r:10px;--r-s:7px;--sh:0 1px 2px rgba(34,42,51,.04),0 0 0 1px rgba(34,42,51,.02);
   --ring:0 0 0 3px rgba(53,88,168,.18);--ease:cubic-bezier(.2,.7,.2,1);--ease-out:cubic-bezier(.16,1,.3,1);--t1:120ms;--t2:180ms;--t3:260ms}
+/* ---- tema: valori chiari = quelli storici; il tema scuro ridefinisce solo le variabili ---- */
+:root{color-scheme:light;
+  --hdr-bg:rgba(248,249,250,.85);--float-bg:rgba(248,249,250,.96);--seg-hov:rgba(255,255,255,.55);--seg-bg2:rgba(255,255,255,.7);
+  --row-alt:#f6f7f9;--l1-bg:#f3f5f8;--bd-hov:#aab2bc;--wa-bd:#d9b77e;--wa-ln:#c9a15c;--wa-bd2:#e7cf9f;--wa-ln2:#b88a3b;
+  --mc-bd:#c9d4ea;--mc-g:#edf1f9;--mc-okg:#f1f8f3;--mc-hov:#e9f0fb;--macdim-bg:#e9edf5;--macdim-st:#b9c6e2;
+  --toast-bg:#2d3640;--toast-tx:#f3f5f7;--hit-bg:#fff8d6;--hit-bd:#f2c94c;--hit-bd2:#e2b93b;--hit-ring:#f2d27a;--dr-bg:#fff6e0;
+  --kf:#1d3f8f;--sub-tx:#56606b;--dim-bg:#f4f5f7;--x-bg:#eef6f5;--x-st:#7fb2ac;--tg-st:#9aa4b0;--edge:#b8c0ca;--edge-dim:#e1e5ea;
+  --cov-bg:#e7eaee;--dot:#d9dee5;--root-bg:#222a33;--root-tx:#fff;--root-sub:#c3cad2}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#0f1114;--surface:#16181c;--surface-2:#1c1f24;--surface-3:#252930;--field:#191c21;
+  --tx:#e8eaed;--tx-2:#b4b9c0;--mut:#8b929b;--bd:#262a30;--bd-2:#363b43;
+  --ac:#3f63b0;--ac-h:#4a70c2;--ac-s:#1b2230;--ac-tx:#a9bde6;
+  --ok:#6fb58c;--ok-s:#151c18;--wa:#cfae72;--wa-s:#1e1b15;--er:#e0897b;--er-s:#241a19;
+  --sh:0 1px 2px rgba(0,0,0,.45);--ring:0 0 0 3px rgba(120,150,220,.3);
+  --hdr-bg:rgba(22,24,28,.88);--float-bg:rgba(22,24,28,.96);--seg-hov:rgba(255,255,255,.05);--seg-bg2:rgba(255,255,255,.04);
+  --row-alt:#1a1d21;--l1-bg:#1f2329;--bd-hov:#4c5560;--wa-bd:#6a5730;--wa-ln:#a98a45;--wa-bd2:#594a29;--wa-ln2:#b99a55;
+  --mc-bd:#2a313c;--mc-g:#1b1f26;--mc-okg:#171e1a;--mc-hov:#1d222b;--macdim-bg:#1b2029;--macdim-st:#323b4c;
+  --toast-bg:#2a2e35;--toast-tx:#eef0f3;--hit-bg:#3a3315;--hit-bd:#b89f3f;--hit-bd2:#b89f3f;--hit-ring:#6b5c22;--dr-bg:#2a2314;
+  --kf:#a9bde6;--sub-tx:#a2a9b2;--dim-bg:#14171b;--x-bg:#17231f;--x-st:#4a857e;--tg-st:#646d78;--edge:#444b55;--edge-dim:#262b31;
+  --cov-bg:#272c33;--dot:#20242a;--root-bg:#d5dae1;--root-tx:#15181c;--root-sub:#46505c;
+  --xa:#b4a6e0;--xa-s:#201f2a;--xa-b:#3a3650;--xa-bg:#54478a;--db:#d98a7a}
+.themebtn{flex:none;width:34px;height:34px;border-radius:var(--r-s);border:1px solid transparent;background:transparent;color:var(--mut);cursor:pointer;display:inline-grid;place-items:center;transition:background .15s,color .15s}
+.themebtn:hover{background:var(--surface-3);color:var(--tx)}
+.themebtn:focus-visible{outline:none;box-shadow:var(--ring)}
+.themebtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.themebtn .sun{display:none}
+:root[data-theme="dark"] .themebtn .sun{display:block}
+:root[data-theme="dark"] .themebtn .moon{display:none}
 *{box-sizing:border-box}
 html{scrollbar-gutter:stable}
 body{margin:0;font:14px/1.5 "Segoe UI Variable Text","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
 ::selection{background:var(--ac-s)}
 /* ---------- app bar ---------- */
-header{display:flex;align-items:center;gap:28px;overflow:hidden;padding:0 24px;height:58px;background:rgba(248,249,250,.85);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:20}
+header{display:flex;align-items:center;gap:28px;overflow:hidden;padding:0 24px;height:58px;background:var(--hdr-bg);backdrop-filter:blur(8px);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:20}
 .brand{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .brand .logo{width:30px;height:30px;border-radius:8px;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
 .brand b{font-size:15px;font-weight:650;letter-spacing:-.01em}
@@ -51,24 +80,24 @@ main{max-width:1440px;margin:0 auto;padding:22px 24px 40px}
 label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:500;color:var(--tx-2)}
 input,select{font:inherit;color:var(--tx);background:var(--field);border:1px solid var(--bd-2);border-radius:var(--r-s);padding:7px 10px;min-width:0;height:36px;transition:border-color .15s,box-shadow .15s,background .15s}
 input::placeholder{color:var(--mut);opacity:.75}
-input:hover,select:hover{border-color:#aab2bc}
+input:hover,select:hover{border-color:var(--bd-hov)}
 input:focus,select:focus{outline:none;border-color:var(--ac);box-shadow:var(--ring)}
 select{cursor:pointer}
 select.unset{background:var(--surface-2)}
-select.unset.req{border-color:#d9b77e}
+select.unset.req{border-color:var(--wa-bd)}
 input[type=checkbox]{accent-color:var(--ac);width:16px;height:16px;margin:0}
 .ghost{background:transparent;border-color:transparent;height:32px;padding:5px 8px}
-.ghost:hover{border-color:var(--bd-2);background:#fff}
-.ghost:focus{background:#fff}
+.ghost:hover{border-color:var(--bd-2);background:var(--field)}
+.ghost:focus{background:var(--field)}
 .ghost.title{font-size:18px;font-weight:650;height:40px;margin-left:-8px}
 .ghost.h3{font-size:14px;font-weight:650;margin-left:-8px}
 /* ---------- segmented ---------- */
 .seg{display:inline-flex;flex-wrap:wrap;gap:3px;padding:3px;background:var(--surface-3);border-radius:9px}
 .seg button{font:inherit;font-size:13px;font-weight:500;border:0;background:transparent;color:var(--tx-2);padding:0 12px;height:30px;border-radius:6px;cursor:pointer;transition:background .18s var(--ease),color .18s,box-shadow .18s;white-space:nowrap}
-.seg button:hover{color:var(--tx);background:rgba(255,255,255,.55)}
-.seg button.on{background:#fff;color:var(--ac-tx);box-shadow:0 1px 2px rgba(40,49,60,.12),0 0 0 1px rgba(59,98,184,.25);font-weight:600}
+.seg button:hover{color:var(--tx);background:var(--seg-hov)}
+.seg button.on{background:var(--field);color:var(--ac-tx);box-shadow:0 1px 2px rgba(40,49,60,.12),0 0 0 1px rgba(59,98,184,.25);font-weight:600}
 .seg.unset{background:var(--surface-3)}
-.seg.unset.req{box-shadow:inset 0 0 0 1px #d9b77e}
+.seg.unset.req{box-shadow:inset 0 0 0 1px var(--wa-bd)}
 .pfield.unused{opacity:.55}
 .pfield.unused:hover{opacity:1}
 .seg.sm{padding:2px;gap:2px;border-radius:7px}
@@ -77,8 +106,8 @@ input[type=checkbox]{accent-color:var(--ac);width:16px;height:16px;margin:0}
 .seg.sm button.none.on{background:transparent;box-shadow:none;color:var(--mut);font-weight:500}
 .seg.sm:has(button.none.on){background:transparent;box-shadow:inset 0 0 0 1px var(--bd)}
 /* ---------- buttons ---------- */
-.b{font:inherit;font-weight:500;height:36px;padding:0 14px;border-radius:var(--r-s);border:1px solid var(--bd-2);background:#fff;color:var(--tx);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;transition:background .15s,border-color .15s,transform .1s}
-.b:hover{background:var(--surface-2);border-color:#aab2bc}
+.b{font:inherit;font-weight:500;height:36px;padding:0 14px;border-radius:var(--r-s);border:1px solid var(--bd-2);background:var(--field);color:var(--tx);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;transition:background .15s,border-color .15s,transform .1s}
+.b:hover{background:var(--surface-2);border-color:var(--bd-hov)}
 .b:active{transform:translateY(1px)}
 .b:focus-visible,.ib:focus-visible,.seg button:focus-visible,nav button:focus-visible{outline:none;box-shadow:var(--ring)}
 .b.p{background:var(--ac);border-color:var(--ac);color:#fff}
@@ -98,7 +127,7 @@ th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd);vertica
 th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);font-weight:600;white-space:nowrap;background:var(--surface-2)}
 tbody tr:last-child td{border-bottom:0}
 .mx td{padding:6px 8px}.mx th{padding:8px}
-.mx tbody tr:nth-child(even){background:#f6f7f9}
+.mx tbody tr:nth-child(even){background:var(--row-alt)}
 .mx .seg.sm button.none{width:24px;padding:0}
 .mx tbody tr{transition:background .15s}
 .mx tbody tr:hover{background:var(--surface-2)}
@@ -108,7 +137,7 @@ tbody tr:last-child td{border-bottom:0}
 .tag em{font-style:normal;color:var(--mut)}
 .tag b{font-weight:600}
 .tag.unset{border-style:dashed;color:var(--mut)}
-.chip{display:inline-flex;align-items:center;height:28px;padding:0 11px;border-radius:999px;border:1px solid var(--bd-2);font-size:12px;font-weight:500;margin:2px 4px 2px 0;cursor:pointer;user-select:none;color:var(--tx-2);background:#fff;transition:all .15s var(--ease)}
+.chip{display:inline-flex;align-items:center;height:28px;padding:0 11px;border-radius:999px;border:1px solid var(--bd-2);font-size:12px;font-weight:500;margin:2px 4px 2px 0;cursor:pointer;user-select:none;color:var(--tx-2);background:var(--field);transition:all .15s var(--ease)}
 .chip:hover{border-color:var(--ac);color:var(--ac-tx)}
 .chip.on{background:var(--ac-s);border-color:var(--ac);color:var(--ac-tx)}
 .mut{color:var(--mut);font-size:12px}
@@ -127,7 +156,7 @@ tbody tr:last-child td{border-bottom:0}
 .dot.ok{background:var(--ok)}.dot.wa{background:var(--wa)}
 .progress{height:4px;border-radius:6px;background:var(--surface-3);overflow:hidden}
 .progress>i{display:block;height:100%;background:var(--ok);border-radius:6px;transition:width var(--t3) var(--ease-out),background var(--t2)}
-.progress.wa>i{background:#c9a15c}
+.progress.wa>i{background:var(--wa-ln)}
 /* ---------- configuratore ---------- */
 .conf{display:grid;grid-template-columns:340px minmax(0,1fr);gap:20px;align-items:start}
 .inputs{padding:16px 18px}
@@ -203,6 +232,27 @@ tbody tr:last-child td{border-bottom:0}
 .dlg .dbody p{margin:0 0 8px}
 .dlg .dacts{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
 .dlg table td,.dlg table th{padding:6px 8px}
+.histform{display:grid;gap:12px;margin:14px 0}
+.histform label{display:grid;gap:5px;min-width:0}
+.histform input[type="date"]{width:180px;max-width:100%}
+.histform textarea{display:block;width:100%;min-height:80px;resize:vertical;box-sizing:border-box;font:inherit;line-height:1.5}
+.histform textarea{padding:8px 10px;color:var(--tx);background:var(--field);border:1px solid var(--bd-2);border-radius:var(--r-s)}
+.histform button{justify-self:end;max-width:100%;white-space:normal}
+.histadvanced{margin-top:8px;border-top:1px solid var(--bd);padding-top:10px}
+.histadvanced summary{cursor:pointer;color:var(--mut);font-size:12px;margin-bottom:8px}
+.global-search{display:grid;gap:8px;padding:12px 16px}
+.global-search label{font-size:12px;color:var(--mut)}
+.searchhit{display:block;width:100%;text-align:left;margin-top:6px;white-space:normal}
+.searchhit small{display:block;color:var(--mut)}
+#btnUndo,#btnRedo{font-size:25px;line-height:1;opacity:1}
+#btnUndo:disabled,#btnRedo:disabled{opacity:.3;cursor:default}
+body.editing-data #groupEditor .ghost,body.editing-data #paramSections .ghost{border-color:var(--bd);background:var(--field)}
+body.consulting-data .vchip .vl,body.consulting-data [data-gp],body.consulting-data [data-accp],body.consulting-data [data-medit]{cursor:default}
+.impact{background:var(--surface-2);padding:10px 12px;border-radius:var(--r-s);margin:10px 0}
+.qtyedit{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--mut);margin:4px 0 0 8px}
+.qtyedit input{width:76px;height:28px;padding:3px 6px}
+#backupStatus{overflow-wrap:anywhere}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .counters{display:flex;gap:10px;margin:6px 0 12px}
 .counters div{flex:1;background:var(--surface-2);border:1px solid var(--bd);border-radius:8px;padding:8px 12px}
 .counters b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
@@ -221,14 +271,14 @@ tbody tr:last-child td{border-bottom:0}
 .vchip input{height:22px;width:110px;padding:0 4px;font-size:13px}
 input.vadd{height:28px;width:120px;font-size:13px;border-style:dashed;background:transparent}
 .seg.sm button.q{color:var(--wa);font-weight:700}
-.seg.sm button.q.on{background:var(--wa-s);color:var(--wa);box-shadow:inset 0 0 0 1px #d9b77e}
+.seg.sm button.q.on{background:var(--wa-s);color:var(--wa);box-shadow:inset 0 0 0 1px var(--wa-bd)}
 select.sm{height:26px;padding:0 6px;font-size:12px}
-select.sm.q{background:var(--wa-s);border-color:#d9b77e;color:var(--wa)}
+select.sm.q{background:var(--wa-s);border-color:var(--wa-bd);color:var(--wa)}
 .mx td{padding:4px 8px;height:38px}
 .mx .seg.sm{flex-wrap:nowrap}
 .acts{opacity:.35}
 tr.review td:first-child{box-shadow:inset 3px 0 0 var(--wa)}
-input.draftcode{border:1px dashed #d9b77e!important;background:var(--wa-s)!important}
+input.draftcode{border:1px dashed var(--wa-bd)!important;background:var(--wa-s)!important}
 .flashok td{animation:flashok 700ms var(--ease)}
 .pfield .lbl .clr{border:0;background:none;color:var(--mut);cursor:pointer;font-size:15px;line-height:1;padding:0 4px;border-radius:4px}
 .pfield .lbl .clr:hover{background:var(--surface-3);color:var(--tx)}
@@ -237,9 +287,9 @@ input.draftcode{border:1px dashed #d9b77e!important;background:var(--wa-s)!impor
 .pfield.hit{box-shadow:0 0 0 3px rgba(53,88,168,.18),0 0 0 8px rgba(53,88,168,.06)}
 .openchip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx-2);background:var(--surface-2);border:1px solid var(--bd);border-radius:999px;padding:3px 10px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .openchip i{width:7px;height:7px;border-radius:50%;background:var(--ok);flex:none}
-.openchip.dirty i{background:#c9a15c}
+.openchip.dirty i{background:var(--wa-ln)}
 tr.openrow td:first-child{box-shadow:inset 3px 0 0 var(--ac)}
-.tag.wa{background:var(--wa-s);border-color:#e7cf9f;color:var(--wa)}
+.tag.wa{background:var(--wa-s);border-color:var(--wa-bd2);color:var(--wa)}
 .tag.btn{cursor:pointer}
 .tag.alt{background:var(--ac-s);border-color:transparent;color:var(--ac-tx)}
 .tag.er{background:var(--er-s);border-color:transparent;color:var(--er)}
@@ -261,7 +311,14 @@ tr.openrow td:first-child{box-shadow:inset 3px 0 0 var(--ac)}
    v5 — layout compatto (solo presentazione; logica e dati invariati)
    ===================================================================== */
 main{max-width:1880px}
-.conf{grid-template-columns:360px minmax(0,1fr);gap:16px}
+.conf{grid-template-columns:var(--sbw,360px) minmax(0,1fr);gap:16px;position:relative}
+/* maniglia per ridimensionare il pannello parametri */
+.rsz{position:absolute;top:0;bottom:0;left:calc(var(--sbw,360px) + 3px);width:10px;cursor:col-resize;touch-action:none;z-index:3;outline:none}
+.rsz i{position:sticky;top:70px;display:block;height:min(160px,calc(100vh - 84px));margin:calc(50vh - 120px) auto 0;width:4px;border-radius:2px;background:var(--bd-2);opacity:0;transition:opacity .15s,background .15s}
+.conf:hover .rsz i{opacity:.55}
+.rsz:hover i,.rsz:focus-visible i,.rsz.drag i{opacity:1;background:var(--ac)}
+body.rszing{cursor:col-resize;user-select:none}
+@media (max-width:980px){.rsz{display:none}}
 /* ---- pannello parametri: righe etichetta|controllo, sezioni comprimibili ---- */
 .inputs{padding:10px 14px 12px;position:sticky;top:70px;max-height:calc(100vh - 84px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
 .inputs .cardhead{position:sticky;top:-10px;background:var(--surface);z-index:2;margin:-10px -14px 0!important;padding:10px 14px 6px}
@@ -343,7 +400,7 @@ main{max-width:1880px}
 .bomt{min-width:780px}
 .bomt td{padding:6px 10px;vertical-align:top}
 .bomt td.code{white-space:nowrap}
-.bomt tr.l1 td{background:#f3f5f8;border-top:1px solid var(--bd-2)}
+.bomt tr.l1 td{background:var(--l1-bg);border-top:1px solid var(--bd-2)}
 .bomt tr.unres td{font-style:normal}
 .bomt tr.unres td:nth-child(3){color:var(--wa);font-weight:500}
 .bomt tbody tr:hover td{background:var(--ac-s)}
@@ -370,7 +427,7 @@ main{max-width:1880px}
   .pfield{grid-template-columns:108px minmax(0,1fr) 18px}
 }
 /* ---------- toast ---------- */
-#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,14px);background:#2d3640;color:#f3f5f7;padding:9px 10px 9px 16px;border-radius:9px;opacity:0;transition:opacity .2s,transform .25s var(--ease);pointer-events:none;z-index:30;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:flex;align-items:center;gap:12px}
+#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,14px);background:var(--toast-bg);color:var(--toast-tx);padding:9px 10px 9px 16px;border-radius:9px;opacity:0;transition:opacity .2s,transform .25s var(--ease);pointer-events:none;z-index:30;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.18);display:flex;align-items:center;gap:12px}
 #toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 #toast button{font:inherit;font-weight:600;background:transparent;border:0;color:#9db7f0;cursor:pointer;padding:4px 8px;border-radius:5px}
 #toast button:hover{background:rgba(255,255,255,.08)}
@@ -387,12 +444,12 @@ main{max-width:1880px}
 @keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
 .st.pop{animation:pop 280ms var(--ease-out)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:1ms!important;animation-delay:0ms!important;transition-duration:1ms!important;scroll-behavior:auto!important}::view-transition-group(*){animation:none!important}}
-@media print{header,.noprint,.inputs{display:none!important}main{padding:0}.conf{display:block}.card{border:0;box-shadow:none}body{background:#fff}.ggrid{display:block}.gcard{margin-bottom:12px;border:1px solid #ccc}}
+@media print{header,.noprint,.inputs{display:none!important}main{padding:0}.conf{display:block}.card{border:0;box-shadow:none}body{background:var(--field)}.ggrid{display:block}.gcard{margin-bottom:12px;border:1px solid #ccc}}
 
 /* editor codici su due livelli */
 .mx2{table-layout:auto;width:100%}
 .mx2 tbody.it{border-top:1px solid var(--bd)}
-.mx2 tbody.it:nth-of-type(even){background:#f6f7f9}
+.mx2 tbody.it:nth-of-type(even){background:var(--row-alt)}
 .mx2 tbody.it:hover{background:var(--surface-2)}
 .mx2 tbody tr:nth-child(even),.mx2 tbody tr:hover{background:transparent}
 .mx2 tr.rA td{height:36px;padding-bottom:0}
@@ -418,11 +475,21 @@ main{max-width:1880px}
 .chead{background:var(--surface-2);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);padding-top:8px;padding-bottom:8px;border-bottom:1px solid var(--bd)}
 .crow{border-top:1px solid var(--bd);transition:background .15s;position:relative}
 .chead+.crow{border-top:0}
-.crow:nth-child(odd){background:#f8f9fb}
+.crow:nth-child(odd){background:var(--row-alt)}
 .crow:hover{background:var(--surface-2)}
 .crow.review{box-shadow:inset 3px 0 0 var(--wa)}
 .crow.flash{animation:flash 900ms var(--ease)}.crow.flashok{animation:flashok 700ms var(--ease)}
 .crow .c-code input{width:100%;font-weight:600}
+.crow .c-code{position:relative;padding-left:23px}
+.rowgrip{position:absolute;left:0;top:5px;border:0;background:none;color:var(--mut);cursor:grab;padding:3px;font:inherit;touch-action:none}
+.rowgrip:active{cursor:grabbing}
+.rowdrag{opacity:.35}
+.crow.dropbefore{box-shadow:inset 0 3px var(--ac)}
+.crow.dropafter{box-shadow:inset 0 -3px var(--ac)}
+header{flex-wrap:wrap;height:auto;min-height:58px;gap:10px 18px;padding-top:8px;padding-bottom:8px}
+header nav{height:40px;flex:1;min-width:0;overflow-x:auto}
+header .misstog{flex-shrink:0}
+@media(max-width:1100px){header nav{flex:1 1 65%}header .savestate{margin-left:0}}
 .crow .c-qty input{width:100%;text-align:right}
 .crow .acts{display:inline-flex}
 .crow{align-items:start}.crow>div{padding-top:0}.crow .c-attrs{padding-top:2px}.crow .c-qty,.crow .c-act{padding-top:2px}
@@ -445,6 +512,18 @@ main{max-width:1880px}
   .clist.cx .crow,.clist.cx.noattr .crow{grid-template-columns:1fr auto;grid-template-areas:"code act" "desc desc" "attrs attrs"}
 }
 .misstog{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--tx-2);cursor:pointer;user-select:none}
+
+/* storico codici: discreto, una riga piccola sotto il codice */
+.phist{display:inline-flex;align-items:center;gap:4px;max-width:100%;margin-top:3px;padding:0 2px;border:0;border-radius:4px;background:none;color:var(--mut);font:inherit;font-size:11.5px;line-height:1.4;cursor:pointer;opacity:.85}
+.phist:hover,.phist:focus-visible{color:var(--ac-tx);opacity:1}
+.phist:focus-visible{outline:none;box-shadow:var(--ring)}
+.phist .i{width:12px;height:12px;flex:none}
+.phist .pc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.phist em{font-style:normal;flex:none}
+.plist{list-style:none;margin:8px 0 0;padding:0}
+.plist li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--bd)}
+.plist .pi{min-width:0;overflow-wrap:anywhere}
+.plist .pa{display:flex;align-items:center;gap:4px;flex:none}
 
 /* macrogruppi */
 .mcard{break-inside:avoid;margin:0 0 12px;padding:0;overflow:hidden;display:block}
@@ -469,7 +548,7 @@ main{max-width:1880px}
    v8 — gerarchia macrogruppo → sotto-parte → interscambio → codici → accessori
    (solo presentazione)
    ===================================================================== */
-:root{--xa:#5f4591;--xa-s:#f3f0f9;--xa-b:#d9d0ea;--db:#9a3b2c}
+:root{--xa:#5f4591;--xa-s:#f3f0f9;--xa-b:#d9d0ea;--xa-bg:#5f4591;--db:#9a3b2c}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield select:focus-visible,.misstog input:focus-visible,tr.pick input:focus-visible{outline:2px solid var(--ac);outline-offset:2px;box-shadow:none}
 .b:focus-visible,.ib:focus-visible,.seg button:focus-visible,nav button:focus-visible,.sech:focus-visible,.rq:focus-visible,.pfield .clr:focus-visible{outline:2px solid var(--ac);outline-offset:1px;box-shadow:none}
@@ -487,6 +566,8 @@ a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield
 .hnum{display:flex;align-items:baseline;gap:4px;color:var(--mut);font-size:13px}
 .hnum b{font-size:20px;font-weight:650;color:var(--tx);font-variant-numeric:tabular-nums;line-height:1}
 .hsub{font-size:12px}
+.hbtn{background:none;border:0;padding:0;font:inherit;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;border-radius:3px}
+.hbtn:hover{text-decoration-style:solid}.hbtn:focus-visible{outline:none;box-shadow:var(--ring)}
 .progress{height:6px}
 .progress.part>i{background:var(--ac)}
 .cfgbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 18px;border-top:1px solid var(--bd);background:var(--surface-2)}
@@ -500,14 +581,14 @@ a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield
 .toolbar{margin:0 0 10px;gap:8px 14px}
 .misstog{font-size:12.5px;color:var(--mut)}
 /* ---- barra problemi: bianca con accento, divisa per tipo ---- */
-.issuebar{display:block;background:var(--surface);border:1px solid var(--bd);border-left:3px solid #c9a15c;border-radius:var(--r-s);padding:8px 12px;margin-bottom:12px;font-size:12.5px;color:var(--tx-2)}
+.issuebar{display:block;background:var(--surface);border:1px solid var(--bd);border-left:3px solid var(--wa-ln);border-radius:var(--r-s);padding:8px 12px;margin-bottom:12px;font-size:12.5px;color:var(--tx-2)}
 .issuebar .ibh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .issuebar .ibh b{color:var(--tx);font-size:13px}
 .issuebar .ibn{min-width:22px;height:20px;padding:0 6px;border-radius:999px;background:var(--wa-s);color:var(--wa);font-weight:700;font-size:12px;display:inline-grid;place-items:center;font-variant-numeric:tabular-nums}
 .issuebar .ibr{display:grid;grid-template-columns:136px minmax(0,1fr);gap:8px;align-items:baseline;margin-top:6px}
 .issuebar .ibk{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .issuebar .ibk::before{content:"";width:7px;height:7px;border-radius:50%;flex:none}
-.issuebar .ibk.wa{color:var(--wa)}.issuebar .ibk.wa::before{background:#c9a15c}
+.issuebar .ibk.wa{color:var(--wa)}.issuebar .ibk.wa::before{background:var(--wa-ln)}
 .issuebar .ibk.db{color:var(--mut)}.issuebar .ibk.db::before{background:var(--db)}
 .issuebar .ibl{display:flex;flex-wrap:wrap;gap:2px 0;line-height:1.6}
 .issuebar a{color:var(--tx);font-weight:500;text-decoration:underline;text-decoration-color:var(--bd-2);text-underline-offset:3px}
@@ -567,14 +648,14 @@ a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield
 .gcard .gx.flash{animation:flash 900ms var(--ease)}
 .ctab td{padding:2px 4px;border-bottom:0!important;font-size:12.5px;line-height:1.35;vertical-align:baseline}
 .ctab tr+tr td{border-top:1px solid var(--surface-3)!important;padding-top:4px}
-.gcard .ctab td.code{width:1%;white-space:nowrap;padding-left:0;padding-right:12px;font-size:12px;padding-top:2px}
+.gcard .ctab td.code{width:var(--ccode,1%);min-width:var(--ccode,0);white-space:nowrap;padding-left:0;padding-right:12px;font-size:12px;padding-top:2px}
 .gcard .ctab td.num{width:34px;padding-top:2px;padding-right:0}
 .ctab .q{font-size:11.5px;color:var(--mut)}.ctab .q::before{content:"×";margin-right:1px;opacity:.7}
 .gcard .ctab td.ds .mut{font-size:11px}
 .ctab tr.pick{cursor:pointer}.ctab tr.pick:hover td{background:var(--surface-2)}
 .ctab td.rad{width:22px;padding:2px 0 0}
 .note{font-size:12.5px;line-height:1.4;padding:1px 0 1px 9px;border-left:2px solid var(--bd-2);color:var(--tx-2);margin:2px 0}
-.note.wa{border-left-color:#c9a15c}.note.er{border-left-color:var(--er);color:var(--er)}.note.ne{color:var(--mut)}
+.note.wa{border-left-color:var(--wa-ln)}.note.er{border-left-color:var(--er);color:var(--er)}.note.ne{color:var(--mut)}
 .note .tlink{color:var(--ac-tx);font-weight:600}
 /* ---- accessori: blocco proprio, colore e icona dedicati ---- */
 .accblk{margin:8px 0 2px;border:1px solid var(--xa-b);background:var(--xa-s);border-radius:var(--r-s);padding:7px 10px}
@@ -582,15 +663,15 @@ a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield
 .lrow+.accblk{margin-top:6px}
 .accblk.off{background:transparent;border-style:dashed;border-color:var(--bd-2)}
 .acch{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
-.acctag{display:inline-flex;align-items:center;gap:4px;height:19px;padding:0 7px;border-radius:5px;background:var(--xa);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;flex:none}
+.acctag{display:inline-flex;align-items:center;gap:4px;height:19px;padding:0 7px;border-radius:5px;background:var(--xa-bg);color:#fff;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;flex:none}
 .acctag svg.i{width:12px;height:12px;stroke-width:2}
 .accblk.off .acctag{background:transparent;color:var(--xa);box-shadow:inset 0 0 0 1px var(--xa-b)}
 .acch .an{font-weight:600;font-size:13px;color:var(--tx);margin-right:auto}
 .acch .an small{font-weight:500;font-size:11px;color:var(--mut)}
-.accblk .seg.sm{background:rgba(255,255,255,.7);box-shadow:inset 0 0 0 1px var(--xa-b)}
+.accblk .seg.sm{background:var(--seg-bg2);box-shadow:inset 0 0 0 1px var(--xa-b)}
 .accblk .seg.sm button.on{color:var(--xa);box-shadow:0 1px 2px rgba(40,49,60,.12),0 0 0 1px var(--xa)}
 .accblk.off .seg.sm{background:transparent;box-shadow:inset 0 0 0 1px var(--bd)}
-.accblk .seg.sm.unset.req{box-shadow:inset 0 0 0 1px #d9b77e}
+.accblk .seg.sm.unset.req{box-shadow:inset 0 0 0 1px var(--wa-bd)}
 .accbody{margin:6px 0 0;padding-top:6px;border-top:1px solid var(--xa-b)}
 .accbody .ctab tr+tr td{border-top-color:var(--xa-b)!important}
 .accbody .note{margin:0}
@@ -631,13 +712,13 @@ a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield
 
 /* v11 — interscambio come icona con anteprima */
 .gcard .gh{align-items:flex-start}
-.xbtn{flex:none;width:24px;height:22px;display:inline-grid;place-items:center;border-radius:6px;border:1px solid var(--bd-2);background:#fff;color:var(--ac);cursor:help;padding:0;transition:background .15s,border-color .15s}
+.xbtn{flex:none;width:24px;height:22px;display:inline-grid;place-items:center;border-radius:6px;border:1px solid var(--bd-2);background:var(--field);color:var(--ac);cursor:help;padding:0;transition:background .15s,border-color .15s}
 .xbtn svg.i{width:14px;height:14px}
 .xbtn:hover,.xbtn:focus-visible,.xbtn.on{background:var(--surface-2);border-color:var(--ac);outline:none}
 .xbtn.er{color:var(--er);border-color:var(--er-s);background:var(--er-s)}
 .xbtn.miss{color:var(--mut);border-style:dashed}
 .xbtn.flash{animation:flash 900ms var(--ease)}
-#xpop{position:fixed;z-index:60;max-width:360px;min-width:220px;background:#fff;border:1px solid var(--bd-2);border-radius:var(--r-s);box-shadow:0 10px 30px rgba(15,23,42,.14);padding:10px 12px;font-size:12.5px;line-height:1.45;opacity:0;transform:translateY(-3px);pointer-events:none;transition:opacity .12s,transform .12s}
+#xpop{position:fixed;z-index:60;max-width:360px;min-width:220px;background:var(--field);border:1px solid var(--bd-2);border-radius:var(--r-s);box-shadow:0 10px 30px rgba(15,23,42,.14);padding:10px 12px;font-size:12.5px;line-height:1.45;opacity:0;transform:translateY(-3px);pointer-events:none;transition:opacity .12s,transform .12s}
 #xpop.show{opacity:1;transform:none;pointer-events:auto}
 #xpop .xh{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:4px}
 #xpop .xc{font-weight:650;font-size:12.5px;overflow-wrap:anywhere}
@@ -648,12 +729,12 @@ a.tlink:focus-visible,.issuebar a:focus-visible,.gdeps .un:focus-visible,.pfield
 .toolbar .vsep{width:1px;height:20px;background:var(--bd-2)}
 .toolbar .row.icons{gap:2px}
 /* v13 — macrogruppi leggermente più in evidenza */
-.mcard{margin:0 0 18px;border:1px solid #c9d4ea;box-shadow:0 1px 2px rgba(15,23,42,.05),0 4px 14px rgba(53,88,168,.07)}
-.mcard .mh{background:linear-gradient(var(--ac-s),#edf1f9);border-bottom:1px solid #c9d4ea;box-shadow:inset 3px 0 0 var(--ac);padding:11px 14px 11px 16px}
-.mcard .mic{background:#fff;border-color:#c9d4ea;color:var(--ac)}
+.mcard{margin:0 0 18px;border:1px solid var(--mc-bd);box-shadow:0 1px 2px rgba(15,23,42,.05),0 4px 14px rgba(53,88,168,.07)}
+.mcard .mh{background:linear-gradient(var(--ac-s),var(--mc-g));border-bottom:1px solid var(--mc-bd);box-shadow:inset 3px 0 0 var(--ac);padding:11px 14px 11px 16px}
+.mcard .mic{background:var(--field);border-color:var(--mc-bd);color:var(--ac)}
 .mcard .mh h3{font-size:15.5px;color:var(--ac-tx)}
 .mcard .mh .code{color:var(--ac-h);opacity:.75}
-.mcard.done .mh{background:linear-gradient(var(--ok-s),#f1f8f3);box-shadow:inset 3px 0 0 var(--ok)}
+.mcard.done .mh{background:linear-gradient(var(--ok-s),var(--mc-okg));box-shadow:inset 3px 0 0 var(--ok)}
 .mcard.done .mh h3{color:var(--tx)}
 /* v13 — griglia regolare: macrogruppi in ordine da sinistra a destra, righe allineate */
 .ggrid{display:grid;columns:auto;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:18px;align-items:stretch}
@@ -668,7 +749,7 @@ button.savestate:hover{background:var(--surface-3);color:var(--tx)}
 .savestate.fs-er{color:var(--er)}.savestate.fs-er i{background:var(--er)}
 #fsBanner .fsb{display:flex;align-items:center;gap:10px;padding:8px 24px;font-size:13px;border-bottom:1px solid var(--bd)}
 #fsBanner .fsb span{line-height:1.9}
-#fsBanner .fs-wa{background:var(--wa-s);color:#6b4a12}
+#fsBanner .fs-wa{background:var(--wa-s);color:var(--wa)}
 #fsBanner .fs-er{background:var(--er-s);color:var(--er)}
 #fsBanner .b{height:28px;margin-left:8px;vertical-align:middle}
 .fsrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -678,7 +759,7 @@ button.savestate:hover{background:var(--surface-3);color:var(--tx)}
 /* v16 — evidenza al passaggio del mouse sulle sotto-parti */
 .mcard>.gcard{transition:background-color .15s var(--ease),box-shadow .15s var(--ease)}
 @media (hover:hover){
-  .mcard>.gcard:hover{background:#e9f0fb;box-shadow:inset 3px 0 0 var(--ac)}
+  .mcard>.gcard:hover{background:var(--mc-hov);box-shadow:inset 3px 0 0 var(--ac)}
   .mcard>.gcard:hover .gh h3{color:var(--ac-tx)}
   .ggrid>.gcard:hover{border-color:var(--ac);box-shadow:var(--ring)}
 }
@@ -720,10 +801,10 @@ button.cbtn,.ctab button.cbtn,.bomt button.cbtn{display:inline!important;height:
 .glev{display:flex;align-items:center;gap:8px}
 #grHlLab.off{opacity:.55;cursor:not-allowed}
 .gzoom{display:flex;align-items:center;gap:2px}.gzoom .ib{font-size:18px;font-weight:600}
-.gmapctl{position:absolute;right:12px;bottom:10px;z-index:2;background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:10px;padding:3px 5px}
+.gmapctl{position:absolute;right:12px;bottom:10px;z-index:2;background:var(--float-bg);border:1px solid var(--bd);border-radius:10px;padding:3px 5px}
 #grZoomPct{min-width:40px;text-align:center;font-size:11px;font-variant-numeric:tabular-nums}
 .gcanvas{position:relative;padding:0;overflow:hidden;height:calc(100vh - 186px);min-height:480px;margin:0;
-  background-color:var(--surface);background-image:radial-gradient(#d9dee5 1px,transparent 1px);background-size:24px 24px}
+  background-color:var(--surface);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:24px 24px}
 #grSvg{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none;outline:none}
 #grSvg:focus-visible{box-shadow:inset 0 0 0 3px rgba(53,88,168,.35)}
 #grSvg.drag{cursor:grabbing}
@@ -742,55 +823,55 @@ button.cbtn,.ctab button.cbtn,.bomt button.cbtn{display:inline!important;height:
 .gside ul{margin:0;padding-left:16px;font-size:13px}.gside li{margin:2px 0}
 .gside .acts2{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 /* legenda */
-.glegend{position:absolute;left:12px;bottom:10px;z-index:2;font-size:11.5px;color:var(--tx-2);background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:10px;max-width:min(560px,calc(100% - 24px))}
+.glegend{position:absolute;left:12px;bottom:10px;z-index:2;font-size:11.5px;color:var(--tx-2);background:var(--float-bg);border:1px solid var(--bd);border-radius:10px;max-width:min(560px,calc(100% - 24px))}
 .glegend summary{cursor:pointer;padding:6px 12px;font-weight:600;color:var(--tx-2);list-style-position:inside}
 .glegend[open]{box-shadow:0 8px 24px rgba(34,42,51,.12)}
 .glegend .lgrid{display:grid;grid-template-columns:repeat(3,auto);gap:6px 16px;padding:4px 12px 8px}
 .glegend .lgrid span{display:inline-flex;align-items:center;gap:6px}
 .glegend p{margin:0;padding:6px 12px 10px;border-top:1px solid var(--bd);line-height:1.6}
-.lg{width:14px;height:11px;border-radius:3px;display:inline-block;border:1px solid var(--bd-2);background:#fff;flex:none;font-style:normal}
-.lg.k-mac{background:var(--ac);border-color:var(--ac)}.lg.k-grp{box-shadow:inset 3px 0 0 var(--tx-2)}.lg.k-x{background:#eef6f5;border-color:#5f9b95}
-.lg.k-acc{background:var(--xa-s);border-color:var(--xa)}.lg.draft{border-style:dashed;border-color:#b88a3b;background:var(--wa-s)}
-.lg.st{box-shadow:inset 4px 0 0 var(--c)}.lg.st-ok{--c:var(--ok)}.lg.st-wa{--c:#c9a15c}.lg.st-er{--c:var(--er);box-shadow:inset 6px 0 0 var(--c)}.lg.st-db{--c:var(--db)}
+.lg{width:14px;height:11px;border-radius:3px;display:inline-block;border:1px solid var(--bd-2);background:var(--field);flex:none;font-style:normal}
+.lg.k-mac{background:var(--ac);border-color:var(--ac)}.lg.k-grp{box-shadow:inset 3px 0 0 var(--tx-2)}.lg.k-x{background:var(--x-bg);border-color:var(--x-st)}
+.lg.k-acc{background:var(--xa-s);border-color:var(--xa)}.lg.draft{border-style:dashed;border-color:var(--wa-ln2);background:var(--wa-s)}
+.lg.st{box-shadow:inset 4px 0 0 var(--c)}.lg.st-ok{--c:var(--ok)}.lg.st-wa{--c:var(--wa-ln)}.lg.st-er{--c:var(--er);box-shadow:inset 6px 0 0 var(--c)}.lg.st-db{--c:var(--db)}
 .lg.hlk{background:var(--ok-s);border-color:var(--ok);color:var(--ok);font-size:9px;font-weight:800;text-align:center;line-height:9px}
-.lg.mt{background:#fff8d6;border-color:#e2b93b;box-shadow:0 0 0 2px #f2d27a}
+.lg.mt{background:var(--hit-bg);border-color:var(--hit-bd2);box-shadow:0 0 0 2px var(--hit-ring)}
 /* nodi */
 .gn{transition:transform 380ms var(--ease-out),opacity 300ms;cursor:pointer;outline:none}
-.gn rect.b{fill:#fff;stroke:var(--bd-2);stroke-width:1;transition:stroke 150ms,fill 150ms}
+.gn rect.b{fill:var(--field);stroke:var(--bd-2);stroke-width:1;transition:stroke 150ms,fill 150ms}
 .gn:hover rect.b{stroke:var(--ac)}
 .gn rect.halo,.gn rect.ring{fill:none;display:none;vector-effect:non-scaling-stroke}
-.gn.match rect.halo{display:block;fill:#fff8d6;stroke:#f2c94c;stroke-width:4}
-.gn.kf rect.ring{display:block;stroke:#1d3f8f;stroke-width:2.5}
+.gn.match rect.halo{display:block;fill:var(--hit-bg);stroke:var(--hit-bd);stroke-width:4}
+.gn.kf rect.ring{display:block;stroke:var(--kf);stroke-width:2.5}
 .gn text{font-family:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;font-size:13px;fill:var(--tx);pointer-events:none;transition:opacity 150ms}
-.gn text.sub{font-size:11.5px;fill:#56606b}
+.gn text.sub{font-size:11.5px;fill:var(--sub-tx)}
 .gn text.mono{font-family:"Cascadia Mono",Consolas,monospace;font-weight:600;font-size:12.5px}
 .gn text.ok{fill:var(--ok);font-weight:800;font-size:13px}
 .gn .stripe{stroke-width:4;stroke:var(--bd-2)}
-.gn.st-ok .stripe{stroke:var(--ok)}.gn.st-wa .stripe{stroke:#c9a15c;stroke-dasharray:5 3}.gn.st-er .stripe{stroke:var(--er);stroke-width:7}.gn.st-db .stripe{stroke:var(--db);stroke-dasharray:2 3}
-.gn.k-root rect.b{fill:var(--tx);stroke:var(--tx)}.gn.k-root text{fill:#fff;font-weight:700;font-size:14px}.gn.k-root text.sub{fill:#c3cad2;font-weight:400;font-size:11.5px}
+.gn.st-ok .stripe{stroke:var(--ok)}.gn.st-wa .stripe{stroke:var(--wa-ln);stroke-dasharray:5 3}.gn.st-er .stripe{stroke:var(--er);stroke-width:7}.gn.st-db .stripe{stroke:var(--db);stroke-dasharray:2 3}
+.gn.k-root rect.b{fill:var(--root-bg);stroke:var(--root-bg)}.gn.k-root text{fill:var(--root-tx);font-weight:700;font-size:14px}.gn.k-root text.sub{fill:var(--root-sub);font-weight:400;font-size:11.5px}
 .gn.k-mst rect.b{fill:var(--ac-s);stroke:var(--ac)}
-.gn.k-mac rect.b{fill:var(--ac);stroke:var(--ac)}.gn.k-mac text{fill:#fff;font-weight:650}.gn.k-mac text.sub{fill:#dbe3f5;font-weight:500}
+.gn.k-mac rect.b{fill:var(--ac);stroke:var(--ac)}.gn.k-mac text{fill:#ffffff;font-weight:650}.gn.k-mac text.sub{fill:#dbe3f5;font-weight:500}
 .gn.k-grp text.lbl{font-weight:650}
-.gn.k-x rect.b{fill:#eef6f5;stroke:#7fb2ac}
+.gn.k-x rect.b{fill:var(--x-bg);stroke:var(--x-st)}
 .gn.k-acc rect.b{fill:var(--xa-s);stroke:var(--xa-b)}.gn.k-acc text.lbl{fill:var(--xa);font-weight:650}
 .gn.k-acode rect.b{stroke:var(--xa-b)}
-.gn.draft rect.b{stroke:#b88a3b;stroke-dasharray:4 3;fill:var(--wa-s)}
+.gn.draft rect.b{stroke:var(--wa-ln2);stroke-dasharray:4 3;fill:var(--wa-s)}
 .gn.hl rect.b{stroke:var(--ok);stroke-width:2}
 .gn.hl.k-code rect.b,.gn.hl.k-acode rect.b,.gn.hl.k-x rect.b{fill:var(--ok-s)}
 .gn.sel rect.b{stroke:var(--ac)!important;stroke-width:2.6!important;filter:drop-shadow(0 2px 6px rgba(53,88,168,.28))}
 /* attenuati senza perdere contrasto del testo */
-.gn.dim rect.b{fill:#f4f5f7;stroke:#dfe3e8}
-.gn.dim text{fill:#5f6975}.gn.dim text.sub{fill:#646d78}.gn.dim text.lbl{font-weight:500}
-.gn.dim .stripe{stroke:#cfd5dc}
-.gn.k-mac.dim rect.b{fill:#e9edf5;stroke:#b9c6e2}.gn.k-mac.dim text{fill:#3558a8}
-.gn.dim .pill rect{fill:#eceff2}
-.gn .tg circle.v{fill:#fff;stroke:#9aa4b0}.gn .tg circle.hit{fill:transparent}
+.gn.dim rect.b{fill:var(--dim-bg);stroke:var(--bd)}
+.gn.dim text{fill:var(--mut)}.gn.dim text.sub{fill:var(--mut)}.gn.dim text.lbl{font-weight:500}
+.gn.dim .stripe{stroke:var(--bd-2)}
+.gn.k-mac.dim rect.b{fill:var(--macdim-bg);stroke:var(--macdim-st)}.gn.k-mac.dim text{fill:var(--ac-tx)}
+.gn.dim .pill rect{fill:var(--bg)}
+.gn .tg circle.v{fill:var(--field);stroke:var(--tg-st)}.gn .tg circle.hit{fill:transparent}
 .gn .tg text{font-size:13px;font-weight:700;fill:var(--tx-2);text-anchor:middle}
 .gn .tg:hover circle.v{stroke:var(--ac);fill:var(--ac-s)}
-.gn .pill rect{fill:#e8ebef;stroke:#d3d8de}.gn .pill text{font-size:11.5px;font-weight:600;fill:var(--tx-2)}
+.gn .pill rect{fill:var(--surface-3);stroke:var(--bd-2)}.gn .pill text{font-size:11.5px;font-weight:600;fill:var(--tx-2)}
 .gn .tg{cursor:pointer}.gn .tg:hover .pill rect{fill:var(--ac-s);stroke:var(--ac)}
-.ge{fill:none;stroke:#b8c0ca;stroke-width:1.4;transition:d 380ms var(--ease-out),opacity 300ms,stroke 200ms}
-.ge.hl{stroke:var(--ok);stroke-width:2.2}.ge.dim{stroke:#e1e5ea}
+.ge{fill:none;stroke:var(--edge);stroke-width:1.4;transition:d 380ms var(--ease-out),opacity 300ms,stroke 200ms}
+.ge.hl{stroke:var(--ok);stroke-width:2.2}.ge.dim{stroke:var(--edge-dim)}
 /* zoom semantico */
 .gn text.lblL{display:none;font-size:16px;font-weight:650}
 #grSvg.lod1 .gn text.sub,#grSvg.lod1 .gn text.lbl,#grSvg.lod1 .gn .pill{display:none}
@@ -798,10 +879,10 @@ button.cbtn,.ctab button.cbtn,.bomt button.cbtn{display:inline!important;height:
 #grSvg.lod2 .gn text{display:none}
 #grSvg.lod2 .gn.k-mac text.lblL,#grSvg.lod2 .gn.k-root text.lblL{display:block;font-size:19px}
 .glens{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-2)}.glens select{height:32px;font-size:13px;max-width:230px}
-.gn text.bdg{font-size:11px;font-weight:700}.gn text.b-ok{fill:var(--ok)}.gn text.b-wa{fill:#8a5410}.gn text.b-er{fill:var(--er)}.gn text.b-p{fill:var(--ac-tx)}
+.gn text.bdg{font-size:11px;font-weight:700}.gn text.b-ok{fill:var(--ok)}.gn text.b-wa{fill:var(--wa)}.gn text.b-er{fill:var(--er)}.gn text.b-p{fill:var(--ac-tx)}
 .gn.pk rect.b{stroke:var(--ac);stroke-width:2;fill:var(--ac-s)}.gn.pk.k-mac rect.b{fill:var(--ac)}
 .ge.hp{stroke:var(--ac);stroke-width:2.2}
-.gsum{position:absolute;left:12px;top:10px;z-index:2;max-width:calc(100% - 380px);background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:10px;padding:6px 12px;font-size:13px;color:var(--tx-2)}
+.gsum{position:absolute;left:12px;top:10px;z-index:2;max-width:calc(100% - 380px);background:var(--float-bg);border:1px solid var(--bd);border-radius:10px;padding:6px 12px;font-size:13px;color:var(--tx-2)}
 .gsum #grSumTxt{display:block;line-height:1.7}
 .gsum .lgrid.inl{display:flex;flex-wrap:wrap;gap:4px 14px;padding:4px 0 0;font-size:11.5px;color:var(--mut)}
 .gsum .lgrid.inl span{display:inline-flex;align-items:center;gap:5px}
@@ -813,20 +894,20 @@ button.cbtn,.ctab button.cbtn,.bomt button.cbtn{display:inline!important;height:
 .gside{max-height:calc(100% - 84px)}
 #grSvg.lod1 .gn text.bdg{display:none}
 .gn text tspan.phl{fill:var(--ac-tx);font-weight:700}
-.gn rect.covbg{fill:#e7eaee}.gn rect.cov{fill:var(--ok)}.gn.st-wa rect.cov{fill:#c9a15c}.gn.st-er rect.cov{fill:var(--er)}
-.gn.dim rect.cov{fill:#cfd5dc}
-.lg.covk{background:linear-gradient(90deg,var(--ok) 60%,#e7eaee 60%);height:5px;border:0;width:22px}
+.gn rect.covbg{fill:var(--cov-bg)}.gn rect.cov{fill:var(--ok)}.gn.st-wa rect.cov{fill:var(--wa-ln)}.gn.st-er rect.cov{fill:var(--er)}
+.gn.dim rect.cov{fill:var(--bd-2)}
+.lg.covk{background:linear-gradient(90deg,var(--ok) 60%,var(--cov-bg) 60%);height:5px;border:0;width:22px}
 .gside .tag{white-space:normal;height:auto;line-height:1.35;padding:2px 8px}
 .mtab a.mc:focus-visible{outline:2px solid var(--ac)!important;outline-offset:-2px}
 .mwrap{overflow-x:auto}
 .mtab tbody th{max-width:160px;white-space:normal!important}
-#grMini{position:absolute;right:12px;bottom:58px;z-index:2;background:rgba(248,249,250,.96);border:1px solid var(--bd);border-radius:8px;cursor:crosshair;touch-action:none}
+#grMini{position:absolute;right:12px;bottom:58px;z-index:2;background:var(--float-bg);border:1px solid var(--bd);border-radius:8px;cursor:crosshair;touch-action:none}
 #grMini.hide{display:none}
-#grMini .mm-n{fill:#b7c0cb}#grMini .mm-d{fill:#dde2e8}#grMini .mm-h{fill:var(--ok)}#grMini .mm-m{fill:var(--ac)}#grMini .mm-s{fill:#e2b93b}
+#grMini .mm-n{fill:var(--edge)}#grMini .mm-d{fill:var(--edge-dim)}#grMini .mm-h{fill:var(--ok)}#grMini .mm-m{fill:var(--ac)}#grMini .mm-s{fill:var(--hit-bd2)}
 #grMini .mm-v{fill:rgba(53,88,168,.08);stroke:var(--ac);stroke-width:1.2}
 .mmtog{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
-.lg.dimk{background:#f4f5f7;border-color:#dfe3e8}.lg.pkk{background:var(--ac-s);border-color:var(--ac)}
-.bk{font-size:11px;font-weight:700;color:#8a5410;min-width:34px;display:inline-block}.bk.p{color:var(--ac-tx);min-width:0}
+.lg.dimk{background:var(--dim-bg);border-color:var(--bd)}.lg.pkk{background:var(--ac-s);border-color:var(--ac)}
+.bk{font-size:11px;font-weight:700;color:var(--wa);min-width:34px;display:inline-block}.bk.p{color:var(--ac-tx);min-width:0}
 .gside.wide{width:440px}
 .gside .pmore{display:none;margin-top:8px}
 @media (max-width:1399px){.gside .pmore{display:inline-flex}.gside:not(.open) .pbody{display:none}.gside:not(.open){width:300px}}
@@ -836,8 +917,8 @@ button.cbtn,.ctab button.cbtn,.bomt button.cbtn{display:inline!important;height:
 .mtab th,.mtab td{border-bottom:1px solid var(--bd);padding:4px 6px;text-align:left;vertical-align:top}
 .mtab thead th{position:sticky;top:0;background:var(--surface-2);font-size:11px;color:var(--tx-2);z-index:1}
 .mtab tbody th{font-weight:500;color:var(--tx-2);white-space:nowrap;background:var(--surface)}
-.mtab td.gap{background:var(--wa-s);color:#8a5410;text-align:center;font-weight:700}
-.mtab td.gap.dr{background:#fff6e0}
+.mtab td.gap{background:var(--wa-s);color:var(--wa);text-align:center;font-weight:700}
+.mtab td.gap.dr{background:var(--dr-bg)}
 .mtab td.multi{background:var(--er-s)}
 .mtab a.mc{display:block;color:var(--tx);text-decoration:none;font-size:11.5px;border-radius:4px;padding:1px 3px}
 .mtab a.mc:hover,.mtab a.mc:focus-visible{background:var(--ac-s);color:var(--ac-tx);outline:none}
@@ -848,6 +929,30 @@ button.brand:hover,button.brand:focus-visible{background:var(--surface-2)}
 button.brand:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
 button.brand .pen{width:14px;height:14px;opacity:0;color:var(--mut);transition:opacity var(--t2)}
 button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
+.header-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px 14px;min-width:0;margin-left:auto}
+.header-actions .savestate{margin-left:0}
+header nav{flex:1 1 520px;height:40px}
+.glist{top:calc(var(--appbar-h,58px) + 18px)}
+.inputs,.rsz i{top:calc(var(--appbar-h,58px) + 12px);max-height:calc(100dvh - var(--appbar-h,58px) - 26px)}
+.crow{scroll-margin-top:calc(var(--appbar-h,58px) + 16px)}
+.chead .c-code,.chead .c-desc{position:relative;padding-right:12px}
+.col-resize{position:absolute;right:-12px;top:-8px;bottom:-8px;width:12px;padding:0;border:0;background:transparent;cursor:col-resize;touch-action:none;z-index:2}
+.col-resize::after{content:"";position:absolute;left:5px;top:5px;bottom:5px;width:2px;border-radius:2px;background:var(--bd-2);transition:background .12s}
+.col-resize:hover::after,.col-resize:focus-visible::after{background:var(--ac)}
+.col-resize:focus-visible{outline:2px solid var(--ac);outline-offset:0}
+body.column-resizing,body.column-resizing *{cursor:col-resize!important;user-select:none!important}
+@media(min-width:761px){
+  .clist.cx.custom-cols.noattr .chead,.clist.cx.custom-cols.noattr .crow{grid-template-columns:var(--col-code) minmax(0,1fr) 84px}
+}
+@media(min-width:761px) and (max-width:1500px){
+  .clist.cx.custom-cols .chead,.clist.cx.custom-cols .crow{grid-template-columns:var(--col-code) minmax(0,1fr) 84px}
+  .col-resize[data-column="desc"]{display:none}
+}
+@media(min-width:1501px){
+  .clist.cx.custom-cols:not(.noattr) .chead,.clist.cx.custom-cols:not(.noattr) .crow{grid-template-columns:var(--col-code) var(--col-desc) minmax(0,1fr) 84px}
+}
+@media(max-width:1100px){header nav{flex:1 1 65%}.header-actions{flex:1 1 100%;justify-content:flex-start}}
+@media(max-width:720px){.inputs{position:static;max-height:none}}
 </style>
 </head>
 <body>
@@ -860,9 +965,20 @@ button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
     <button data-t="graph">Grafo</button>
     <button data-t="data">Import / Export</button>
   </nav>
+  <div class="header-actions">
+  <div class="row noprint" style="gap:2px" role="group" aria-label="Cronologia modifiche">
+    <button type="button" class="ib" id="btnUndo" disabled title="Annulla (Ctrl+Z)" aria-label="Annulla ultima modifica">↶</button>
+    <button type="button" class="ib" id="btnRedo" disabled title="Ripristina (Ctrl+Y)" aria-label="Ripristina modifica">↷</button>
+  </div>
+  <label class="misstog noprint"><input type="checkbox" id="editMode" checked> Modifica dati</label>
+  <label class="misstog noprint" style="white-space:nowrap"><input type="checkbox" id="autoSave" checked> Salvataggio automatico</label>
+  <button type="button" class="b p s hide noprint" id="btnSaveJson">Salva JSON</button>
   <button type="button" class="savestate" id="saveState"><i></i><span>Salvato nel browser</span></button>
+  <button type="button" class="themebtn" id="themeBtn" aria-pressed="false" aria-label="Passa alla modalità scura" title="Modalità scura"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+  </div>
 </header>
 <div id="fsBanner" class="hide noprint"></div>
+<div id="historyStatus" class="sr-only" aria-live="polite"></div>
 <main>
 
 <!-- ============ CONFIGURATORE ============ -->
@@ -874,6 +990,7 @@ button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
         <button class="ib" id="btnReset" title="Azzera parametri" aria-label="Azzera parametri"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button></div></div>
       <div id="cfgInputs"></div>
     </aside>
+    <div class="rsz" id="sbResize" role="separator" aria-orientation="vertical" aria-label="Larghezza pannello parametri" aria-valuemin="260" aria-valuemax="640" tabindex="0" title="Trascina per ridimensionare · doppio clic per ripristinare"><i></i></div>
     <div>
       <div class="card herowrap">
         <div class="hero" id="hero"></div>
@@ -909,6 +1026,7 @@ button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
 <section id="t-groups" class="view hide">
   <div class="pagehead"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><h1>Tipologie e codici</h1><label class="misstog" title="Mostra o nasconde il conteggio delle combinazioni di attributi che non hanno ancora un codice o un interscambio"><input type="checkbox" id="chkMiss"> Mostra combinazioni mancanti</label></div>
     <p>Per ogni tipologia scegli gli attributi disponibili. Poi assegna a ogni codice e a ogni assieme di interscambio un valore per ciascun attributo che lo identifica, oppure “—” se quell'attributo non conta. <b>?</b> vuol dire da definire: finché una riga ha un <b>?</b> o il codice vuoto resta in bozza e il configuratore non la usa.</p></div>
+  <div class="card noprint global-search"><label for="globalCodeSearch">Cerca in tutte le tipologie, negli interscambi, negli accessori e nello storico</label><input type="search" id="globalCodeSearch" placeholder="Codice attuale o precedente, descrizione…" autocomplete="off"><div id="globalCodeResults" aria-live="polite"></div></div>
   <div class="gcols">
     <div class="card glist">
       <div id="groupList"></div>
@@ -959,9 +1077,16 @@ button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
 <section id="t-data" class="view hide">
   <div class="pagehead"><h1>Import / Export</h1></div>
   <div class="card">
-    <div class="cardhead"><h2>Salvataggio automatico su file</h2></div>
+    <div class="cardhead"><h2>Salvataggio su file</h2></div>
     <p class="mut" style="margin:0 0 12px">Collega la cartella del configuratore: ogni modifica viene scritta subito in <span class="code">configuratore_db.json</span> (oppure <span class="code">falcon_db.json</span> se c'è già) e all'apertura il database viene letto da lì. Una volta al giorno viene salvata una copia in <span class="code">backup_db/</span>.</p>
+    <p class="hint">La spunta «Salvataggio automatico» in alto abilita la scrittura a ogni modifica. Se la togli, usa «Salva JSON» per scrivere nella cartella collegata o scaricare il file. La copia di lavoro resta nel browser.</p>
     <div id="fsCard"></div>
+    <div class="backup-settings" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--bd)">
+      <label style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">Backup automatico ogni <input type="number" id="backupEvery" value="10" min="1" max="10000" step="1" style="width:90px" aria-label="Numero di modifiche tra due backup"> modifiche completate <button type="button" class="b s" id="backupEverySave">Imposta intervallo</button></label>
+      <p class="hint">Ogni copia è un nuovo JSON nella cartella <span class="code">backup/</span>, creata dentro la cartella collegata al configuratore. Le copie non vengono sovrascritte né eliminate automaticamente. Si contano le modifiche ai dati, raggruppando la digitazione nello stesso campo; i cambi dei parametri macchina non modificano il database e non contano. Cambiare intervallo fa ripartire il conteggio. I backup restano attivi anche con il salvataggio principale manuale.</p>
+      <div id="backupStatus" class="mut" role="status" style="margin-top:8px"></div>
+      <button type="button" class="b s hide" id="backupRetry" style="margin-top:8px">Riprova i backup in attesa</button>
+    </div>
   </div>
   <div class="card">
     <div class="cardhead"><h2>Collegamento Windchill</h2></div>
@@ -1003,6 +1128,8 @@ button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
    inter:    [{id,groupId,code,desc,cond:{pid:value},review?}]            assiemi di interscambio
    acc:      [{id,groupId,name,values:[opzioni],params:[pid],required}]   accessori di una tipologia
    accItems: [{id,groupId:accId,code,desc,qty,note,cond:{accId:opzione,pid:value}}] codici accessorio
+   prev?:    [{code,date,desc?,link?}]  su items/inter/accItems: codici precedenti della riga, il più recente per primo.
+             Campo facoltativo: un database senza storico si legge come prima, uno con storico si apre anche nelle versioni precedenti.
    configs:  [{id,name,date,sel,choice,bomSnap:[lines]}]   (la scelta di un accessorio è in sel[accId])
    cond[pid]: valore singolo | "?" (da definire) | assente = "—" (vale per ogni valore)
    Bozza = codice vuoto, oppure un "?", oppure review=true → ignorata da configuratore e copertura.
@@ -1012,6 +1139,8 @@ button.brand:hover .pen,button.brand:focus-visible .pen{opacity:.8}
 const INST = decodeURIComponent(location.pathname || "/");
 const INST_DIR = (INST.split(/[\\/]/).slice(-2, -1)[0] || "");
 const KEY = "cf_db@" + INST, KEY_DRAFT = "cf_draft@" + INST;
+const KEY_AUTO = "cf_autosave@" + INST;
+let autoSave = (() => { try { return localStorage.getItem(KEY_AUTO) !== "0"; } catch { return true; } })();
 const LEGACY = {db: "configuratore_falcon_v4", draft: "configuratore_falcon_draft_v4"};
 const Q = "?";
 const $ = s => document.querySelector(s);
@@ -1028,6 +1157,7 @@ const IC = {
   asm: svg('<path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="m3 13 9 5 9-5"/>'),
   star: svg('<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>'),
   check: svg('<path d="m5 12 5 5 9-10"/>'),
+  hist: svg('<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 8v4l3 2"/>'),
   plug: svg('<path d="M9 7V3M15 7V3"/><path d="M6 7h12v4a6 6 0 0 1-12 0z"/><path d="M12 17v4"/>'),
 };
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
@@ -1100,6 +1230,52 @@ function migrateMacros(d) {
     d.macros.push(m); gs.forEach(g => g.macroId = m.id);
   }
 }
+/* ---------- storico dei codici ----------
+   Se cambia il codice di una riga già compilata, il vecchio resta in riga.prev (con data, descrizione e link di allora).
+   Tornare a un codice dello storico lo toglie dallo storico. Cambiare solo maiuscole/minuscole non è una sostituzione. */
+const sameCode = (a, b) => String(a ?? "").trim().toLowerCase() === String(b ?? "").trim().toLowerCase();
+const todayIso = () => new Date().toLocaleDateString("sv-SE");
+const fmtDate = s => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s || "")); return m ? `${m[3]}/${m[2]}/${m[1]}` : ""; };
+function cleanPrev(row) {                                   // tollerante: ignora voci malformate, non altera il resto
+  if (!("prev" in row)) return;
+  const L = (Array.isArray(row.prev) ? row.prev : []).filter(p => p && String(p.code ?? "").trim())
+    .map(p => ({...p, code: String(p.code).trim(), date: typeof p.date === "string" ? p.date : ""}));
+  if (L.length) row.prev = L; else delete row.prev;
+}
+function recordCodeChange(row, oldCode, newCode) {
+  oldCode = String(oldCode ?? "").trim(); newCode = String(newCode ?? "").trim();
+  if (sameCode(oldCode, newCode)) return false;
+  if (oldCode) {
+    row.prev ??= [];
+    const e = {...codeVersion(row), code: oldCode};
+    if (row.link) { e.link = row.link; delete row.link; }  // il link Windchill appartiene al vecchio codice
+    row.prev.unshift(e);
+  }
+  const k = (row.prev || []).findIndex(p => sameCode(p.code, newCode));
+  if (k >= 0) { const [p] = row.prev.splice(k, 1); if (p.link && !row.link) row.link = p.link; }
+  if (row.prev && !row.prev.length) delete row.prev;
+  return true;
+}
+function codeVersion(row, note = "", date = todayIso()) {
+  const v = {code: row.code, date, desc: row.desc || "", link: row.link || "", cond: structuredClone(row.cond || {}), note: row.note || "", review: !!row.review};
+  if (row.qty !== undefined) v.qty = row.qty;
+  if (note) v.historyNote = note;
+  return v;
+}
+function checkedVersion(row, version) {
+  const v = structuredClone(version), problems = [];
+  if (v.cond && typeof v.cond === "object" && !Array.isArray(v.cond)) {
+    const a = byId(db.acc, row.groupId), g = G(row.groupId);
+    const allowed = new Set(a ? [...a.params, a.id] : g?.params || []);
+    for (const [pid, value] of Object.entries(v.cond)) {
+      const p = P(pid) || (a?.id === pid ? a : null);
+      if (!p || !allowed.has(pid)) { delete v.cond[pid]; problems.push(`Attributo non più disponibile: ${p?.name || pid}`); }
+      else if (value !== Q && !p.values.includes(value)) { v.cond[pid] = Q; problems.push(`${p.name}: «${value}» non è più un valore valido`); }
+    }
+  } else if ("cond" in v) { v.cond = {}; problems.push("Attributi della versione non validi"); }
+  if (problems.length) v.review = true;
+  return {version: v, problems};
+}
 function normalize(d) {
   for (const k of ["sections", "params", "groups", "items", "inter", "acc", "accItems", "configs", "macros"]) d[k] ??= [];
   d.settings ??= {};
@@ -1111,6 +1287,7 @@ function normalize(d) {
   d.items.forEach(i => { i.qty ??= 1; i.note ??= ""; i.code ??= ""; i.desc ??= ""; });
   d.inter.forEach(i => { i.code ??= ""; i.desc ??= ""; });
   d.items = expandConds(d.items); d.inter = expandConds(d.inter);
+  [d.items, d.inter, d.accItems].forEach(L => L.forEach(cleanPrev));
   d.configs.forEach(c => { c.sel ??= {}; c.choice ??= {}; });
   if (!d.groups.some(g => g.kind === "master")) {
     const pv = d.params.find(p => /versione/i.test(p.name));
@@ -1176,8 +1353,9 @@ const combos = pids => pids.reduce((acc, pid) => acc.flatMap(c => (P(pid)?.value
 function coverage(g, arr) {
   const act = arr.filter(x => x.groupId === g.id && !isDraft(x));
   if (!g.params.length) return {total: 1, missing: act.length ? [] : [{}], multi: act.length > 1 ? [{}] : []};
+  const total = g.params.reduce((n, pid) => n * (P(pid)?.values.length || 0), 1);
+  if (total > 3000) return {total, missing: null, multi: []};
   const cs = combos(g.params);
-  if (cs.length > 3000) return {total: cs.length, missing: null, multi: []};
   const n = c => act.filter(i => matches(i, c)).length;
   return {total: cs.length, missing: cs.filter(c => !n(c)), multi: cs.filter(c => n(c) > 1)};
 }
@@ -1278,7 +1456,7 @@ function resolveAll(sel, choice) {
 const bomSig = lines => (lines || []).map(l => `${l.lvl}|${l.code}|${l.qty}`).join(";");
 
 /* =================== CONFIGURATORE =================== */
-let onlyOpen = false;
+let onlyOpen = false, issuesOpen = false;   // issuesOpen: il riquadro «da risolvere» si apre solo con un clic
 // preferenza di visualizzazione (solo browser, non entra nel database): mostrare o no le combinazioni mancanti,
 // cioè codici / interscambi non ancora inseriti. Vale per il configuratore e per Tipologie e codici.
 let showMiss = (() => { try { return localStorage.getItem("cf_showmiss") !== "0"; } catch { return true; } })();
@@ -1362,7 +1540,7 @@ function renderResult() {
         <div class="mdesc">${mDesc}</div></div></div>
     <div class="hprog"><div class="hnum"><b>${R.ready}</b><span> / ${R.total} tipologie pronte</span></div>
       <div class="progress ${pct < 100 ? "part" : ""}" role="progressbar" aria-valuemin="0" aria-valuemax="${R.total}" aria-valuenow="${R.ready}" aria-label="Tipologie pronte"><i style="width:${oldW}"></i></div>
-      <div class="hsub">${notReady ? `<span class="warn">${notReady} da risolvere</span>` : '<span class="ok">Tutto pronto</span>'}${nGap ? ` <span class="mut">· ${nGap} con dati da inserire (nascoste)</span>` : ""}</div></div>`;
+      <div class="hsub">${notReady ? `<button type="button" class="warn hbtn" data-issues-toggle aria-expanded="${issuesOpen}" title="Mostra o nascondi il dettaglio di cosa è da risolvere">${notReady} da risolvere</button>` : '<span class="ok">Tutto pronto</span>'}${nGap ? ` <span class="mut">· ${nGap} con dati da inserire (nascoste)</span>` : ""}</div></div>`;
   requestAnimationFrame(() => requestAnimationFrame(() => { const i = $("#hero .progress>i"); if (i) i.style.width = pct + "%"; }));
 
   // ---- barra problemi (stesso conteggio dell'hero), divisa in: scelte da fare qui / dati da inserire nel database
@@ -1380,6 +1558,8 @@ function renderResult() {
         <details><summary>Dettagli</summary><ul>${issues.map(i => `<li><b>${esc(i.g.name)}</b>: ${i.missing.length
           ? "manca " + i.missing.map(p => `<a data-param="${p}" href="javascript:void 0">${esc(P(p)?.name)}</a>`).join(", ") : esc(i.text)}</li>`).join("")}</ul></details></div>`
     : `<div class="issuebar okbar"><span class="st ok" aria-hidden="true">✓</span>${nGap ? `Nessuna scelta da fare <span class="mut">· ${nGap} ${nGap === 1 ? "tipologia" : "tipologie"} con dati ancora da inserire, nascoste</span>` : "Configurazione completa: master, interscambi e codici definiti."}</div>`;
+  if (!issues.length) issuesOpen = false;
+  $("#issues").classList.toggle("hide", !!issues.length && !issuesOpen);
   if (!started) {
     if (!db.params.length) { $("#cfgGroups").innerHTML = `<div class="card startcard" style="grid-column:1/-1"><div class="ic">${IC.asm}</div><b>Configuratore vuoto</b>Inizia da <a class="tlink" href="javascript:void 0" onclick="show('params')">Parametri</a> (es. Versione, Materiale), poi crea le tipologie e i codici in <a class="tlink" href="javascript:void 0" onclick="show('groups')">Tipologie e codici</a>. Il nome in alto si cambia con un clic.</div>`; $("#cfgBom").innerHTML = ""; prevKeys = new Set(); animateCards = true; return; }
     $("#cfgGroups").innerHTML = `<div class="card startcard" style="grid-column:1/-1"><div class="ic">${IC.asm}</div><b>Scegli i parametri per iniziare</b>Parti da <b style="display:inline;font-size:inherit">${esc(m?.g.params.map(p => P(p)?.name).join(", ") || "Versione")}</b>: il master Creo, gli interscambi e i codici compariranno qui.</div>`;
@@ -1416,7 +1596,7 @@ function renderResult() {
       const lab = x ? `Interscambio: ${x.code}` : r.inter.length ? "Interscambio ambiguo" : "Interscambio mancante";
       inter = `<button type="button" class="xbtn ${st} ${x ? fresh("x" + x.id) : ""}" data-xg="${g.id}" data-xs="${st}" ${x ? `data-xi="${x.id}"` : ""} aria-label="${esc(lab)}">${IC.asm}</button>`;
     }
-    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td>`;
+    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="mut" style="text-align:right;white-space:nowrap">×${esc(i.qty ?? 1)}</td>`;
     const note = (c, t) => `<div class="note ${c}">${t}</div>`;
     if (r.state === "missing") body = ""; // i parametri mancanti sono già evidenziati (cliccabili) nella riga attributi
     else if (r.state === "none" && gap) body = lrow("Codici", note("ne", "Codice non ancora inserito."));
@@ -1453,10 +1633,10 @@ function renderResult() {
   // ---- distinta: colonna Tipo esplicita, accessori marcati, tipologia ripetuta solo quando cambia
   const TY = {Master: "Master", Macrogruppo: "Macrogruppo", Interscambio: "Interscambio", Codice: "Codice", Accessorio: "Accessorio"};
   let prevG = null;
-  $("#cfgBom").innerHTML = `<div class="scroll"><table class="bomt"><thead><tr><th style="width:40px">Liv.</th><th>Codice</th><th>Descrizione</th><th>Tipo</th><th>Tipologia</th></tr></thead><tbody>${
+  $("#cfgBom").innerHTML = `<div class="scroll"><table class="bomt"><thead><tr><th style="width:40px">Liv.</th><th>Codice</th><th>Descrizione</th><th>Tipo</th><th>Tipologia</th><th>Quantità</th></tr></thead><tbody>${
     R.lines.map(l => { const gname = l.lvl <= 1 && l.type !== "NON RISOLTO" ? "" : (l.group !== prevG ? esc(l.group) : ""); if (l.lvl > 1 || l.type === "NON RISOLTO") prevG = l.group; if (l.type === "Macrogruppo") prevG = null;
       const acc = l.type === "Accessorio" || (l.unres && l.acc);
-      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + (l.code ? codeLink(rowByCode(l.code), l.code) : "")}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}</td><td class="mut">${gname}</td></tr>`; }).join("")}</tbody></table></div>`;
+      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + (l.code ? codeLink(rowByCode(l.code), l.code) : "")}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}</td><td class="mut">${gname}</td><td style="text-align:right">${esc(l.qty ?? "")}</td></tr>`; }).join("")}</tbody></table></div>`;
 
   prevKeys = keys; animateCards = false;
 }
@@ -1464,7 +1644,7 @@ function accHtml(x, keys, fresh) {
   const a = x.a, v = cfg.sel[a.id] && a.values.includes(cfg.sel[a.id]) ? cfg.sel[a.id] : "";
   const seg = `<div class="seg sm ${!v && a.required ? "unset req" : ""}" data-accsel="${a.id}" role="group" aria-label="Opzione accessorio ${esc(a.name)}">${a.required ? "" : `<button data-v="" class="none ${v ? "" : "on"}">Nessuno</button>`}${a.values.map(o => `<button data-v="${esc(o)}" class="${v === o ? "on" : ""}">${esc(o)}</button>`).join("")}</div>`;
   let body = "";
-  if (x.state === "ok") body = `<table class="ctab"><tbody>${x.items.map(i => { keys.add("a" + i.id); return `<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td></tr>`; }).join("")}</tbody></table>`;
+  if (x.state === "ok") body = `<table class="ctab"><tbody>${x.items.map(i => { keys.add("a" + i.id); return `<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="mut" style="text-align:right;white-space:nowrap">×${esc(i.qty ?? 1)}</td></tr>`; }).join("")}</tbody></table>`;
   else if (x.state === "missing") body = `<div class="note wa">Scegli ${x.missing.map(p => `<a class="tlink" data-param="${p}" href="javascript:void 0"><b>${esc(P(p)?.name)}</b></a>`).join(", ")} nei parametri.</div>`;
   else if (x.state === "draft") body = `<div class="note wa">Righe dell'accessorio in bozza · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Completale in Tipologie</a></div>`;
   else if (x.state === "none") body = `<div class="note er">Nessun codice per «${esc(v)}» · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Aggiungilo in Tipologie</a></div>`;
@@ -1483,7 +1663,9 @@ function setView(v) {
   el.classList.remove("view"); void el.offsetWidth; el.classList.add("view");
 }
 $("#viewSeg").onclick = e => { if (e.target.dataset.v) setView(e.target.dataset.v); };
-function withTransition(fn) { if (document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) document.startViewTransition(fn); else fn(); }
+// Aggiorna solo i risultati: le transizioni dell'intero documento fotografavano
+// anche header e pannello parametri, causando un lampo/barra durante i cambi.
+function withTransition(fn) { fn(); }
 function setParam(pid, v, ctl) {
   if (v) cfg.sel[pid] = v; else delete cfg.sel[pid];
   if (ctl) { // aggiornamento sul posto: le transizioni CSS restano visibili
@@ -1547,6 +1729,10 @@ $("#btnSecAll").onclick = () => {
   const ids = db.sections.map(s => s.id), close = ids.some(id => !secClosed[id]);
   ids.forEach(id => secClosed[id] = close); renderInputs();
 };
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-issues-toggle]"); if (!b) return;
+  issuesOpen = !issuesOpen; $("#issues").classList.toggle("hide", !issuesOpen); b.setAttribute("aria-expanded", issuesOpen);
+});
 $("#fltSeg").onclick = e => { const b = e.target.closest("[data-f]"); if (!b) return; onlyOpen = b.dataset.f === "open";
   $$("#fltSeg button").forEach(x => x.classList.toggle("on", x === b)); renderResult(); };
 $("#btnReset").onclick = () => {
@@ -1567,7 +1753,7 @@ async function guardExport(fn) {
 function bomTable(sep, lines = resolveAll(cfg.sel, cfg.choice).lines, name = cfg.name, sel = cfg.sel) {
   const num = n => sep === ";" ? String(n).replace(".", ",") : String(n);
   const head = [...db.params, ...db.acc].filter(p => sel[p.id]).map(p => [db.acc.includes(p) ? `Accessorio ${G(p.groupId)?.name} · ${p.name}` : p.name, sel[p.id]]);
-  const rows = [["Configurazione", name], ...head, [], ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione"], ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc])];
+  const rows = [["Configurazione", name], ...head, [], ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione", "Quantità"], ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc, num(l.qty ?? "")])];
   return rows.map(r => r.map(x => csvCell(x, sep)).join(sep)).join("\r\n") + "\r\n";
 }
 const defName = () => { const v = db.params.filter(p => cfg.sel[p.id]).map(p => cfg.sel[p.id]); return ["distinta", machineSlug(), ...v].filter(Boolean).join("_"); };
@@ -1616,11 +1802,33 @@ function addValues(p, text) {
   }
   if (added) { save(); rerender(); toast(`${plural(added, "valore aggiunto", "valori aggiunti")} a ${p.name}`); $(`[data-vadd="${p.id}"]`)?.focus(); }
 }
-function renameValue(p, oldV, newV) {
+function impactPreview(mutate, rows) {
+  const original = db, ids = new Set(rows.map(r => byId(db.acc, r.groupId)?.groupId || r.groupId));
+  const measure = () => {
+    let gaps = 0, drafts = 0, limited = false;
+    for (const g of db.groups.filter(g => ids.has(g.id))) {
+      for (const [group, arr] of [[g, db.items], ...(needsInter(g) ? [[g, db.inter]] : []), ...accsOf(g).map(a => [accPseudo(a), db.accItems])]) {
+        const cv = coverage(group, arr); if (cv.missing === null) limited = true; else gaps += cv.missing.length;
+        drafts += arr.filter(r => r.groupId === group.id && isDraft(r)).length;
+      }
+    }
+    return {gaps, drafts, limited};
+  };
+  try {
+    const before = measure(); db = structuredClone(original); mutate(db); const after = measure();
+    return `<div class="impact"><b>Impatto previsto</b><div>${rows.length} righe interessate · ${ids.size} tipologie</div><div>Righe in bozza/da revisionare: ${before.drafts} → ${after.drafts}</div><div>Carenze di copertura: ${before.limited || after.limited ? "controllo parziale (troppe combinazioni)" : `${before.gaps} → ${after.gaps}`}</div><small>La copertura conta separatamente codici, interscambi e accessori.</small></div>`;
+  } finally { db = original; }
+}
+async function renameValue(p, oldV, newV) {
   newV = newV.trim();
   if (!newV || newV === oldV) return rerender();
   const dup = findCI(p.values, newV, oldV);
   if (dup) { toast(`Esiste già «${dup}»`); return rerender(); }
+  const affected = allRows().filter(r => r.cond[p.id] === oldV);
+  if (affected.length) {
+    const r = await ask({title: `Rinomina «${oldV}» in «${newV}»`, body: `<p>Le righe attuali e le selezioni saranno aggiornate. Le versioni storiche conserveranno il valore originale e saranno verificate al ripristino.</p>${impactPreview(d => { byId(d.params, p.id).values = p.values.map(v => v === oldV ? newV : v); [d.items, d.inter, d.accItems].flat().forEach(r => { if (r.cond[p.id] === oldV) r.cond[p.id] = newV; }); }, affected)}`, actions: [{label: "Annulla", value: null, default: true}, {label: "Rinomina", value: "ok", kind: "p"}]});
+    if (r.action !== "ok") return rerender();
+  }
   const snap = snapshot();
   p.values[p.values.indexOf(oldV)] = newV;
   let n = 0;
@@ -1636,7 +1844,7 @@ async function removeValue(p, v) {
   if (using.length) {
     const gnames = [...new Set(using.map(r => G(r.groupId)?.name || (byId(db.acc, r.groupId) ? "accessorio " + byId(db.acc, r.groupId).name : "")))].join(", ");
     const r = await ask({title: `Rimuovi «${v}» da ${p.name}`, body: `<p>${plural(using.length, "riga usa", "righe usano")} questo valore (${esc(gnames)}). Cosa vuoi fare con queste righe?</p>
-      <p class="mut">“Da revisionare” le mette in bozza con <b>?</b>: il configuratore non le usa finché non le correggi.</p>`,
+      <p class="mut">“Da revisionare” le mette in bozza con <b>?</b>: il configuratore non le usa finché non le correggi.</p>${impactPreview(d => { byId(d.params, p.id).values = p.values.filter(x => x !== v); const ids = new Set(using.map(r => r.id)); [d.items, d.inter, d.accItems].flat().filter(r => ids.has(r.id)).forEach(r => { r.cond[p.id] = Q; r.review = true; }); }, using)}`,
       actions: [{label: "Annulla", value: null}, {label: "Elimina le righe", value: "del", kind: "d"}, {label: "Rendi valide per tutti (—)", value: "all"}, {label: "Segna da revisionare", value: "rev", kind: "p", default: true}]});
     if (!r.action) return;
     action = r.action;
@@ -1708,7 +1916,7 @@ ps.addEventListener("click", async e => {
   }
   if (d.pdel) {
     const p = P(d.pdel), gs = reqBy(p.id), using = allRows().filter(r => r.cond[p.id] != null);
-    const r = await ask({title: `Elimina il parametro «${p.name}»`, body: `<p>${gs.length ? `Verrà tolto da: <b>${gs.map(g => esc(g.name)).join(", ")}</b>. ` : ""}${using.length ? `${plural(using.length, "riga lo usa", "righe lo usano")}: verranno segnate <b>da revisionare</b> per non diventare valide per tutti.` : ""}</p>`,
+    const r = await ask({title: `Elimina il parametro «${p.name}»`, body: `<p>${gs.length ? `Verrà tolto da: <b>${gs.map(g => esc(g.name)).join(", ")}</b>. ` : ""}${using.length ? `${plural(using.length, "riga lo usa", "righe lo usano")}: verranno segnate <b>da revisionare</b> per non diventare valide per tutti.` : ""}</p>${impactPreview(d => { d.params = d.params.filter(x => x.id !== p.id); d.groups.forEach(g => g.params = g.params.filter(x => x !== p.id)); d.acc.forEach(a => a.params = a.params.filter(x => x !== p.id)); [d.items, d.inter, d.accItems].flat().filter(r => r.cond[p.id] != null).forEach(r => { delete r.cond[p.id]; r.review = true; }); }, using)}`,
       actions: [{label: "Annulla", value: null, default: true}, {label: "Elimina parametro", value: "ok", kind: "d"}]});
     if (r.action !== "ok") return;
     const snap = snapshot();
@@ -1779,10 +1987,75 @@ function coverageHtml(g, arr, kind, label, accId = "") {
     <button class="b s" data-showmiss="${kid}">Mostra</button><button class="b s" data-gen="${kind}"${acA}>Crea righe mancanti</button></div>
     <div class="hide" id="miss-${kid}" style="margin:8px 0 0">${cv.missing.map(c => `<div>${g.params.map(pid => `<span class="tag"><em>${esc(P(pid).name)}</em><b>${esc(c[pid])}</b></span>`).join("")}</div>`).join("")}</div>` + multi;
 }
+// riga discreta sotto il codice: compare solo se la riga ha un codice precedente
+function histBtn(i, kind) {
+  const n = i.prev?.length || 0;
+  return `<button type="button" class="phist" data-hist="${i.id}" data-k="${kind}" ${n ? 'data-has-history aria-describedby="xpop" aria-label="Versioni precedenti: anteprima al passaggio del mouse, clic per gestire lo storico"' : 'title="Visualizza le versioni precedenti o registra una versione nello storico"'}>${IC.hist}<span>Versioni precedenti${n ? ` (${n})` : ""}</span></button>`;
+}
+async function codeHistory(kind, id) {
+  const row = byId(listOf(kind), id); if (!row) return;
+  const snap = snapshot(); let touched = false, pendingRestore = null;
+  const body = () => pendingRestore ? (() => {
+    const {version: v, problems} = pendingRestore.checked;
+    const fields = [["code", "Codice"], ["desc", "Descrizione"], ["cond", "Attributi"], ["qty", "Quantità"], ["note", "Note"], ["link", "Link Windchill"]];
+    const text = (key, value) => key === "cond" ? Object.entries(value || {}).map(([pid, val]) => `${P(pid)?.name || byId(db.acc, pid)?.name || pid}: ${val}`).join(" · ") || "—" : String(value ?? "") || "—";
+    return `<p>Stai per ripristinare <b class="code">${esc(v.code)}</b>. La versione attuale sarà conservata nello storico.</p><div class="scroll"><table><thead><tr><th>Campo</th><th>Attuale</th><th>Dopo il ripristino</th></tr></thead><tbody>${fields.filter(([key]) => (key in v || key === "link") && JSON.stringify(row[key] ?? "") !== JSON.stringify(v[key] ?? "")).map(([key, label]) => `<tr><td>${label}</td><td>${esc(text(key, row[key]))}</td><td>${esc(text(key, v[key]))}</td></tr>`).join("") || '<tr><td colspan="3">I dati sono già uguali.</td></tr>'}</tbody></table></div>${problems.length ? `<div class="callout wa">La riga sarà segnata <b>da revisionare</b>:<ul>${problems.map(p => `<li>${esc(p)}</li>`).join("")}</ul></div>` : ""}<div class="row" style="justify-content:flex-end;margin-top:14px"><button type="button" class="b s" data-hback>Indietro</button><button type="button" class="b p s" data-hrestore>Ripristina questa versione</button></div>`;
+  })() : `
+    <p>Codice attuale: <span class="code">${esc(row.code || "da inserire")}</span></p>
+    <p class="hint">Inserisci un vecchio codice per aggiungerlo allo storico. Il cambio del codice attuale conserva automaticamente il precedente.</p>
+    <div class="histform">
+      <label>Codice precedente <input id="histCode" class="code" placeholder="Inserisci il vecchio codice" autocomplete="off"></label>
+      <label>Data <input type="date" id="histDate" value="${todayIso()}"></label>
+      <label>Nota <textarea id="histNote" rows="3" placeholder="Motivo della revisione (facoltativo)"></textarea></label>
+      <button type="button" class="b p s" data-hadd>Aggiungi codice precedente</button>
+      <details class="histadvanced"><summary>Opzioni avanzate</summary><p class="hint">Conserva descrizione e attributi attuali prima di modificarli.</p><button type="button" class="b s" data-hsnapshot ${row.code.trim() ? "" : "disabled"}>Registra versione attuale</button></details>
+    </div>
+    ${!row.prev?.length ? `<p class="mut">Nessuna versione precedente.</p>` : `<ul class="plist">${row.prev.map((p, k) => `<li><div class="pi"><span class="code">${esc(p.code)}</span><span class="mut"> · ${p.manual ? "registrato" : "sostituito"}${fmtDate(p.date) ? " il " + fmtDate(p.date) : ""}</span>${p.desc ? `<div class="mut">${esc(p.desc)}</div>` : ""}${p.historyNote ? `<div>${esc(p.historyNote)}</div>` : ""}</div>
+      <div class="pa"><button class="b s" data-pr="${k}" title="Rimette questo codice; quello attuale passa nello storico">Ripristina</button><button class="ib del" data-pd="${k}" title="Rimuovi dallo storico (es. refuso)" aria-label="Rimuovi dallo storico">${IC.del}</button></div></li>`).join("")}</ul>
+    <p class="hint">Se il vecchio codice era solo un refuso, rimuovilo con il cestino.</p>`}`;
+  const done = ask({title: "Storico codice", body: body(), actions: [{label: "Chiudi", value: null, kind: "p", default: true}]});
+  const d = $("#dlg"), ac = new AbortController();
+  d.addEventListener("click", e => {
+    const r = e.target.closest("[data-pr]"), x = e.target.closest("[data-pd]");
+    if (e.target.closest("[data-hback]")) { pendingRestore = null; d.querySelector(".dbody").innerHTML = body(); return; }
+    if (e.target.closest("[data-hadd]")) {
+      const input = $("#histCode"), code = input.value.trim(), date = $("#histDate");
+      if (!code || sameCode(code, row.code)) {
+        input.setCustomValidity(!code ? "Inserisci il codice precedente." : "Questo è il codice attuale: usa Registra versione attuale.");
+        input.reportValidity(); input.focus(); return;
+      }
+      input.setCustomValidity(""); if (!date.reportValidity()) return;
+      row.prev ??= []; row.prev.unshift({code, date: date.value || todayIso(), historyNote: $("#histNote").value.trim(), manual: true});
+    }
+    else if (e.target.closest("[data-hsnapshot]")) {
+      const date = $("#histDate"); if (!date.reportValidity() || !row.code.trim()) return;
+      row.prev ??= []; row.prev.unshift({...codeVersion(row, $("#histNote").value.trim(), date.value || todayIso()), manual: true});
+    }
+    else if (r) {
+      const v = row.prev?.[+r.dataset.pr]; if (!v) return;
+      pendingRestore = {index: +r.dataset.pr, checked: checkedVersion(row, v)};
+      d.querySelector(".dbody").innerHTML = body(); return;
+    }
+    else if (e.target.closest("[data-hrestore]") && pendingRestore) {
+      const v = pendingRestore.checked.version;
+      row.prev.splice(pendingRestore.index, 1); pendingRestore = null;
+      if (row.code.trim()) row.prev.unshift(codeVersion(row));
+      row.code = v.code;
+      for (const f of ["desc", "link", "cond", "qty", "note", "review"]) if (f in v) row[f] = structuredClone(v[f]);
+      if (!("link" in v)) delete row.link;
+    }
+    else if (x && row.prev) { row.prev.splice(+x.dataset.pd, 1); if (!row.prev.length) delete row.prev; }
+    else return;
+    touched = true; save(); d.querySelector(".dbody").innerHTML = body(); refreshGroups();
+  }, {signal: ac.signal});
+  d.addEventListener("input", e => { if (e.target.id === "histCode") e.target.setCustomValidity(""); }, {signal: ac.signal});
+  await done; ac.abort();
+  if (touched) toast("Storico codici aggiornato", () => restore(snap));
+}
 function rowsHtml(g, arr, kind) {
   const q = gFilter.toLowerCase(), isItem = kind !== "x";
   const all = arr.filter(i => i.groupId === g.id);
-  const list = all.filter(i => (!onlyDraft || isDraft(i)) && (!q || (i.code + " " + i.desc + " " + (i.note || "") + " " + Object.values(i.cond).join(" ")).toLowerCase().includes(q)));
+  const list = all.filter(i => (!onlyDraft || isDraft(i)) && (!q || (i.code + " " + i.desc + " " + (i.note || "") + " " + (i.prev || []).map(p => p.code).join(" ") + " " + Object.values(i.cond).join(" ")).toLowerCase().includes(q)));
   const sig = x => g.params.map(p => x.cond[p] ?? "*").join("|");
   const cnt = {}; all.filter(i => !isDraft(i)).forEach(i => { const k = sig(i) + (isItem && g.mode === "all" ? "#" + i.code.toLowerCase() : ""); cnt[k] = (cnt[k] || 0) + 1; });
   const mark = i => {
@@ -1795,11 +2068,12 @@ function rowsHtml(g, arr, kind) {
   // elenco a griglia: su schermi larghi una riga sola (codice · descrizione · attributi · q.tà · note),
   // su schermi più stretti gli attributi scendono sotto la descrizione. Colonne allineate fra le righe.
   const cls = "cx", ta = (f, v, ph) => `<textarea class="ghost wrapta" rows="1" data-k="${f === "note" ? "i" : kind}" data-f="${f}" data-i="__ID__" title="${esc(v)}" placeholder="${ph}">${esc(v)}</textarea>`;
-  const head = `<div class="chead"><span class="c-code">Codice</span><span class="c-desc">Descrizione</span>${g.params.length ? `<span class="c-attrs">Attributi</span>` : ""}<span class="c-act"></span></div>`;
-  return `<div class="clist ${cls} ${g.params.length ? "" : "noattr"}">${head}
+  const resize = (column, label) => `<button type="button" class="col-resize" data-column="${column}" role="separator" aria-orientation="vertical" aria-label="Larghezza colonna ${label}" title="Trascina per regolare · Frecce per spostare · Doppio clic o Home per ripristinare le larghezze"></button>`;
+  const head = `<div class="chead"><span class="c-code">Codice${resize("code", "Codice")}</span><span class="c-desc">Descrizione${g.params.length ? resize("desc", "Descrizione") : ""}</span>${g.params.length ? `<span class="c-attrs">Attributi</span>` : ""}<span class="c-act"></span></div>`;
+  return `<div class="clist ${cls} ${g.params.length ? "" : "noattr"}" data-rowkind="${kind}" data-rowgroup="${g.id}">${head}
     ${list.map(i => `<div class="crow ${i.review ? "review" : ""} ${i.id === flashId ? "flash" : ""} ${i.id === flashOk ? "flashok" : ""}" data-row="${i.id}">
-      <div class="c-code"><input class="ghost code ${String(i.code).trim() ? "" : "draftcode"}" data-k="${kind}" data-f="code" data-i="${i.id}" value="${esc(i.code)}" title="${esc(i.code)}" placeholder="Codice da inserire">${mark(i) ? `<div class="cmark">${mark(i)}</div>` : ""}</div>
-      <div class="c-desc">${ta("desc", i.desc, "Descrizione").replace("__ID__", i.id)}</div>
+      <div class="c-code"><button type="button" class="rowgrip" draggable="true" title="Trascina per riordinare · Alt + freccia su/giù da tastiera" aria-label="Riordina ${esc(i.code || 'codice')}">⋮⋮</button><input class="ghost code ${String(i.code).trim() ? "" : "draftcode"}" data-k="${kind}" data-f="code" data-i="${i.id}" value="${esc(i.code)}" title="${esc(i.code)}" placeholder="Codice da inserire">${mark(i) ? `<div class="cmark">${mark(i)}</div>` : ""}${histBtn(i, kind)}</div>
+      <div class="c-desc">${ta("desc", i.desc, "Descrizione").replace("__ID__", i.id)}${isItem ? `<label class="qtyedit">Quantità <input type="number" min="0" step="any" data-k="${kind}" data-f="qty" data-i="${i.id}" value="${esc(i.qty ?? 1)}" aria-label="Quantità ${esc(i.code)}"></label>` : ""}</div>
       ${g.params.length ? `<div class="c-attrs">${g.params.map(pid => `<span class="at"><span class="al">${esc(P(pid)?.name)}</span>${attrCell(i, pid, kind)}</span>`).join("")}</div>` : ""}
       <div class="c-act"><div class="acts">${i.review ? `<button class="ib" data-ok="${i.id}" data-k="${kind}" title="Segna come revisionata">${IC.check}</button>` : ""}<button class="ib ${i.link ? "lk-on" : ""}" data-wl="${i.id}" data-k="${kind}" title="${i.link ? "Link Windchill impostato: clic per modificarlo" : "Aggiungi il link Windchill di questo codice"}">${IC.link}</button><button class="ib" data-dup="${i.id}" data-k="${kind}" title="Duplica (codice da inserire)">${IC.dup}</button><button class="ib del" data-del="${i.id}" data-k="${kind}" title="Elimina">${IC.del}</button></div></div>
     </div>`).join("") || `<div class="empty" style="padding:14px">${onlyDraft || q ? "Nessuna riga corrisponde al filtro." : "Nessuna riga."}</div>`}</div>`;
@@ -1878,7 +2152,7 @@ async function toggleGroupParam(g, pid) {
     let action = "all";
     if (using.length) {
       const r = await ask({title: `Rimuovi «${pn}» da ${g.name}`, body: `<p>${plural(using.length, "riga usa", "righe usano")} questo attributo. Senza, potrebbero diventare valide per combinazioni sbagliate.</p>
-        <p class="mut">“Da revisionare” le mette in bozza: il configuratore non le usa finché non le controlli.</p>`,
+        <p class="mut">“Da revisionare” le mette in bozza: il configuratore non le usa finché non le controlli.</p>${impactPreview(d => { const group = byId(d.groups, g.id) || byId(d.acc, g.id); group.params = group.params.filter(x => x !== pid); const ids = new Set(using.map(r => r.id)); [d.items, d.inter, d.accItems].flat().filter(r => ids.has(r.id)).forEach(r => { delete r.cond[pid]; r.review = true; }); }, using)}`,
         actions: [{label: "Annulla", value: null}, {label: "Elimina le righe", value: "del", kind: "d"}, {label: "Rendi valide per tutti (—)", value: "all"}, {label: "Segna da revisionare", value: "rev", kind: "p", default: true}]});
       if (!r.action) return;
       action = r.action;
@@ -1892,7 +2166,7 @@ async function toggleGroupParam(g, pid) {
   } else {
     let mode = "q";
     if (rows.length) {
-      const r = await ask({title: `Aggiungi «${pn}» a ${g.name}`, body: `<p>Le ${rows.length} righe esistenti non hanno ancora un valore per questo attributo.</p>`,
+      const r = await ask({title: `Aggiungi «${pn}» a ${g.name}`, body: `<p>Le ${rows.length} righe esistenti non hanno ancora un valore per questo attributo.</p>${impactPreview(d => { const group = byId(d.groups, g.id) || byId(d.acc, g.id); group.params = [...group.params, pid]; const ids = new Set(rows.map(r => r.id)); [d.items, d.inter, d.accItems].flat().filter(r => ids.has(r.id)).forEach(r => r.cond[pid] = Q); }, rows)}`,
         actions: [{label: "Annulla", value: null}, {label: "Lascia «—» (vale per tutti)", value: "all"}, {label: "Imposta «?» da definire", value: "q", kind: "p", default: true}]});
       if (!r.action) return;
       mode = r.action;
@@ -1945,10 +2219,51 @@ $("#btnGroupAdd").onclick = () => {
 };
 $("#newGroup").addEventListener("keydown", e => { if (e.key === "Enter") $("#btnGroupAdd").click(); });
 const ge = $("#groupEditor");
+// Il riordino resta circoscritto all'elenco della tipologia/accessorio corrente.
+let dragRow = null;
+function moveCodeRow(kind, groupId, fromId, toId, after) {
+  const arr = listOf(kind), from = arr.findIndex(r => r.id === fromId), target = arr.find(r => r.id === toId);
+  if (from < 0 || !target || fromId === toId || arr[from].groupId !== groupId || target.groupId !== groupId) return;
+  const snap = snapshot(), [row] = arr.splice(from, 1);
+  arr.splice(arr.indexOf(target) + (after ? 1 : 0), 0, row);
+  save(); refreshGroups(); toast("Ordine codici aggiornato", () => restore(snap));
+}
+ge.addEventListener("dragstart", e => {
+  const h = e.target.closest(".rowgrip"); if (!h) return;
+  const row = h.closest(".crow"), list = row.closest(".clist");
+  dragRow = {id: row.dataset.row, kind: list.dataset.rowkind, group: list.dataset.rowgroup};
+  e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", dragRow.id); row.classList.add("rowdrag");
+});
+function clearRowDrag() { ge.querySelectorAll(".rowdrag,.dropbefore,.dropafter").forEach(r => r.classList.remove("rowdrag", "dropbefore", "dropafter")); }
+ge.addEventListener("dragover", e => {
+  const row = e.target.closest(".crow"), list = row?.closest(".clist");
+  if (!dragRow || list?.dataset.rowkind !== dragRow.kind || list.dataset.rowgroup !== dragRow.group) return;
+  e.preventDefault(); e.dataTransfer.dropEffect = "move";
+  ge.querySelectorAll(".dropbefore,.dropafter").forEach(r => r.classList.remove("dropbefore", "dropafter"));
+  if (row.dataset.row !== dragRow.id) row.classList.add(e.clientY > row.getBoundingClientRect().top + row.offsetHeight / 2 ? "dropafter" : "dropbefore");
+  const box = ge.getBoundingClientRect(), edge = Math.min(innerHeight, box.bottom);
+  if (e.clientY > edge - 60) scrollBy(0, 18); else if (e.clientY < Math.max(0, box.top) + 60) scrollBy(0, -18);
+});
+ge.addEventListener("drop", e => {
+  const row = e.target.closest(".crow"), list = row?.closest(".clist");
+  if (!dragRow || list?.dataset.rowkind !== dragRow.kind || list.dataset.rowgroup !== dragRow.group) return;
+  e.preventDefault(); const d = dragRow, after = row.classList.contains("dropafter");
+  dragRow = null; clearRowDrag(); moveCodeRow(d.kind, d.group, d.id, row.dataset.row, after);
+});
+ge.addEventListener("dragend", () => { dragRow = null; clearRowDrag(); });
+ge.addEventListener("keydown", e => {
+  if (!e.altKey || !["ArrowUp", "ArrowDown"].includes(e.key) || !e.target.matches(".rowgrip")) return;
+  e.preventDefault(); const row = e.target.closest(".crow"), list = row.closest(".clist"), rows = [...list.querySelectorAll(".crow")];
+  const target = rows[rows.indexOf(row) + (e.key === "ArrowDown" ? 1 : -1)]; if (!target) return;
+  const id = row.dataset.row;
+  moveCodeRow(list.dataset.rowkind, list.dataset.rowgroup, id, target.dataset.row, e.key === "ArrowDown");
+  [...ge.querySelectorAll(".crow")].find(r => r.dataset.row === id)?.querySelector(".rowgrip").focus();
+});
 ge.addEventListener("input", e => {
   if (e.target.id === "gSearch") { gFilter = e.target.value; const pos = e.target.selectionStart; renderGroupEditor(); const s = $("#gSearch"); s.focus(); s.setSelectionRange(pos, pos); return; }
   const d = e.target.dataset;
   if (e.target.classList.contains("wrapta")) fitTa(e.target);
+  if (d.f === "qty" && (!e.target.validity.valid || !Number.isFinite(e.target.valueAsNumber))) return;
   if (d.f && d.i && d.f !== "code") { const it = byId(listOf(d.k), d.i); it[d.f] = d.f === "qty" ? (parseFloat(e.target.value) || 0) : e.target.value; save(); }
 });
 // textarea che si adatta al testo (descrizioni e note sempre leggibili per intero)
@@ -1978,8 +2293,12 @@ ge.addEventListener("change", e => {
   if (t.dataset.accreq) { byId(db.acc, t.dataset.accreq).required = t.checked; save(); }
   if (t.dataset.cp && t.tagName === "SELECT") { setAttr(t.dataset.k, t.dataset.o, t.dataset.cp, t.value); t.classList.toggle("q", t.value === Q); }
   if (t.dataset.f === "code") {
-    const it = byId(listOf(t.dataset.k), t.dataset.i), was = isDraft(it);
-    it.code = t.value = t.value.trim(); save();
+    const it = byId(listOf(t.dataset.k), t.dataset.i), was = isDraft(it), old = it.code;
+    const snap = old.trim() && !sameCode(old, t.value) ? snapshot() : null;
+    it.code = t.value = t.value.trim();
+    const moved = recordCodeChange(it, old, it.code);
+    save();
+    if (moved && old.trim()) toast(`«${old.trim()}» conservato nello storico`, () => restore(snap));
     t.classList.toggle("draftcode", !it.code);
     if (was && !isDraft(it)) { const tr = t.closest(".crow, tr"); tr.classList.remove("flashok"); void tr.offsetWidth; tr.classList.add("flashok"); }
     clearTimeout(ge.t); ge.t = setTimeout(refreshGroups, 450);
@@ -1987,6 +2306,7 @@ ge.addEventListener("change", e => {
 });
 ge.addEventListener("click", async e => {
   const g = G(curG), d = e.target.dataset;
+  const hb = e.target.closest("[data-hist]"); if (hb) return codeHistory(hb.dataset.k, hb.dataset.hist);
   const segBtn = e.target.closest(".seg[data-cp] button");
   if (segBtn) {
     const s = segBtn.parentElement, obj = setAttr(s.dataset.k, s.dataset.o, s.dataset.cp, segBtn.dataset.v);
@@ -2020,7 +2340,7 @@ ge.addEventListener("click", async e => {
     ge.querySelector(`input[data-i="${rec.id}"][data-f="code"]`)?.focus();
   }
   if (d.dup) {
-    const L = listOf(d.k), s = byId(L, d.dup), c = {...structuredClone(s), id: uid(), code: "", review: false}; delete c.link;
+    const L = listOf(d.k), s = byId(L, d.dup), c = {...structuredClone(s), id: uid(), code: "", review: false}; delete c.link; delete c.prev;
     L.splice(L.indexOf(s) + 1, 0, c); flashId = c.id; save(); refreshGroups();
     ge.querySelector(`input[data-i="${c.id}"][data-f="code"]`)?.focus();
   }
@@ -2270,13 +2590,115 @@ const FS = (() => {
   let FN = NEW_FN;
   const stem = () => FN.replace(/\.json$/, "");
   const ok = !!(T.picker || window.showDirectoryPicker);
-  let dir = null, state = ok ? "none" : "unsupported", lastMod = 0, lastAt = null, timer = 0, chain = Promise.resolve(), pending = false, quiet = false;
+  let dir = null, state = ok ? "none" : "unsupported", lastMod = 0, lastAt = null, lastDownloadAt = null, timer = 0, chain = Promise.resolve(), pending = false, quiet = false;
   // ---- handle persistente (IndexedDB) ----
   const idb = f => new Promise((res, rej) => { const r = indexedDB.open("cf_fs", 1); r.onupgradeneeded = () => r.result.createObjectStore("h"); r.onsuccess = () => { const tx = r.result.transaction("h", "readwrite"), q = f(tx.objectStore("h")); tx.oncomplete = () => res(q?.result); tx.onerror = () => rej(tx.error); }; r.onerror = () => rej(r.error); });
   const HK = "dir@" + INST;
   const hGet = () => T.idbGet ? T.idbGet() : idb(s => s.get(HK)).catch(() => null);
   const hSet = h => T.idbSet ? T.idbSet(h) : idb(s => h ? s.put(h, HK) : s.delete(HK)).catch(() => {});
   const hLegacy = () => idb(s => s.get("dir")).catch(() => null);
+  // Backup periodici separati dal database: impostazioni e copie in attesa sono
+  // conservate in IndexedDB, senza cambiare il formato del JSON dell'utente.
+  const AUTO_BK = "backup", BACKUP_KEY = "auto-backups@" + INST;
+  let backupState = {every: 10, count: 0, sequence: 0, queue: [], lastName: "", lastAt: ""};
+  let backupError = "", backupBusy = false, backupChain = Promise.resolve(), pendingEdit = null, editTimer = 0;
+  const backupReady = (T.backupsGet ? Promise.resolve(T.backupsGet()) : idb(s => s.get(BACKUP_KEY))).then(saved => {
+    if (!saved || typeof saved !== "object") return;
+    if (Number.isInteger(saved.every) && saved.every >= 1 && saved.every <= 10000) backupState.every = saved.every;
+    if (Number.isInteger(saved.count) && saved.count >= 0) backupState.count = saved.count;
+    if (Number.isSafeInteger(saved.sequence) && saved.sequence >= 0) backupState.sequence = saved.sequence;
+    backupState.queue = Array.isArray(saved.queue) ? saved.queue.filter(j => j && typeof j.name === "string" && /^[\w.-]+\.json$/.test(j.name) && typeof j.content === "string") : [];
+    backupState.lastName = typeof saved.lastName === "string" ? saved.lastName : "";
+    backupState.lastAt = typeof saved.lastAt === "string" ? saved.lastAt : "";
+  }).catch(e => { backupError = "Impossibile leggere lo stato dei backup: " + e.message; });
+  const persistBackups = () => T.backupsSet ? Promise.resolve(T.backupsSet(structuredClone(backupState))) : idb(s => s.put(backupState, BACKUP_KEY));
+  const canWriteBackups = () => dir && !["none", "prompt", "unsupported"].includes(state);
+  function backupUi() {
+    const input = $("#backupEvery"), status = $("#backupStatus"); if (!input || !status) return;
+    if (document.activeElement !== input) input.value = backupState.every;
+    const progress = `${backupState.count}/${backupState.every} modifiche dall'ultimo intervallo`;
+    const queued = backupState.queue.length ? ` · ${backupState.queue.length} copie in attesa` : "";
+    const destination = canWriteBackups() ? `Cartella: ${dir.name}/${AUTO_BK}/` : "Collega o riconnetti la cartella dell'HTML per scrivere i backup su disco";
+    status.textContent = `${progress}${queued}. ${backupBusy ? "Scrittura backup in corso…" : destination}${backupState.lastName ? ` · Ultimo backup: ${backupState.lastName}` : ""}${backupError ? " · " + backupError : ""}`;
+    status.style.color = backupError ? "var(--er)" : "";
+    const retry = $("#backupRetry"); retry.classList.toggle("hide", !backupState.queue.length && !backupError); retry.disabled = backupBusy || !canWriteBackups();
+  }
+  const enqueueBackup = fn => (backupChain = backupChain.then(async () => { await backupReady; await fn(); }).catch(e => {
+    backupError = "Backup non completato: " + e.message; backupUi();
+  }));
+  function backupName(prefix = stem()) {
+    backupState.sequence++;
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-"), token = (crypto.randomUUID?.() || uid()).slice(0, 8);
+    return `${prefix}_${stamp}_${String(backupState.sequence).padStart(6, "0")}_${token}.json`;
+  }
+  async function drainBackups() {
+    if (!canWriteBackups()) { backupUi(); return; }
+    backupBusy = true; backupUi();
+    try {
+      const destination = dir, folder = await destination.getDirectoryHandle(AUTO_BK, {create: true});
+      while (backupState.queue.length && dir === destination && canWriteBackups()) {
+        const job = backupState.queue[0]; let handle = null, alreadyWritten = false;
+        try {
+          handle = await folder.getFileHandle(job.name);
+          alreadyWritten = await (await handle.getFile()).text() === job.content;
+          if (!alreadyWritten) { job.name = backupName(job.prefix); await persistBackups(); continue; }
+        } catch (e) { if (e.name !== "NotFoundError") throw e; }
+        if (!alreadyWritten) {
+          handle = await folder.getFileHandle(job.name, {create: true});
+          let writable;
+          try { writable = await handle.createWritable(); await writable.write(job.content); await writable.close(); }
+          catch (e) {
+            try { await writable?.abort(); } catch {}
+            // Rimuove soltanto il file vuoto appena creato da questo tentativo,
+            // mai una copia completata o una collisione preesistente.
+            try { if (!(await handle.getFile()).size) await folder.removeEntry(job.name); } catch {}
+            throw e;
+          }
+        }
+        backupState.lastName = job.name; backupState.lastAt = new Date().toISOString();
+        backupState.queue.shift(); await persistBackups(); backupError = "";
+      }
+    } catch (e) {
+      backupError = "Impossibile scrivere in backup/: " + e.message;
+      if (e.name === "NotAllowedError" || e.name === "SecurityError") state = "prompt";
+    } finally { backupBusy = false; ui(); }
+  }
+  const requestBackupFlush = () => enqueueBackup(() => run(drainBackups));
+  function completeIteration(content) {
+    return enqueueBackup(async () => {
+      backupState.count++;
+      if (backupState.count >= backupState.every) {
+        const prefix = stem();
+        backupState.queue.push({name: backupName(prefix), prefix, content: JSON.stringify(JSON.parse(content), null, 1)});
+        backupState.count = 0;
+      }
+      await persistBackups(); backupUi();
+      if (backupState.queue.length) await run(drainBackups);
+    });
+  }
+  function finishIteration() {
+    clearTimeout(editTimer); if (!pendingEdit) return backupChain;
+    const edit = pendingEdit; pendingEdit = null;
+    return edit.before === edit.after ? backupChain : completeIteration(edit.after);
+  }
+  function noteDatabaseChange(before, after, key = "") {
+    if (before === after) return;
+    if (key) {
+      if (pendingEdit && pendingEdit.key !== key) finishIteration();
+      if (pendingEdit) pendingEdit.after = after; else pendingEdit = {key, before, after};
+      clearTimeout(editTimer); editTimer = setTimeout(finishIteration, 1500);
+    } else { finishIteration(); completeIteration(after); }
+  }
+  function discardPendingIteration() { clearTimeout(editTimer); pendingEdit = null; }
+  async function setBackupInterval() {
+    const input = $("#backupEvery"); if (!input.reportValidity()) return;
+    const every = input.valueAsNumber; if (!Number.isInteger(every) || every < 1 || every > 10000) return;
+    finishIteration();
+    await enqueueBackup(async () => {
+      backupState.every = every; backupState.count = 0; await persistBackups(); backupUi();
+      if (backupState.queue.length) await run(drainBackups);
+    });
+  }
   const hasFile = async (d, n) => { try { await d.getFileHandle(n); return true; } catch { return false; } };
   async function chooseFN(d) { FN = (await hasFile(d, NEW_FN)) ? NEW_FN : (await hasFile(d, OLD_FN)) ? OLD_FN : NEW_FN; }
   const dirty = v => { try { v === undefined ? 0 : localStorage.setItem(K_DIRTY, v ? "1" : "0"); return localStorage.getItem(K_DIRTY) === "1"; } catch { return false; } };
@@ -2287,13 +2709,17 @@ const FS = (() => {
 
   // ---- interfaccia: indicatore in alto + banner + scheda Import/Export ----
   function ui() {
+    backupUi();
     const ss = $("#saveState"), bn = $("#fsBanner"), name = dir ? esc(dir.name) : "";
     const S = {
       ok: ["ok", lastAt ? `Salvato su ${FN} alle ${hhmm(lastAt)}` : `Collegato a ${FN}`],
       none: ["wa", "Solo nel browser"], prompt: ["wa", "Cartella da riconnettere"], unsupported: ["wa", "Solo nel browser"],
       error: ["er", "Errore salvataggio su file"], conflict: ["er", "File modificato altrove"]}[state];
-    ss.className = "savestate fs-" + S[0]; ss.querySelector("span").textContent = S[1];
-    ss.title = state === "ok" ? `Cartella: ${dir.name} · ogni modifica viene scritta in ${FN}` : "Clic per gestire il salvataggio su file";
+    $("#autoSave").checked = autoSave; $("#btnSaveJson").classList.toggle("hide", autoSave);
+    $("#btnSaveJson").textContent = dir ? "Salva nel file" : "Salva JSON";
+    const statusText = dirty() && ["ok", "none", "unsupported"].includes(state) ? (dir ? `Nel browser · ${FN} da aggiornare` : "Nel browser · JSON da scaricare") : !dir && lastDownloadAt ? `JSON scaricato alle ${hhmm(lastDownloadAt)} · copia nel browser` : S[1];
+    ss.className = "savestate fs-" + (dirty() && state === "ok" ? "wa" : S[0]); ss.querySelector("span").textContent = statusText;
+    ss.title = state === "ok" ? `Cartella: ${dir.name} · ${autoSave ? "salvataggio automatico" : "salvataggio manuale"} in ${FN}` : "Clic per gestire il salvataggio su file";
     const msg = {
       none: isEmptyDb() ? `<b>Nuovo configuratore.</b> Collega la cartella di questo file (<b>${esc(INST_DIR)}</b>): se contiene un database lo apro, altrimenti creo <span class="code">${NEW_FN}</span> vuoto e inizi a inserire i dati. <button class="b p s" data-fs="pick">Collega cartella…</button>`
         : `Il database non è collegato a una cartella: le modifiche restano solo in questo browser. <button class="b p s" data-fs="pick">Collega cartella…</button>`,
@@ -2304,7 +2730,7 @@ const FS = (() => {
     bn.innerHTML = msg ? `<div class="fsb fs-${S[0]}"><span>${msg}</span></div>` : ""; bn.classList.toggle("hide", !msg);
     const c = $("#fsCard");
     if (c) c.innerHTML = state === "unsupported" ? `<p class="mut" style="margin:0">Salvataggio su file non disponibile in questo browser: usa Chrome o Edge.</p>`
-      : `<div class="fsrow"><span class="fsdot fs-${S[0]}"></span><div style="flex:1;min-width:0">${dir ? `Cartella <b>${name}</b> · file <span class="code">${FN}</span> · backup giornalieri in <span class="code">${BK}/</span> (ultimi ${KEEP})` : "Nessuna cartella collegata"}<div class="mut">${esc(S[1])}</div></div>
+      : `<div class="fsrow"><span class="fsdot fs-${S[0]}"></span><div style="flex:1;min-width:0">${dir ? `Cartella <b>${name}</b> · file <span class="code">${FN}</span> · backup giornalieri in <span class="code">${BK}/</span> (ultimi ${KEEP})` : "Nessuna cartella collegata"}<div class="mut">${esc(statusText)}</div></div>
          ${state === "prompt" ? `<button class="b p" data-fs="grant">Riconnetti</button>` : ""}<button class="b ${dir ? "" : "p"}" data-fs="pick">${dir ? "Cambia cartella…" : "Collega cartella…"}</button>${dir ? `<button class="b dz" data-fs="unlink">Scollega</button>` : ""}</div>`;
   }
 
@@ -2314,8 +2740,10 @@ const FS = (() => {
     catch (e) { if (e.name === "NotFoundError") return null; throw e; }
   }
   function adopt(data, mod) {           // il file diventa il database corrente (senza riscriverlo)
+    discardPendingIteration();
     const snap = JSON.stringify(db);
     db = normalize(data); lastMod = mod; quiet = true; save(); quiet = false; dirty(false);
+    window.EditHistory?.reset();
     prevKeys = null; rerender();
     return snap;
   }
@@ -2327,13 +2755,15 @@ const FS = (() => {
     const names = []; for await (const [n, h] of bd.entries()) if (h.kind === "file" && n.startsWith(stem() + "_") && /_\d{4}-\d\d-\d\d\.json$/.test(n)) names.push(n);
     names.sort(); for (const n of names.slice(0, Math.max(0, names.length - KEEP))) await bd.removeEntry(n).catch(() => {});
   }
-  async function write(force) {
+  async function write(force, automatic = false) {
     if (state !== "ok" && !(force && dir)) return;
     const fh = await dir.getFileHandle(FN, {create: true}); const f = await fh.getFile();
     if (!force && lastMod && f.size && f.lastModified !== lastMod) { state = "conflict"; ui(); return; }
     await backup(f);
-    const w = await fh.createWritable(); await w.write(JSON.stringify(db, null, 1)); await w.close();
-    lastMod = (await fh.getFile()).lastModified; lastAt = new Date(); state = "ok"; dirty(false); ui();
+    if (automatic && !autoSave) return;
+    const content = JSON.stringify(db, null, 1);
+    const w = await fh.createWritable(); await w.write(content); await w.close();
+    lastMod = (await fh.getFile()).lastModified; lastAt = new Date(); state = "ok"; dirty(JSON.stringify(db, null, 1) !== content); ui();
     const ss = $("#saveState"); ss.classList.remove("pulse"); void ss.offsetWidth; ss.classList.add("pulse");
   }
   const run = (fn) => (chain = chain.then(fn).catch(e => {
@@ -2342,16 +2772,36 @@ const FS = (() => {
   }));
   function schedule() {
     if (quiet) return;
+    dirty(true);
+    if (!autoSave) { clearTimeout(timer); pending = false; ui(); return; }
     if (state !== "ok") { if (state !== "conflict" && !isEmptyDb()) dirty(true); ui(); return; }
     pending = true; clearTimeout(timer);
-    timer = setTimeout(() => run(async () => { await write(false); }).finally(() => pending = false), 350);
+    ui();
+    timer = setTimeout(() => run(async () => { if (autoSave) await write(false, true); }).finally(() => pending = false), 350);
+  }
+  function setAutomatic(value) {
+    autoSave = value; try { localStorage.setItem(KEY_AUTO, value ? "1" : "0"); } catch {}
+    clearTimeout(timer); pending = false;
+    if (value && dirty()) schedule(); else ui();
+  }
+  async function manualSave() {
+    clearTimeout(timer); pending = false;
+    if (dir) {
+      if (state !== "ok") { show("data"); toast("Riconnetti la cartella o risolvi il conflitto prima di salvare"); return; }
+      await run(() => write(false));
+      if (state === "ok" && !dirty()) toast(`${FN} salvato`);
+    } else {
+      download(`${machineSlug() || "configuratore"}_${today()}.json`, JSON.stringify(db, null, 2), "application/json");
+      dirty(false); lastDownloadAt = new Date(); ui(); toast("JSON scaricato");
+    }
   }
 
   // ---- collegamento ----
   async function connect(h, picked) {
     dir = h; state = "ok"; await chooseFN(h);
+    requestBackupFlush();
     const r = await readFile();
-    if (!r) { await write(true); if (picked) toast(`Creato ${FN} nella cartella «${h.name}»: puoi iniziare a inserire i dati`); return; }
+    if (!r) { if (autoSave) await write(true); else { dirty(true); ui(); } if (picked) toast(autoSave ? `Creato ${FN} nella cartella «${h.name}»: puoi iniziare a inserire i dati` : `Cartella collegata: premi Salva JSON per creare ${FN}`); return; }
     // database del browser vuoto (copia nuova o primo avvio): il file nella cartella vince sempre, senza domande
     if (isEmptyDb()) { adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); if (picked) toast(`Caricato ${FN} dalla cartella «${h.name}»`); return; }
     if (same(normalize(structuredClone(r.data)), db)) { lastMod = r.f.lastModified; dirty(false); lastAt = new Date(r.f.lastModified); ui(); return; }
@@ -2363,7 +2813,7 @@ const FS = (() => {
          actions: [{label: "Usa il file (scarta le modifiche del browser)", value: "file", kind: "d"}, {label: "Tieni le modifiche del browser", value: "local", kind: "p", default: true}]}
       : null;
     const a = q ? (await ask(q)).action : "file";
-    if (a === "local") { lastMod = r.f.lastModified; await write(true); toast(`${FN} aggiornato con i dati del browser`); }
+    if (a === "local") { lastMod = r.f.lastModified; if (autoSave) { await write(true); toast(`${FN} aggiornato con i dati del browser`); } else { dirty(true); ui(); toast("Modifiche mantenute: premi Salva JSON per scriverle nel file"); } }
     else if (a === "file") { const snap = adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); if (q) toast(`Caricato ${FN}`, () => { db = JSON.parse(snap); dirty(true); save(); rerender(); }); }
     else { dir = h; state = "conflict"; ui(); }        // finestra chiusa senza scegliere
   }
@@ -2389,7 +2839,7 @@ const FS = (() => {
     catch (e) { toast("Permesso non concesso: " + e.message); }
   }
   async function check() {               // al ritorno sulla pagina: il file è cambiato da un'altra parte?
-    if (state !== "ok" || pending) return;
+    if (state !== "ok" || pending || dirty() || $("#dlg").open) return;
     await run(async () => {
       const r = await readFile(); if (!r || r.f.lastModified === lastMod) return;
       adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); toast(`${FN} è cambiato: database ricaricato dal file`);
@@ -2404,11 +2854,17 @@ const FS = (() => {
     if (k === "unlink") { const r = await ask({title: "Scollegare la cartella?", body: `<p>Le modifiche resteranno solo nel browser finché non colleghi di nuovo una cartella. Il file <b>${FN}</b> non viene cancellato.</p>`, actions: [{label: "Annulla", value: null, default: true}, {label: "Scollega", value: "ok", kind: "d"}]}); if (r.action === "ok") { await hSet(null); dir = null; state = "none"; ui(); } }
   }
   async function init() {
+    $("#backupEverySave").addEventListener("click", setBackupInterval);
+    $("#backupRetry").addEventListener("click", () => { finishIteration(); requestBackupFlush(); });
+    $("#backupEvery").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); setBackupInterval(); } });
+    $("#autoSave").addEventListener("change", e => setAutomatic(e.target.checked));
+    $("#btnSaveJson").addEventListener("click", manualSave);
     document.addEventListener("click", e => { const b = e.target.closest("[data-fs]"); if (b) act(b.dataset.fs); });
     $("#saveState").addEventListener("click", () => state === "ok" ? show("data") : state === "prompt" ? grant() : state === "none" ? pick() : show("data"));
     addEventListener("focus", check); document.addEventListener("visibilitychange", () => !document.hidden && check());
-    addEventListener("beforeunload", e => { if (pending) { e.preventDefault(); e.returnValue = ""; } });
-    ui(); if (!ok) return;
+    addEventListener("beforeunload", e => { const due = !!pendingEdit && backupState.count + 1 >= backupState.every; finishIteration(); if (pending || (dir && (dirty() || due || backupBusy || backupState.queue.length))) { e.preventDefault(); e.returnValue = ""; } });
+    document.addEventListener("visibilitychange", () => { if (document.hidden) finishIteration(); });
+    await backupReady; ui(); if (!ok) return;
     let h = await hGet();
     if (!h) {   // migrazione dalla versione precedente: il collegamento valeva per tutte le copie
       const old = await hLegacy();
@@ -2423,7 +2879,9 @@ const FS = (() => {
     let p = "prompt"; try { p = await h.queryPermission({mode: "readwrite"}); } catch {}
     if (p === "granted") await run(() => connect(h, false)); else { state = "prompt"; ui(); }
   }
-  return {init, schedule, ui, get state() { return state; }};
+  return {init, schedule, ui, noteDatabaseChange, finishIteration,
+    get backupInfo() { return {every: backupState.every, count: backupState.count, queued: backupState.queue.length, lastName: backupState.lastName, error: backupError, busy: backupBusy}; },
+    get backupsIdle() { return backupChain; }, get state() { return state; }};
 })();
 { const _save = save; save = function () { _save(); FS.schedule(); }; }
 FS.init();
@@ -2435,6 +2893,10 @@ FS.init();
 (() => {
   const pop = document.getElementById("xpop"); let cur = null, tHide = 0;
   const html = b => {
+    if (b.matches(".phist")) {
+      const prev = byId(listOf(b.dataset.k), b.dataset.hist)?.prev || [];
+      return `<div class="xh">Codici precedenti</div>${prev.slice(0, 5).map(p => `<div style="margin:6px 0"><div class="xc code">${esc(p.code)}</div>${fmtDate(p.date) ? `<div class="xd">${fmtDate(p.date)}</div>` : ""}</div>`).join("")}${prev.length > 5 ? `<div class="xd">Altre ${prev.length - 5} versioni nello storico</div>` : ""}<div class="xa">Clicca su «Versioni precedenti» per aprire lo storico.</div>`;
+    }
     const g = db.groups.find(x => x.id === b.dataset.xg); if (!g) return "";
     const ed = `<a class="tlink" data-goedit="${g.id}" href="javascript:void 0">`;
     if (b.dataset.xs === "ok") {
@@ -2460,11 +2922,11 @@ FS.init();
     pop.setAttribute("aria-hidden", "false"); place(b); pop.classList.add("show");
   };
   const close = (now) => { clearTimeout(tHide); const f = () => { pop.classList.remove("show"); pop.setAttribute("aria-hidden", "true"); cur?.classList.remove("on"); cur = null; }; now ? f() : (tHide = setTimeout(f, 180)); };
-  const root = document.getElementById("cfgGroups");
-  root.addEventListener("pointerover", e => { const b = e.target.closest(".xbtn"); if (b && e.pointerType !== "touch") open(b); });
-  root.addEventListener("pointerout", e => { const b = e.target.closest(".xbtn"); if (b && !b.contains(e.relatedTarget) && !pop.contains(e.relatedTarget)) close(); });
-  root.addEventListener("focusin", e => { const b = e.target.closest(".xbtn"); if (b) open(b); });
-  root.addEventListener("focusout", e => { if (e.target.closest(".xbtn") && !pop.contains(e.relatedTarget)) close(); });
+  const root = document.querySelector("main"), previewSelector = ".xbtn,.phist[data-has-history]";
+  root.addEventListener("pointerover", e => { const b = e.target.closest(previewSelector); if (b && e.pointerType !== "touch") open(b); });
+  root.addEventListener("pointerout", e => { const b = e.target.closest(previewSelector); if (b && !b.contains(e.relatedTarget) && !pop.contains(e.relatedTarget)) close(); });
+  root.addEventListener("focusin", e => { const b = e.target.closest(previewSelector); if (b) open(b); });
+  root.addEventListener("focusout", e => { if (e.target.closest(previewSelector) && !pop.contains(e.relatedTarget)) close(); });
   root.addEventListener("click", e => { const b = e.target.closest(".xbtn"); if (!b) return; e.stopPropagation(); cur === b && pop.classList.contains("show") ? close(true) : open(b); }, true);
   pop.addEventListener("pointerenter", () => clearTimeout(tHide));
   pop.addEventListener("pointerleave", e => { if (!cur?.contains(e.relatedTarget)) close(); });
@@ -2473,7 +2935,7 @@ FS.init();
   document.addEventListener("keydown", e => { if (e.key === "Escape" && cur) { const b = cur; close(true); b.focus(); } });
   addEventListener("scroll", () => cur && close(true), {passive: true, capture: true});
   addEventListener("resize", () => cur && close(true));
-  new MutationObserver(() => { if (cur && !cur.isConnected) close(true); }).observe(root, {childList: true});
+  new MutationObserver(() => { if (cur && !cur.isConnected) close(true); }).observe(root, {childList: true, subtree: true});
 })();
 </script>
 <div id="cpop" role="menu" aria-hidden="true"></div>
@@ -2491,7 +2953,7 @@ FS.init();
     if (base) items.push(["copyopen", "Copia codice e apri Windchill", ""]);
     items.push(["copy", "Copia codice", ""]);
     items.push(["set", r.link ? "Modifica link Windchill…" : "Imposta link Windchill…", ""]);
-    pop.innerHTML = `<div class="ch"><span class="code">${esc(code)}</span>${r.desc ? `<span class="mut">${esc(r.desc)}</span>` : ""}</div>` +
+    pop.innerHTML = `<div class="ch"><span class="code">${esc(code)}</span>${r.desc ? `<span class="mut">${esc(r.desc)}</span>` : ""}${r.prev?.length ? `<span class="mut">prima: ${esc(r.prev.map(p => p.code).join(", "))}</span>` : ""}</div>` +
       items.map(([k, t, x]) => `<button role="menuitem" data-ca="${k}">${t}${x ? `<span class="k">${x}</span>` : ""}</button>`).join("");
     cur?.classList.remove("on"); cur = b; b.classList.add("on");
     const rc = b.getBoundingClientRect(); pop.classList.add("show"); pop.setAttribute("aria-hidden", "false");
@@ -3187,6 +3649,312 @@ FS.init();
   new ResizeObserver(() => { if (curTab !== "graph" || !T) return; drawMini(); if (selId) ensureVisible(T.byNode.get(selId)); }).observe($("#grCanvas"));
   window.renderGraph = () => { sizeCanvas(); sideSig = ""; apply(false); render(); };
 })();
+</script>
+<script>
+// tema chiaro/scuro: scelta salvata nel browser (valida per tutte le copie del configuratore, non entra nel database); senza scelta segue il sistema
+(() => {
+  const root = document.documentElement, btn = document.getElementById("themeBtn"), mq = matchMedia("(prefers-color-scheme: dark)");
+  const stored = () => { try { return localStorage.getItem("cf_theme"); } catch { return null; } };
+  const apply = t => {
+    root.dataset.theme = t; const dark = t === "dark";
+    btn.setAttribute("aria-pressed", dark); btn.setAttribute("aria-label", dark ? "Passa alla modalità chiara" : "Passa alla modalità scura"); btn.title = dark ? "Modalità chiara" : "Modalità scura";
+  };
+  apply(root.dataset.theme === "dark" ? "dark" : "light");
+  btn.onclick = () => { const t = root.dataset.theme === "dark" ? "light" : "dark"; apply(t); try { localStorage.setItem("cf_theme", t); } catch {} };
+  mq.addEventListener?.("change", e => { if (!stored()) apply(e.matches ? "dark" : "light"); });
+  let before = null;                                       // la stampa resta sempre su fondo chiaro
+  addEventListener("beforeprint", () => { before = root.dataset.theme; root.dataset.theme = "light"; });
+  addEventListener("afterprint", () => { if (before) { root.dataset.theme = before; before = null; } });
+})();
+</script>
+<script>
+// pannello parametri ridimensionabile: trascinamento, frecce da tastiera, doppio clic = larghezza standard (scelta salvata nel browser)
+(() => {
+  const conf = document.querySelector(".conf"), h = document.getElementById("sbResize"); if (!conf || !h) return;
+  const DEF = 360, MIN = 260, KEY_W = "cf_sidebar_w";
+  const max = () => Math.max(MIN, Math.min(640, Math.round(conf.getBoundingClientRect().width * 0.5)));
+  const clamp = w => Math.max(MIN, Math.min(max(), Math.round(w)));
+  const set = (w, save) => {
+    w = clamp(w); conf.style.setProperty("--sbw", w + "px"); h.setAttribute("aria-valuenow", w); h.setAttribute("aria-valuemax", max());
+    if (save) try { w === DEF ? localStorage.removeItem(KEY_W) : localStorage.setItem(KEY_W, w); } catch {}
+  };
+  let w0 = DEF; try { w0 = +localStorage.getItem(KEY_W) || DEF; } catch {}
+  set(w0);
+  h.addEventListener("pointerdown", e => {
+    e.preventDefault(); h.setPointerCapture(e.pointerId); h.classList.add("drag"); document.body.classList.add("rszing");
+    const x0 = e.clientX, wi = document.querySelector(".conf>.inputs").getBoundingClientRect().width;
+    const mv = ev => set(wi + ev.clientX - x0);
+    const up = () => { h.classList.remove("drag"); document.body.classList.remove("rszing"); h.removeEventListener("pointermove", mv); h.removeEventListener("pointerup", up); h.removeEventListener("pointercancel", up); set(parseFloat(conf.style.getPropertyValue("--sbw")), true); };
+    h.addEventListener("pointermove", mv); h.addEventListener("pointerup", up); h.addEventListener("pointercancel", up);
+  });
+  h.addEventListener("dblclick", () => set(DEF, true));
+  h.addEventListener("keydown", e => {
+    const cur = parseFloat(conf.style.getPropertyValue("--sbw")) || DEF, st = e.shiftKey ? 48 : 16;
+    if (e.key === "ArrowLeft") { e.preventDefault(); set(cur - st, true); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); set(cur + st, true); }
+    else if (e.key === "Home") { e.preventDefault(); set(DEF, true); }
+  });
+  addEventListener("resize", () => set(parseFloat(conf.style.getPropertyValue("--sbw")) || DEF));
+})();
+</script>
+<script>
+// home: la colonna del codice ha la stessa larghezza in tutte le schede (quella del codice più lungo), così le descrizioni partono sempre dallo stesso punto
+(() => {
+  const root = document.getElementById("cfgGroups"); if (!root) return;
+  let raf = 0;
+  const sync = () => {
+    raf = 0;
+    const cells = [...root.querySelectorAll(".ctab td.code")]; if (!cells.length) return;
+    const prev = root.style.getPropertyValue("--ccode"); root.style.removeProperty("--ccode");
+    const w = Math.min(240, Math.max(0, ...cells.map(c => c.offsetWidth)));
+    if (w > 0) root.style.setProperty("--ccode", w + "px"); else if (prev) root.style.setProperty("--ccode", prev);
+  };
+  const q = () => { if (!raf) raf = requestAnimationFrame(sync); };
+  new MutationObserver(q).observe(root, {childList: true, subtree: true});
+  new ResizeObserver(q).observe(root);
+  document.fonts?.ready.then(q); q();
+})();
+</script>
+<script>
+/* Cronologia della sessione: nessun campo o migrazione nel JSON di lavoro. */
+(() => {
+  const back = [], forward = [], LIMIT = 100;
+  const capture = () => ({db: JSON.stringify(db), cfg: JSON.stringify(cfg)});
+  const same = (a, b) => a.db === b.db && a.cfg === b.cfg;
+  let current = capture(), queued = false, suspended = false, epoch = 0;
+  let meta = {label: "Modifica dati", key: ""};
+  const ui = () => {
+    const enabled = $("#editMode").checked;
+    for (const [id, entry, verb, shortcut] of [["btnUndo", back.at(-1), "Annulla", "Ctrl+Z"], ["btnRedo", forward.at(-1), "Ripristina", "Ctrl+Y"]]) {
+      const b = $("#" + id); b.disabled = !entry || !enabled;
+      b.title = `${verb}${entry ? ": " + entry.label : ""} (${shortcut})`;
+      b.setAttribute("aria-label", b.title);
+    }
+  };
+  const flush = () => {
+    queued = false; if (suspended) return;
+    const next = capture(); if (same(current, next)) return;
+    const last = back.at(-1), now = Date.now();
+    if (meta.key && last?.key === meta.key && !forward.length && now - last.at < 1500) {
+      last.after = next; last.at = now;
+      if (same(last.before, last.after)) back.pop();
+    } else back.push({before: current, after: next, label: meta.label, key: meta.key, at: now});
+    while (back.length > LIMIT) back.shift();
+    forward.length = 0;
+    if (current.db !== next.db) FS.noteDatabaseChange(current.db, next.db, meta.key);
+    current = next; ui(); window.refreshGlobalSearch?.();
+  };
+  const record = () => {
+    if (suspended || queued) return;
+    queued = true; const token = epoch;
+    queueMicrotask(() => { if (token === epoch && queued) flush(); });
+  };
+  const reset = () => { epoch++; queued = false; back.length = forward.length = 0; current = capture(); meta.key = ""; ui(); };
+  const apply = state => {
+    suspended = true;
+    try {
+      const beforeDb = current.db;
+      clearTimeout(ge.t); db = JSON.parse(state.db); cfg = JSON.parse(state.cfg);
+      current = state; prevKeys = null; save(); persistDraft(); rerender();
+      FS.noteDatabaseChange(beforeDb, state.db);
+      window.refreshGlobalSearch?.();
+    } finally { suspended = false; meta.key = ""; ui(); }
+  };
+  const step = redo => {
+    if (!$("#editMode").checked || $("#dlg").open) return;
+    flush(); const source = redo ? forward : back, destination = redo ? back : forward;
+    const entry = source.pop(); if (!entry) return;
+    apply(redo ? entry.after : entry.before); destination.push(entry); ui();
+    const msg = `${redo ? "Ripristinato" : "Annullato"}: ${entry.label}`;
+    $("#historyStatus").textContent = msg; toast(msg);
+  };
+  window.EditHistory = {flush, reset, undo: () => step(false), redo: () => step(true), ui,
+    get undoCount() { flush(); return back.length; }, get redoCount() { return forward.length; }};
+  const oldSave = save, oldDraft = persistDraft;
+  save = function () { const result = oldSave(); record(); return result; };
+  persistDraft = function () { const result = oldDraft(); record(); return result; };
+  const oldToast = toast;
+  toast = function (msg, undo) {
+    if (!undo) return oldToast(msg);
+    flush(); const entry = back.at(-1);
+    oldToast(msg, entry ? () => { if (back.at(-1) === entry && same(current, capture())) step(false); else oldToast("Usa le frecce per annullare le modifiche in ordine."); } : null);
+  };
+  const fieldNames = {code: "codice", desc: "descrizione", qty: "quantità", note: "note"};
+  const describe = e => {
+    const t = e.target, d = t.dataset || {}, row = t.closest?.(".crow"), btn = t.closest?.("button");
+    const code = row?.querySelector('[data-f="code"]')?.value || "";
+    let label = d.f ? `Modifica ${fieldNames[d.f] || d.f}${code ? " · " + code : ""}` : btn?.title || btn?.getAttribute("aria-label") || btn?.textContent.trim() || "Modifica dati";
+    if (t.closest?.("#cfgInputs")) label = "Scelta parametri macchina";
+    else if (t.closest?.(".seg[data-cp]")) label = `Attributi codice${code ? " · " + code : ""}`;
+    else if (t.closest?.("[data-pr],[data-hrestore]")) label = "Ripristino versione precedente";
+    else if (t.closest?.("[data-hadd],[data-hsnapshot]")) label = "Aggiornamento storico codice";
+    const typing = e.type === "input" && t.matches?.('input:not([type="checkbox"]),textarea');
+    const key = typing ? [d.k, d.i, d.f, d.pn, d.secname, d.accname, t.id, t.className].join("|") : "";
+    meta = {label: label.slice(0, 110), key};
+  };
+  for (const type of ["input", "change", "click", "drop"]) document.addEventListener(type, describe, true);
+  document.addEventListener("focusout", () => { flush(); FS.finishIteration(); meta.key = ""; });
+  $("#btnUndo").onclick = () => step(false); $("#btnRedo").onclick = () => step(true);
+  document.addEventListener("keydown", e => {
+    if (!(e.ctrlKey || e.metaKey) || e.altKey || e.isComposing) return;
+    const key = e.key.toLowerCase(); if (!["z", "y"].includes(key)) return;
+    // Mantiene l'annullamento nativo durante la scrittura di un campo.
+    if (e.target.matches?.('input:not([type="checkbox"]),textarea,[contenteditable="true"]') || $("#dlg").open) return;
+    e.preventDefault(); step(key === "y" || e.shiftKey);
+  });
+  ui();
+})();
+
+/* Ricerca generale: gli ID restano quelli del database, anche per i codici storici. */
+(() => {
+  const input = $("#globalCodeSearch"), result = $("#globalCodeResults");
+  const render = () => {
+    const query = input.value.trim().toLowerCase(); result.innerHTML = ""; if (!query) return;
+    const hits = [];
+    for (const [kind, arr] of [["i", db.items], ["x", db.inter], ["a", db.accItems]]) for (const row of arr) {
+      const a = kind === "a" ? byId(db.acc, row.groupId) : null, g = G(a?.groupId || row.groupId);
+      if (!g) continue;
+      const old = (row.prev || []).filter(p => [p.code, p.desc, p.historyNote].join(" ").toLowerCase().includes(query));
+      if (![row.code, row.desc, g.name, a?.name].join(" ").toLowerCase().includes(query) && !old.length) continue;
+      hits.push({kind, row, g, a, old});
+    }
+    result.innerHTML = `<span class="mut">${hits.length} risultati${hits.length > 50 ? " · primi 50 visualizzati" : ""}</span>` + hits.slice(0, 50).map(h => `<button type="button" class="b searchhit" data-search-row="${h.row.id}" data-search-kind="${h.kind}" data-search-group="${h.g.id}"><span class="code">${esc(h.row.code || "Codice da inserire")}</span> · ${esc(h.row.desc)}<small>${esc(h.g.name)}${h.a ? " · Accessorio " + esc(h.a.name) : h.kind === "x" ? " · Interscambio" : ""}${h.old.length ? " · Nello storico: " + h.old.map(p => esc(p.code)).join(", ") : ""}</small></button>`).join("");
+  };
+  input.addEventListener("input", render); window.refreshGlobalSearch = render;
+  result.addEventListener("click", e => {
+    const b = e.target.closest("[data-search-row]"); if (!b) return;
+    curG = b.dataset.searchGroup; gFilter = ""; onlyDraft = false; flashId = b.dataset.searchRow; show("groups");
+    [...ge.querySelectorAll(".crow")].find(r => r.dataset.row === b.dataset.searchRow)?.scrollIntoView({behavior: "smooth", block: "center"});
+  });
+})();
+
+/* Consultazione: protegge il database, lasciando disponibili scelte macchina e ricerca. */
+(() => {
+  const toggle = $("#editMode");
+  const selector = '#t-params input,#t-params select,#t-params textarea,#t-params button,#groupEditor input:not(#gSearch),#groupEditor select,#groupEditor textarea,#groupEditor button:not([data-hist]):not([data-showmiss]):not(.col-resize),#groupList [data-gup],#newGroup,#btnGroupAdd,#btnMacroAdd,#appBrand,#wcTplIn,#wcTplSave,#btnJsonImp,#btnCsvImp,#btnWipe,#dlg .histform input,#dlg .histform textarea,#dlg [data-pr],#dlg [data-pd],#dlg [data-hadd],#dlg [data-hsnapshot],#dlg [data-hrestore]';
+  const apply = () => {
+    const editing = toggle.checked;
+    document.body.classList.toggle("editing-data", editing); document.body.classList.toggle("consulting-data", !editing);
+    for (const el of document.querySelectorAll(selector)) {
+      if (!editing && !el.disabled) { el.disabled = true; el.dataset.modeDisabled = "1"; }
+      else if (editing && el.dataset.modeDisabled) { el.disabled = false; delete el.dataset.modeDisabled; }
+    }
+    window.EditHistory?.ui();
+  };
+  toggle.addEventListener("change", () => { apply(); toast(toggle.checked ? "Modifica dati attiva" : "Consultazione: dati protetti dalle modifiche"); });
+  const guarded = '#t-params .vl,#t-params .vchip,#groupEditor [data-gp],#groupEditor [data-accp],#groupList [data-medit],#groupEditor .rowgrip,#groupEditor .vchip,#cpop [data-ca="set"]';
+  for (const type of ["click", "dblclick", "dragstart"]) document.addEventListener(type, e => {
+    if (!toggle.checked && e.target.closest?.(guarded)) { e.preventDefault(); e.stopImmediatePropagation(); }
+  }, true);
+  let queued = false;
+  new MutationObserver(() => { if (!queued) { queued = true; queueMicrotask(() => { queued = false; apply(); }); } }).observe(document.querySelector("main"), {childList: true, subtree: true});
+  new MutationObserver(apply).observe($("#dlg"), {childList: true, subtree: true});
+  apply();
+})();
+/* Colonne dell'editor: preferenze del browser per questa copia dell'HTML,
+   separate per codici, interscambi e accessori. Non modificano il database. */
+(() => {
+  const root = $("#groupEditor"), key = "cf_editor_columns@" + INST;
+  let prefs = {}, drag = null, raf = 0, lastWidth = -1;
+  try {
+    const saved = JSON.parse(localStorage.getItem(key));
+    for (const kind of ["i", "x", "a"]) {
+      const value = saved?.[kind];
+      if (value && Number.isFinite(value.code) && value.code >= 40 && value.code <= 5000) {
+        prefs[kind] = {code: value.code};
+        if (Number.isFinite(value.desc) && value.desc >= 40 && value.desc <= 5000) prefs[kind].desc = value.desc;
+      }
+    }
+  } catch {}
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+  function measure(list) {
+    const head = list.querySelector(".chead");
+    if (!head || getComputedStyle(head).display === "none") return null;
+    const style = getComputedStyle(head), attrs = head.querySelector(".c-attrs");
+    const wide = !!attrs && getComputedStyle(attrs).display !== "none";
+    const available = head.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight) - 84 - parseFloat(style.columnGap) * (wide ? 3 : 2);
+    if (available <= 0) return null;
+    return {wide, available, code: head.querySelector(".c-code").getBoundingClientRect().width, desc: head.querySelector(".c-desc").getBoundingClientRect().width,
+      attrs: wide ? attrs.getBoundingClientRect().width : 0,
+      minCode: Math.min(120, available * .35), minDesc: Math.min(160, available * .4), minAttrs: wide ? Math.min(180, available * .25) : 0};
+  }
+  function apply(list) {
+    const preferred = prefs[list.dataset.rowkind];
+    list.classList.toggle("custom-cols", !!preferred);
+    const m = measure(list); if (!m) return;
+    if (preferred) {
+      const code = clamp(preferred.code, m.minCode, m.available - m.minDesc - m.minAttrs);
+      const desc = m.wide ? clamp(preferred.desc ?? m.desc, m.minDesc, m.available - code - m.minAttrs) : m.available - code;
+      list.style.setProperty("--col-code", code + "px"); list.style.setProperty("--col-desc", desc + "px");
+    }
+    const actual = measure(list);
+    for (const handle of list.querySelectorAll(".col-resize")) {
+      const code = handle.dataset.column === "code";
+      handle.setAttribute("aria-valuenow", Math.round(code ? actual.code : actual.desc));
+      handle.setAttribute("aria-valuemin", Math.ceil(code ? m.minCode : m.minDesc));
+      handle.setAttribute("aria-valuemax", Math.floor(code ? actual.code + actual.desc - m.minDesc : m.available - actual.code - m.minAttrs));
+    }
+  }
+  const applyAll = () => {
+    raf = 0;
+    if (drag && !drag.handle.isConnected) finish(false);
+    root.querySelectorAll(".clist").forEach(apply);
+    root.querySelectorAll("textarea.wrapta").forEach(fitTa);
+  };
+  const schedule = () => { if (!raf) raf = requestAnimationFrame(applyAll); };
+  const persist = () => {
+    try { localStorage.setItem(key, JSON.stringify(prefs)); }
+    catch { toast("Larghezze applicate, ma il browser non riesce a memorizzarle"); }
+  };
+  function resize(list, column, delta, start = measure(list)) {
+    if (!start || (column === "desc" && !start.wide)) return;
+    const widths = {code: start.code, desc: start.desc};
+    if (column === "code") {
+      const move = clamp(delta, start.minCode - start.code, start.desc - start.minDesc);
+      widths.code += move; widths.desc -= move;
+    } else {
+      const move = clamp(delta, start.minDesc - start.desc, start.attrs - start.minAttrs);
+      widths.desc += move;
+    }
+    prefs[list.dataset.rowkind] = {...prefs[list.dataset.rowkind], code: widths.code,
+      ...(start.wide ? {desc: widths.desc} : {})};
+    applyAll();
+  }
+  function finish(save) {
+    if (!drag) return;
+    const previous = drag; drag = null;
+    if (!save) { if (previous.before) prefs[previous.kind] = previous.before; else delete prefs[previous.kind]; }
+    document.body.classList.remove("column-resizing");
+    if (previous.handle.hasPointerCapture(previous.pointerId)) previous.handle.releasePointerCapture(previous.pointerId);
+    if (save) persist(); applyAll();
+  }
+  root.addEventListener("pointerdown", e => {
+    const handle = e.target.closest(".col-resize"); if (!handle || e.button !== 0) return;
+    const list = handle.closest(".clist"), start = measure(list); if (!start) return;
+    e.preventDefault(); e.stopPropagation(); handle.focus({preventScroll: true}); handle.setPointerCapture(e.pointerId);
+    const kind = list.dataset.rowkind;
+    drag = {handle, list, kind, pointerId: e.pointerId, x: e.clientX, start, before: prefs[kind] ? {...prefs[kind]} : null};
+    document.body.classList.add("column-resizing");
+  });
+  root.addEventListener("pointermove", e => { if (drag && e.pointerId === drag.pointerId) { e.preventDefault(); resize(drag.list, drag.handle.dataset.column, e.clientX - drag.x, drag.start); } });
+  root.addEventListener("pointerup", e => { if (drag && e.pointerId === drag.pointerId) finish(true); });
+  root.addEventListener("pointercancel", () => finish(false));
+  root.addEventListener("lostpointercapture", () => { if (drag) finish(false); });
+  const reset = list => { delete prefs[list.dataset.rowkind]; persist(); applyAll(); };
+  root.addEventListener("dblclick", e => { const h = e.target.closest(".col-resize"); if (h) { e.preventDefault(); reset(h.closest(".clist")); } });
+  root.addEventListener("keydown", e => {
+    const h = e.target.closest(".col-resize"); if (!h) return;
+    if (e.key === "Home") { e.preventDefault(); reset(h.closest(".clist")); }
+    else if (["ArrowLeft", "ArrowRight"].includes(e.key)) { e.preventDefault(); resize(h.closest(".clist"), h.dataset.column, (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 32 : 8)); persist(); }
+  });
+  document.addEventListener("keydown", e => { if (drag && e.key === "Escape") { e.preventDefault(); finish(false); } });
+  addEventListener("resize", () => { finish(false); schedule(); });
+  new MutationObserver(schedule).observe(root, {childList: true, subtree: true});
+  new ResizeObserver(([entry]) => { if (Math.abs(entry.contentRect.width - lastWidth) > .5) { lastWidth = entry.contentRect.width; schedule(); } }).observe(root);
+  schedule();
+})();
+// La barra può andare su due righe: i pannelli fissi ne seguono l'altezza.
+new ResizeObserver(([entry]) => document.documentElement.style.setProperty("--appbar-h", entry.target.offsetHeight + "px")).observe(document.querySelector("header"));
 </script>
 </body>
 </html>
