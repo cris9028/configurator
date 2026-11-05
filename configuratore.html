@@ -953,6 +953,59 @@ body.column-resizing,body.column-resizing *{cursor:col-resize!important;user-sel
 }
 @media(max-width:1100px){header nav{flex:1 1 65%}.header-actions{flex:1 1 100%;justify-content:flex-start}}
 @media(max-width:720px){.inputs{position:static;max-height:none}}
+/* sei schede (con Richieste): nessuna voce tagliata, al limite la barra scorre */
+nav{overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+@media(max-width:1500px) and (min-width:721px){header{gap:10px}nav button{padding:0 8px}nav button::after{left:6px;right:6px}.brand b{max-width:170px;overflow:hidden;text-overflow:ellipsis}.header-actions{gap:8px 10px}}
+/* «Qualsiasi valore» ed esplorazione delle varianti */
+.seg button.anyv{font-style:italic}
+b.anyv{font-style:italic;color:var(--xa)}
+.hsub.explore{margin-bottom:4px;padding:4px 8px;border-radius:6px;background:color-mix(in srgb,var(--wa-ln,#d9a400) 14%,transparent)}
+.gcard .ctab tr.vgrp td{padding-top:8px;font-size:.78em;font-weight:600;letter-spacing:.02em;color:var(--mut,#777);border-bottom:1px solid var(--bd)}
+.gcard .ctab tr.cfl td{color:var(--er)}
+.bomt .vlab{font-size:.8em}
+/* schede della home: l'etichetta (Codice/Codici/Interscambi) sta sopra la tabella invece che in una colonna da 94 px,
+   così la descrizione ha tutta la larghezza della scheda e non va a capo */
+.gcard .lrow{grid-template-columns:minmax(0,1fr);gap:2px}
+.gcard .lk{padding-top:0}
+/* Richieste */
+#nav .navn{display:inline-block;min-width:18px;padding:0 5px;margin-left:4px;border-radius:9px;background:var(--er);color:#fff;font-size:.75em;line-height:18px;text-align:center}
+.reqform .reqgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px}
+.reqform label{display:flex;flex-direction:column;gap:4px;font-size:.9em}
+.reqform label.wide{grid-column:1/-1}
+.reqform label.chk{flex-direction:row;align-items:center;gap:8px}
+.reqform input:not([type=checkbox]),.reqform select,.reqform textarea{width:100%;box-sizing:border-box;font:inherit}
+.reqform label.chk input{width:auto;margin:0}
+#reqFlt .n{margin-left:6px;opacity:.7}
+.reqform .reqpri{display:flex;flex-direction:column;gap:4px;font-size:.9em}
+.reqbar{margin:14px 0 8px}
+.reqlist{display:grid;gap:10px}
+.reqitem{display:grid;gap:6px}
+.reqitem .reqh{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.reqitem .reqmeta{margin-left:auto;font-size:.85em}
+.reqitem .reqreason{white-space:pre-wrap}
+.reqitem.st-inserita,.reqitem.st-rifiutata{opacity:.78}
+.reqitem .tag.pri.er{background:var(--er);color:#fff}
+.reqacts{gap:6px;justify-content:flex-end}
+/* Grafo: vista Rete */
+:root{--net-mac:#7c5cd6;--net-grp:#3b7dd8;--net-par:#d08a1c;--net-x:#1f9d8a;--net-code:#8a94a6;--net-acc:#c2549b}
+#grMode{margin-left:10px}
+#grNet{position:absolute;inset:0;z-index:3;background:var(--surface)}
+#grNetCv{display:block;width:100%;height:100%;cursor:grab;outline:none}
+#grNetCv.drag{cursor:grabbing}
+#grNet .netbar{position:absolute;top:10px;left:10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:6px 10px;margin:0;font-size:.85em;max-width:calc(100% - 20px)}
+#grNet .netbar label{display:flex;align-items:center;gap:4px;white-space:nowrap}
+#grNet .netbar input[type=search]{width:170px}
+#grNet .netlegend{position:absolute;left:12px;bottom:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.78em;color:var(--mut);pointer-events:none}
+#grNet .netlegend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+#grNet .netside{position:absolute;top:10px;right:10px;width:300px;max-width:calc(100% - 20px);max-height:calc(100% - 20px);overflow:auto;margin:0;padding:12px 14px;font-size:.88em}
+#grNet .netside h3{margin:0 0 4px;padding-right:28px;font-size:1.05em}
+#grNet .netside .netclose{position:absolute;top:8px;right:8px}
+@media(max-width:720px){#grNet .netside{top:auto;bottom:10px;max-height:55%}}
+#grNet .netside ul{margin:4px 0 8px;padding-left:16px}
+#grNet .netside li{margin:2px 0}
+#grNet .netside button.lnk{background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;text-align:left}
+#t-graph.netmode .gsum,#t-graph.netmode #grMini,#t-graph.netmode .gzoom,#t-graph.netmode .glegend,#t-graph.netmode .gside,#t-graph.netmode .glev,#t-graph.netmode .gsearch{display:none!important}
+@media(max-width:720px){.reqitem .reqmeta{margin-left:0;width:100%}}
 </style>
 </head>
 <body>
@@ -963,6 +1016,7 @@ body.column-resizing,body.column-resizing *{cursor:col-resize!important;user-sel
     <button data-t="params">Parametri</button>
     <button data-t="groups">Tipologie e codici</button>
     <button data-t="graph">Grafo</button>
+    <button data-t="requests">Richieste</button>
     <button data-t="data">Import / Export</button>
   </nav>
   <div class="header-actions">
@@ -1043,7 +1097,7 @@ body.column-resizing,body.column-resizing *{cursor:col-resize!important;user-sel
 <!-- ============ GRAFO ============ -->
 <section id="t-graph" class="view hide">
   <div class="gtool card">
-    <div class="gtl"><h1 style="font-size:18px;margin:0">Grafo</h1><span class="mut" id="grStats"></span></div>
+    <div class="gtl"><h1 style="font-size:18px;margin:0">Grafo</h1><div class="seg sm" id="grMode" role="group" aria-label="Tipo di vista"><button data-gm="net" aria-pressed="true" class="on">Rete</button><button data-gm="tree" aria-pressed="false">Albero</button></div><span class="mut" id="grStats"></span></div>
     <div class="gtr">
       <div class="gsearch" role="search">
         <input id="grSearch" type="search" aria-label="Cerca nel grafo" placeholder="Cerca codice, tipologia, descrizione… ( / )" autocomplete="off">
@@ -1055,6 +1109,21 @@ body.column-resizing,body.column-resizing *{cursor:col-resize!important;user-sel
   </div>
   <div class="gview" id="grViewWrap">
     <div class="gcanvas card" id="grCanvas">
+      <div id="grNet" class="hide" aria-label="Rete dei legami: tipologie, parametri, codici">
+        <canvas id="grNetCv" tabindex="0" aria-describedby="grNetHelp"></canvas>
+        <div class="netbar card">
+          <input id="grNetQ" type="search" placeholder="Cerca nodo…" aria-label="Cerca nella rete" autocomplete="off">
+          <label><input type="checkbox" data-nf="param" checked> Parametri</label>
+          <label><input type="checkbox" data-nf="code"> Codici</label>
+          <label><input type="checkbox" data-nf="x" checked> Interscambi</label>
+          <label><input type="checkbox" data-nf="acc" checked> Accessori</label>
+          <label title="Colora le tipologie in base alla completezza dei dati"><input type="checkbox" id="grNetHealth" checked> Stato</label>
+          <button class="ib sm" id="grNetFit" title="Adatta alla finestra" aria-label="Adatta alla finestra">⤢</button>
+        </div>
+        <div class="netlegend"><span><i style="background:var(--net-mac)"></i>Macrogruppo</span><span><i style="background:var(--net-grp)"></i>Tipologia</span><span><i style="background:var(--net-par)"></i>Parametro</span><span><i style="background:var(--net-x)"></i>Interscambio</span><span><i style="background:var(--net-code)"></i>Codice</span><span><i style="background:var(--net-acc)"></i>Accessorio</span></div>
+        <aside class="netside card hide" id="grNetSide" role="region" aria-label="Legami del nodo"></aside>
+        <p id="grNetHelp" class="sr-only">Passa sopra un nodo per evidenziarne i legami, clic per l'elenco dei collegamenti, trascina i nodi, rotella per lo zoom, trascina lo sfondo per spostarti. Doppio clic su una tipologia apre l'editor.</p>
+      </div>
       <svg id="grSvg" tabindex="0" role="tree" aria-label="Struttura macchina. Frecce per muoversi, Invio per i dettagli, Spazio per aprire o chiudere un ramo." aria-describedby="grKeysHelp"><g id="grView"><g id="grEdges" aria-hidden="true"></g><g id="grNodes"></g></g></svg>
       <details class="glegend">
         <summary>Legenda e comandi</summary>
@@ -1112,6 +1181,13 @@ body.column-resizing,body.column-resizing *{cursor:col-resize!important;user-sel
     </div>
     <div id="csvMsg" class="mut" style="margin-top:10px"></div>
   </div>
+</section>
+
+<!-- ============ RICHIESTE ============ -->
+<section id="t-requests" class="view hide">
+  <div class="pagehead"><h1>Richieste di nuovi codici</h1></div>
+  <p class="mut" id="reqSrc" style="margin:-4px 0 12px"></p>
+  <div id="reqHost"></div>
 </section>
 </main>
 <dialog id="dlg" class="dlg"></dialog>
@@ -1298,20 +1374,119 @@ function normalize(d) {
   d.version = 4;
   return d;
 }
+/* ---------- validazione prima di sostituire il database ----------
+   Tollerante con tutto ciò che le versioni precedenti producono (campi in più, campi facoltativi assenti,
+   valori numerici): li conserva o li ripara con un avviso. Blocca solo ciò che romperebbe il programma
+   (tipi sbagliati negli elenchi principali, ID strutturali duplicati, versione futura).
+   Ripara anche gli ID con caratteri non sicuri, aggiornando tutti i riferimenti. */
+const LISTS = ["sections", "params", "groups", "items", "inter", "acc", "accItems", "configs", "macros"];
+// ID ammessi: tutto tranne i caratteri che possono chiudere un attributo HTML o un selettore
+// (virgolette, < > &, barra rovesciata, accento grave, spazi e controlli).
+// Gli ID scritti dalle versioni precedenti (anche con = . : / ecc.) restano identici.
+const SAFE_ID = /^[^"'<>&\\`\s\u0000-\u001f]{1,128}$/;
+const isObj = v => v !== null && typeof v === "object" && !Array.isArray(v);
+function validateDb(d) {
+  const errors = [], warnings = [], E = m => errors.push(m), W = m => warnings.push(m);
+  if (!isObj(d)) return {errors: ["il file non contiene un database (oggetto JSON)"], warnings};
+  if (d.version != null && !(Number(d.version) <= 4)) E(`creato con una versione più recente del formato (v${esc(d.version)}): aggiorna il configuratore`);
+  for (const k of LISTS) {
+    if (d[k] == null) continue;
+    if (!Array.isArray(d[k])) { E(`«${k}» dovrebbe essere un elenco`); continue; }
+    if (d[k].some(x => !isObj(x))) E(`«${k}» contiene elementi non validi`);
+  }
+  if (d.settings != null && !isObj(d.settings)) E("«settings» non è valido");
+  if (errors.length) return {errors, warnings};
+  const name = (x, k) => { if (x.name != null && typeof x.name !== "string") { x.name = String(x.name); W(`${k}: nome convertito in testo`); } };
+  const strList = (x, f, label) => {
+    if (x[f] == null) return;
+    if (!Array.isArray(x[f])) { E(`${label}: «${f}» dovrebbe essere un elenco`); return; }
+    if (x[f].some(v => typeof v !== "string")) { x[f] = x[f].filter(v => v != null && v !== "").map(String); W(`${label}: valori convertiti in testo`); }
+  };
+  (d.params || []).forEach(p => { name(p, "Parametro"); if (p.values == null) { p.values = []; W(`Parametro «${p.name}»: senza valori`); } strList(p, "values", `Parametro «${p.name}»`); });
+  (d.groups || []).forEach(g => { name(g, "Tipologia"); strList(g, "params", `Tipologia «${g.name}»`); });
+  (d.acc || []).forEach(a => { name(a, "Accessorio"); strList(a, "values", `Accessorio «${a.name}»`); strList(a, "params", `Accessorio «${a.name}»`); });
+  for (const k of ["items", "inter", "accItems"]) (d[k] || []).forEach(r => {
+    if (r.cond == null) r.cond = {};
+    else if (!isObj(r.cond)) E(`Riga «${esc(r.code ?? "?")}»: condizioni non valide`);
+    else for (const [pid, v] of Object.entries(r.cond)) if (typeof v === "number" || typeof v === "boolean") r.cond[pid] = String(v);
+    for (const f of ["code", "desc", "note"]) if (r[f] != null && typeof r[f] !== "string") r[f] = String(r[f]);
+    if (r.qty != null && typeof r.qty !== "number") { const n = parseFloat(String(r.qty).replace(",", ".")); r.qty = Number.isFinite(n) ? n : 1; }
+  });
+  (d.configs || []).forEach(c => { if (c.sel != null && !isObj(c.sel)) E(`Configurazione «${esc(c.name ?? "?")}»: scelte non valide`); if (c.choice != null && !isObj(c.choice)) c.choice = {}; });
+  if (errors.length) return {errors, warnings};
+  // ---- ID: mancanti, duplicati, non sicuri ----
+  const M = new Map(), fresh = () => { let id; do id = "r" + uid(); while (M.has(id)); return id; };
+  for (const k of [...LISTS.filter(k => k !== "configs"), "configs"]) {
+    const seen = new Set();
+    for (const x of d[k] || []) {
+      if (x.id == null || x.id === "") { x.id = fresh(); W(`${k}: elemento senza ID, assegnato`); continue; }
+      const id = String(x.id);
+      if (seen.has(id)) {
+        if (["sections", "params", "groups", "acc", "macros"].includes(k)) E(`ID duplicato in «${k}»: ${esc(id)}`);
+        else { x.id = fresh(); W(`${k}: ID duplicato ${id} rinominato`); }
+        continue;
+      }
+      seen.add(id);
+      if (!SAFE_ID.test(id) || typeof x.id !== "string") { const n = SAFE_ID.test(id) ? id : fresh(); M.set(id, n); x.id = n; }
+    }
+  }
+  if (errors.length) return {errors, warnings};
+  if (M.size) {
+    const m = v => (v != null && M.has(String(v))) ? M.get(String(v)) : v;
+    const keys = o => isObj(o) ? Object.fromEntries(Object.entries(o).map(([k, v]) => [m(k), v])) : o;
+    (d.params || []).forEach(p => { if (p.sectionId != null) p.sectionId = m(p.sectionId); });
+    (d.groups || []).forEach(g => { if (g.params) g.params = g.params.map(m); if (g.macroId != null) g.macroId = m(g.macroId); });
+    (d.acc || []).forEach(a => { a.groupId = m(a.groupId); if (a.params) a.params = a.params.map(m); });
+    for (const k of ["items", "inter", "accItems"]) (d[k] || []).forEach(r => { r.groupId = m(r.groupId); r.cond = keys(r.cond); });
+    (d.configs || []).forEach(c => { c.sel = keys(c.sel); if (c.choice) c.choice = Object.fromEntries(Object.entries(c.choice).map(([k, v]) => [m(k), m(v)])); });
+    W(`${plural(M.size, "identificatore con caratteri non ammessi è stato sostituito", "identificatori con caratteri non ammessi sono stati sostituiti")} (riferimenti aggiornati)`);
+  }
+  // ---- riferimenti orfani: solo avviso, dati conservati ----
+  const ids = k => new Set((d[k] || []).map(x => x.id));
+  const sec = ids("sections"), par = ids("params"), grp = ids("groups"), acc = ids("acc");
+  const orphanP = (d.params || []).filter(p => p.sectionId != null && !sec.has(p.sectionId)).length;
+  if (orphanP) W(`${plural(orphanP, "parametro senza sezione valida", "parametri senza sezione valida")}`);
+  const orphanR = [...(d.items || []), ...(d.inter || [])].filter(r => !grp.has(r.groupId)).length + (d.accItems || []).filter(r => !acc.has(r.groupId)).length;
+  if (orphanR) W(`${plural(orphanR, "riga collegata a una tipologia inesistente", "righe collegate a tipologie inesistenti")}`);
+  const badCond = [...(d.items || []), ...(d.inter || []), ...(d.accItems || [])].filter(r => Object.keys(r.cond).some(k => !par.has(k) && !acc.has(k))).length;
+  if (badCond) W(`${plural(badCond, "riga con condizioni su parametri inesistenti", "righe con condizioni su parametri inesistenti")}`);
+  return {errors, warnings};
+}
+const dbProblemHtml = rep => `${rep.errors.length ? `<p><b>Problemi che impediscono l'apertura:</b></p><ul>${rep.errors.map(e => `<li>${e}</li>`).join("")}</ul>` : ""}${rep.warnings.length ? `<p class="mut">Avvisi (dati conservati):</p><ul class="mut">${rep.warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}`;
+let loadProblem = null;                       // database del browser illeggibile: conservato a parte, mai sovrascritto in silenzio
 function load() {
-  try { const d = JSON.parse(localStorage.getItem(KEY)); if (d) return normalize(d); } catch {}
+  let raw = null;
+  try { raw = localStorage.getItem(KEY); } catch {}
+  if (raw) {
+    try {
+      const d = JSON.parse(raw), rep = validateDb(d);
+      if (!rep.errors.length) return normalize(d);
+      loadProblem = rep;
+    } catch (e) { loadProblem = {errors: [esc(e.message)], warnings: []}; }
+    try { localStorage.setItem("cf_db_corrupt@" + INST, raw); } catch {}
+  }
   return seed();
 }
 let db = load();
+// errore persistente della memoria del browser (es. spazio esaurito): resta visibile finché un salvataggio non riesce,
+// così nessun altro messaggio può far credere che le modifiche siano al sicuro nel browser
+let storageError = "";
 function save() {
   const ss = $("#saveState");
+  if (window.TabLock?.readonly) return TabLock.refuse();   // un'altra scheda sta modificando: questa è in sola lettura
   try {
     localStorage.setItem(KEY, JSON.stringify(db));
+    storageError = "";
     ss.querySelector("span").textContent = "Salvato alle " + new Date().toLocaleTimeString("it-IT", {hour: "2-digit", minute: "2-digit"});
     ss.classList.remove("pulse"); void ss.offsetWidth; ss.classList.add("pulse");
-  } catch (e) { ss.querySelector("span").textContent = "Errore salvataggio"; toast("Errore salvataggio: " + e.message); }
+  } catch (e) {
+    storageError = e.message || String(e);
+    ss.className = "savestate fs-er"; ss.querySelector("span").textContent = "Modifiche solo in memoria";
+    toast("Memoria del browser non disponibile: le ultime modifiche sono solo in questa pagina. Salva o esporta il JSON.");
+  }
 }
-save();
+if (!loadProblem) save();     // con un database illeggibile non si riscrive nulla finché l'utente non sceglie
+else setTimeout(() => ask({title: "Database del browser non leggibile", body: dbProblemHtml(loadProblem) + `<p>Una copia intatta è conservata nel browser (chiave <span class="code">cf_db_corrupt</span>). Collega la cartella o importa un JSON valido: il configuratore è partito vuoto.</p>`, actions: [{label: "OK", value: null, default: true}]}), 0);
 const byId = (arr, id) => arr.find(x => x.id === id);
 /* ---- nome del configuratore (salvato nel database) ---- */
 const appTitle = () => String(db.settings?.title || "").trim() || (db.source === "configuratore-prelim.xlsx" ? "Configuratore Falcon" : "Nuovo configuratore");
@@ -1347,8 +1522,16 @@ const rowsOf = g => (g.kind === "acc" || db.acc.includes(g) ? db.accItems : [...
 
 /* =================== LOGICA =================== */
 const isDraft = r => !String(r.code || "").trim() || !!r.review || Object.values(r.cond).includes(Q);
-const matches = (r, sel) => Object.entries(r.cond).every(([pid, v]) => v !== Q && sel[pid] === v);
-const partialMatch = (r, sel) => Object.entries(r.cond).every(([pid, v]) => v === Q || sel[pid] === v);
+// «Qualsiasi valore»: scelta di consultazione nel pannello parametri (mai nel database). Con un parametro su Qualsiasi
+// valgono tutte le righe, qualunque sia il loro valore per quel parametro: il configuratore mostra le varianti.
+const ANY = "⁂qualsiasi";
+const selLabel = v => v === ANY ? "Qualsiasi" : String(v ?? "");
+const anyParams = (pids, sel) => pids.filter(pid => sel[pid] === ANY);
+const matches = (r, sel) => Object.entries(r.cond).every(([pid, v]) => v !== Q && (sel[pid] === v || sel[pid] === ANY));
+const partialMatch = (r, sel) => Object.entries(r.cond).every(([pid, v]) => v === Q || sel[pid] === v || sel[pid] === ANY);
+// etichetta della variante di una riga rispetto ai parametri su Qualsiasi («tutti» = riga valida per ogni valore)
+const variantOf = (r, pids) => pids.map(pid => `${P(pid)?.name || "?"}: ${r.cond[pid] ?? "tutti"}`).join(" · ");
+const condKey = r => JSON.stringify(Object.entries(r.cond || {}).sort());
 const combos = pids => pids.reduce((acc, pid) => acc.flatMap(c => (P(pid)?.values || []).map(v => ({...c, [pid]: v}))), [{}]);
 function coverage(g, arr) {
   const act = arr.filter(x => x.groupId === g.id && !isDraft(x));
@@ -1365,35 +1548,48 @@ function groupHealth(g) {
   const rows = db.items.filter(i => i.groupId === g.id), xs = !needsInter(g) ? [] : db.inter.filter(i => i.groupId === g.id);
   const drafts = rows.filter(isDraft).length + xs.filter(isDraft).length;
   const ci = coverage(g, db.items), cx = !needsInter(g) ? {missing: [], multi: []} : coverage(g, db.inter);
-  const uncov = ci.missing === null ? 0 : ci.missing.length + (cx.missing?.length || 0);
+  const uncov = (ci.missing?.length || 0) + (cx.missing?.length || 0);
+  const unk = ci.missing === null || cx.missing === null;      // oltre il limite: copertura non calcolata, mai «tutto definito»
   let ambig = cx.multi.length;
-  if (g.mode === "all" && !isM) {
+  if (g.mode === "one" || isM) ambig += ci.multi.length;    // una combinazione deve individuare un solo codice
+  else {
     const seen = {};
     rows.filter(r => !isDraft(r)).forEach(r => { const k = r.code.toLowerCase() + "#" + JSON.stringify(Object.entries(r.cond).sort()); seen[k] = (seen[k] || 0) + 1; });
     ambig += Object.values(seen).filter(n => n > 1).length;
   }
-  let aUnc = 0, aDr = 0;
-  if (!isM) for (const a of accsOf(g)) { const ps = accPseudo(a), cv = coverage(ps, db.accItems); aUnc += cv.missing?.length || 0; aDr += rowsOf(ps).filter(isDraft).length; }
-  const accN = aUnc + aDr;
+  let aUnc = 0, aDr = 0, aUnk = false;
+  if (!isM) for (const a of accsOf(g)) { const ps = accPseudo(a), cv = coverage(ps, db.accItems); if (cv.missing === null) aUnk = true; aUnc += cv.missing?.length || 0; aDr += rowsOf(ps).filter(isDraft).length; }
+  const accN = aUnc + aDr, nc = unk || aUnk;
   const parts = [];
+  if (nc) parts.push("copertura non calcolata (troppe combinazioni)");
   if (accN) parts.push(`accessori: ${accN} da sistemare`);
-  if (uncov) parts.push(`${uncov} scoperte`); if (drafts) parts.push(`${drafts} in bozza`); if (ambig) parts.push(`${ambig} ambigue`);
-  return {uncov, drafts, ambig, badge: ambig ? "er" : uncov || drafts || accN ? "wa" : "ok", title: parts.join(" · ") || "Tutto definito", n: uncov + drafts + accN};
+  if (uncov) parts.push(`${uncov} scoperte`); if (drafts) parts.push(`${drafts} in bozza`); if (ambig) parts.push(`${ambig} in conflitto`);
+  return {uncov, drafts, ambig, unk: nc, badge: ambig ? "er" : uncov || drafts || accN || nc ? "wa" : "ok", title: parts.join(" · ") || "Tutto definito", n: uncov + drafts + accN + (nc ? 1 : 0)};
 }
+// righe con stesso codice e stesse condizioni: duplicati veri, in conflitto in qualunque tipologia
+const dupRows = rows => { const seen = new Map(), out = new Set();
+  for (const r of rows) { const k = String(r.code).trim().toLowerCase() + "#" + condKey(r); if (seen.has(k)) { out.add(seen.get(k)); out.add(r); } else seen.set(k, r); }
+  return [...out]; };
+// `choice` resta nel JSON per compatibilità con le configurazioni salvate, ma non risolve più un conflitto:
+// una combinazione deve individuare un solo gruppo, più corrispondenze sono un errore del database da correggere.
 function resolveGroup(g, sel, choice) {
   const missing = g.params.filter(pid => !sel[pid]);
-  const base = {g, missing, items: [], cands: [], inter: []};
+  const base = {g, missing, items: [], cands: [], inter: [], conflict: []};
   if (missing.length) return {...base, state: "missing"};
   const act = arr => arr.filter(x => x.groupId === g.id && !isDraft(x) && matches(x, sel));
   const cands = act(db.items), inter = needsInter(g) ? act(db.inter) : [];
   // righe in bozza che potrebbero valere per questi parametri: la tipologia non è pronta finché non vengono completate
   const pending = rowsOf(g).filter(x => isDraft(x) && partialMatch(x, sel));
+  const anyP = anyParams(g.params, sel);
+  if (anyP.length) {                                     // esplorazione: tutte le varianti, senza conflitti
+    const vk = r => variantOf(r, anyP);
+    if (!cands.length && !inter.length) return {...base, pending, anyP, vk, state: pending.length ? "draft" : g.required ? "none" : "empty"};
+    return {...base, cands, inter, pending, anyP, vk, items: cands, state: "variants"};
+  }
   if (pending.length) return {...base, cands, inter, pending, state: "draft"};
   if (!cands.length) return {...base, inter, state: g.required ? "none" : "empty"};
-  if ((g.mode === "one" || g.kind === "master") && cands.length > 1) {
-    const ch = cands.find(i => i.id === choice?.[g.id]);
-    return {...base, cands, inter, items: ch ? [ch] : [], state: ch ? "ok" : "choose"};
-  }
+  const conflict = (g.mode === "one" || g.kind === "master") && cands.length > 1 ? cands : dupRows(cands);
+  if (conflict.length) return {...base, cands, inter, conflict, state: "conflict"};
   return {...base, cands, inter, items: cands, state: "ok"};
 }
 // accessorio: la scelta dell'opzione è in sel[acc.id]; "Nessuno" = assente
@@ -1406,17 +1602,22 @@ function resolveAcc(a, sel) {
   const pending = rows.filter(x => isDraft(x) && partialMatch(x, sel));
   if (pending.length) return {a, state: "draft", items: [], missing, pending};
   const items = rows.filter(x => !isDraft(x) && matches(x, sel));
+  const anyP = anyParams(a.params, sel);
+  if (anyP.length) return {a, state: items.length ? "ok" : "none", items, missing, anyP, vk: r => variantOf(r, anyP)};
+  const dups = dupRows(items);
+  if (dups.length) return {a, state: "conflict", items: [], missing, conflict: dups};
   return {a, state: items.length ? "ok" : "none", items, missing};
 }
 const accOk = x => x.state === "ok" || x.state === "off";
 function accIssue(x) {
-  return {choose: "scegli un'opzione", missing: "manca " + (x.missing || []).map(p => P(p)?.name).join(", "), draft: "righe in bozza da completare", none: `nessun codice per «${x.a.name}: ${x.v || ""}»`}[x.state] || "";
+  return {choose: "scegli un'opzione", missing: "manca " + (x.missing || []).map(p => P(p)?.name).join(", "), draft: "righe in bozza da completare", conflict: `${(x.conflict || []).length} righe duplicate (stesso codice e condizioni)`, none: `nessun codice per «${x.a.name}: ${x.v || ""}»`}[x.state] || "";
 }
-const isBaseReady = r => r.state === "empty" || (r.state === "ok" && (!needsInter(r.g) || r.inter.length === 1));
+const isBaseReady = r => r.state === "empty" || r.state === "variants" || (r.state === "ok" && (!needsInter(r.g) || r.inter.length === 1));
 const isReady = r => isBaseReady(r) && (r.acc || []).every(accOk);
 function issueText(r) {
   const T = {missing: () => "manca " + r.missing.map(p => P(p)?.name).join(", "), none: () => "nessun codice per questa combinazione",
-    draft: () => `${plural(r.pending.length, "riga in bozza o da revisionare", "righe in bozza o da revisionare")} da completare`, choose: () => `scegli tra ${r.cands.length} alternative`};
+    draft: () => `${plural(r.pending.length, "riga in bozza o da revisionare", "righe in bozza o da revisionare")} da completare`, choose: () => `scegli tra ${r.cands.length} alternative`,
+    conflict: () => `conflitto: ${r.conflict.length} righe valgono per questa combinazione (${r.conflict.slice(0, 4).map(i => i.code).join(", ")}${r.conflict.length > 4 ? "…" : ""})`};
   if (!isBaseReady(r)) {
     if (T[r.state]) return T[r.state]();
     return r.inter.length ? `${r.inter.length} interscambi validi: ne serve uno` : "assieme di interscambio non definito";
@@ -1430,7 +1631,8 @@ function resolveAll(sel, choice) {
   const all = m ? [m, ...res] : res;
   const issues = all.filter(r => !isReady(r)).map(r => ({g: r.g, text: issueText(r), missing: r.missing}));
   const lines = [];
-  if (m) lines.push(isReady(m) ? {lvl: 0, type: "Master", group: m.g.name, code: m.items[0].code, desc: m.items[0].desc, qty: 1}
+  if (m && m.state === "variants") m.items.forEach(i => lines.push({lvl: 0, type: "Master", group: m.g.name, code: i.code, desc: i.desc, qty: 1, variant: m.vk(i)}));
+  else if (m) lines.push(isReady(m) ? {lvl: 0, type: "Master", group: m.g.name, code: m.items[0].code, desc: m.items[0].desc, qty: 1}
     : {lvl: 0, type: "NON RISOLTO", group: m.g.name, code: "", desc: issueText(m), qty: "", unres: true});
   let curMacro = null;
   for (const r of res) {
@@ -1438,7 +1640,11 @@ function resolveAll(sel, choice) {
     const mc = macroOf(r.g), o = mc ? 1 : 0;            // dentro un macrogruppo tutto scende di un livello
     if (mc && mc !== curMacro) lines.push({lvl: 1, type: "Macrogruppo", group: mc.name, code: mc.code || "", desc: mc.name, qty: 1});
     curMacro = mc;
-    if (r.state === "ok") {
+    if (r.state === "variants") {
+      const ni = needsInter(r.g);
+      if (ni) r.inter.forEach(x => lines.push({lvl: 1 + o, type: "Interscambio", group: r.g.name, code: x.code, desc: x.desc, qty: 1, variant: r.vk(x)}));
+      r.items.forEach(i => lines.push({lvl: (ni ? 2 : 1) + o, type: "Codice", group: r.g.name, code: i.code, desc: i.desc, qty: i.qty, variant: r.vk(i)}));
+    } else if (r.state === "ok") {
       const ni = needsInter(r.g), x = r.inter.length === 1 ? r.inter[0] : null;
       if (ni) lines.push(x ? {lvl: 1 + o, type: "Interscambio", group: r.g.name, code: x.code, desc: x.desc, qty: 1}
         : {lvl: 1 + o, type: "NON RISOLTO", group: r.g.name, code: "", desc: issueText(r), qty: "", unres: true});
@@ -1446,12 +1652,12 @@ function resolveAll(sel, choice) {
     } else if (!isBaseReady(r)) lines.push({lvl: 1 + o, type: "NON RISOLTO", group: r.g.name, code: "", desc: issueText(r), qty: "", unres: true});
     for (const x of r.acc) {
       if (x.state === "off") continue;
-      if (x.state === "ok") x.items.forEach(i => lines.push({lvl: 2 + o, type: "Accessorio", group: r.g.name, acc: `${x.a.name}: ${x.v}`, code: i.code, desc: i.desc, qty: i.qty}));
+      if (x.state === "ok") x.items.forEach(i => lines.push({lvl: 2 + o, type: "Accessorio", group: r.g.name, acc: `${x.a.name}: ${x.v}`, code: i.code, desc: i.desc, qty: i.qty, ...(x.vk ? {variant: x.vk(i)} : {})}));
       else lines.push({lvl: 2 + o, type: "NON RISOLTO", group: r.g.name, acc: x.a.name, code: "", desc: `Accessorio «${x.a.name}»: ${accIssue(x)}`, qty: "", unres: true});
     }
   }
   const ready = all.filter(isReady).length;
-  return {m, res, lines, issues, ready, total: all.length};
+  return {m, res, lines, issues, ready, total: all.length, explore: Object.values(sel).includes(ANY)};
 }
 const bomSig = lines => (lines || []).map(l => `${l.lvl}|${l.code}|${l.qty}`).join(";");
 
@@ -1472,8 +1678,11 @@ const reqByNames = pid => [...reqBy(pid).map(g => g.name), ...db.acc.filter(a =>
 function paramControl(p, req) {
   const v = cfg.sel[p.id], u = v ? "" : "unset" + (req ? " req" : "");
   const compact = p.values.length <= 4 && p.values.join("").length <= 30;
-  if (compact) return `<div class="seg ${u}" data-p="${p.id}">${p.values.map(x => `<button data-v="${esc(x)}" class="${v === x ? "on" : ""}">${esc(x)}</button>`).join("")}</div>`;
-  return `<select data-p="${p.id}" class="${u}"><option value="">— scegli —</option>${p.values.map(x => `<option ${v === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
+  // «Qualsiasi» solo dove serve: parametro con più valori e usato da almeno una tipologia o accessorio
+  const anyOk = p.values.length > 1 && (reqBy(p.id).length > 0 || db.acc.some(a => a.params.includes(p.id)));
+  const anyBtn = anyOk || v === ANY ? `<button data-v="${ANY}" class="anyv ${v === ANY ? "on" : ""}" title="Qualsiasi valore: mostra tutte le varianti per ${esc(p.name)}">Qualsiasi</button>` : "";
+  if (compact) return `<div class="seg ${u}" data-p="${esc(p.id)}">${p.values.map(x => `<button data-v="${esc(x)}" class="${v === x ? "on" : ""}">${esc(x)}</button>`).join("")}${anyBtn}</div>`;
+  return `<select data-p="${esc(p.id)}" class="${u}"><option value="">— scegli —</option>${anyOk || v === ANY ? `<option value="${ANY}" ${v === ANY ? "selected" : ""}>Qualsiasi valore</option>` : ""}${p.values.map(x => `<option ${v === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
 }
 // v5: sezioni comprimibili (stato solo in memoria, nessuna nuova chiave localStorage)
 const secClosed = {};
@@ -1482,7 +1691,7 @@ function secSummary(s) {
   const ps = db.params.filter(p => p.sectionId === s.id), set = ps.filter(p => cfg.sel[p.id]);
   const missReq = ps.some(p => !cfg.sel[p.id] && reqBy(p.id).some(g => g.required));
   return {cnt: `<span class="cnt ${set.length === ps.length ? "ok" : missReq && set.length ? "wa" : ""}" title="${set.length} di ${ps.length} parametri impostati">${set.length}/${ps.length}</span>`,
-    sum: set.length ? set.map(p => `${esc(p.name)} <b>${esc(cfg.sel[p.id])}</b>`).join(" · ") : '<span class="mut">nessun valore impostato</span>'};
+    sum: set.length ? set.map(p => `${esc(p.name)} <b${cfg.sel[p.id] === ANY ? ' class="anyv"' : ""}>${esc(selLabel(cfg.sel[p.id]))}</b>`).join(" · ") : '<span class="mut">nessun valore impostato</span>'};
 }
 function updateSecSummaries() {
   $$("#cfgInputs .psec").forEach(el => { const s = byId(db.sections, el.dataset.sec); if (!s) return; const x = secSummary(s);
@@ -1495,16 +1704,16 @@ function renderInputs() {
     const ps = db.params.filter(p => p.sectionId === s.id);
     if (!ps.length) return "";
     const x = secSummary(s), closed = !!secClosed[s.id];
-    return `<div class="psec ${closed ? "closed" : ""}" data-sec="${s.id}">
-      <button type="button" class="sech" data-sech="${s.id}" aria-expanded="${!closed}">${CHEV}<span class="eyebrow">${esc(s.name)}</span>${x.cnt}</button>
+    return `<div class="psec ${closed ? "closed" : ""}" data-sec="${esc(s.id)}">
+      <button type="button" class="sech" data-sech="${esc(s.id)}" aria-expanded="${!closed}">${CHEV}<span class="eyebrow">${esc(s.name)}</span>${x.cnt}</button>
       <div class="psum">${x.sum}</div>
       <div class="pbody">${ps.map(p => {
       const gs = reqBy(p.id), req = gs.some(g => g.required), names = reqByNames(p.id);
       const tip = names.length ? "Richiesto da: " + names.join(", ") : "Non usato da nessuna tipologia";
-      return `<div class="pfield ${names.length ? "" : "unused"}" data-pf="${p.id}">
-        <div class="lbl"><span>${esc(p.name)}</span><button type="button" class="rq ${names.length ? "" : "none"}" data-rq="${p.id}" aria-expanded="false" title="${esc(tip)}" aria-label="${esc(tip)}">${names.length}</button></div>
+      return `<div class="pfield ${names.length ? "" : "unused"}" data-pf="${esc(p.id)}">
+        <div class="lbl"><span>${esc(p.name)}</span><button type="button" class="rq ${names.length ? "" : "none"}" data-rq="${esc(p.id)}" aria-expanded="false" title="${esc(tip)}" aria-label="${esc(tip)}">${names.length}</button></div>
         ${paramControl(p, req)}
-        <button type="button" class="clr ${cfg.sel[p.id] ? "" : "hide"}" data-clr="${p.id}" title="Azzera ${esc(p.name)}" aria-label="Azzera ${esc(p.name)}">×</button>
+        <button type="button" class="clr ${cfg.sel[p.id] ? "" : "hide"}" data-clr="${esc(p.id)}" title="Azzera ${esc(p.name)}" aria-label="Azzera ${esc(p.name)}">×</button>
         <div class="reqby hide">${names.length ? "<b>Richiesto da</b> " + names.map(esc).join(", ") : "Non usato da nessuna tipologia"}</div></div>`;
     }).join("")}</div></div>`;
   }).join("") || '<div class="empty">Nessun parametro. Vai su “Parametri”.</div>';
@@ -1519,18 +1728,20 @@ function renderResult() {
   const keys = new Set(), fresh = k => prevKeys && !prevKeys.has(k) ? "flash" : "";
 
   // ---- hero: master
-  const m = R.m, mi = m && isReady(m) ? m.items[0] : null;
+  const m = R.m, mi = m && m.state === "ok" && isReady(m) ? m.items[0] : null;
   const pct = R.total ? Math.round(R.ready / R.total * 100) : 0;
   const oldW = $("#hero .progress>i")?.style.width || "0%";
   let mTitle, mDesc, mCls = "wa";
   if (!m) { mTitle = "Nessuna tipologia master"; mDesc = ""; }
   else if (mi) { mTitle = esc(mi.code); mDesc = esc(mi.desc); mCls = "ok"; }
   else if (m.state === "missing") { mTitle = "Scegli " + m.missing.map(p => esc(P(p)?.name)).join(", "); mDesc = "Il master Creo dipende da " + m.g.params.map(p => esc(P(p)?.name)).join(", "); }
-  else if (m.state === "choose") { mTitle = `${m.cands.length} master validi: scegline uno`;
-    mDesc = `<div class="seg mseg" id="mSeg">${m.cands.map(i => `<button data-mpick="${i.id}" class="code">${esc(i.code)}</button>`).join("")}</div>`; }
-  else if (m.state === "draft") { mTitle = "Master in bozza: da completare"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Completalo in Tipologie</a>`; }
-  else if (!db.items.some(i => i.groupId === m.g.id)) { mCls = "ne"; mTitle = "Assieme master non ancora definito"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Definiscilo in Tipologie</a>`; }
-  else { mCls = "er"; mTitle = "Nessun master per questi parametri"; mDesc = `<a class="tlink" data-goedit="${m.g.id}">Aggiungilo in Tipologie</a>`; }
+  else if (m.state === "variants") { mCls = "ok"; mTitle = `${plural(m.items.length, "master possibile", "master possibili")}`;
+    mDesc = m.items.slice(0, 8).map(i => `<span class="code">${esc(i.code)}</span> <span class="mut">(${esc(m.vk(i))})</span>`).join(" · ") + (m.items.length > 8 ? " …" : ""); }
+  else if (m.state === "conflict") { mCls = "er"; mTitle = `Conflitto: ${m.conflict.length} master per questi parametri`;
+    mDesc = `${m.conflict.map(i => `<span class="code">${esc(i.code)}</span>`).join(", ")} · <a class="tlink" data-goedit="${esc(m.g.id)}">Correggi in Tipologie</a>`; }
+  else if (m.state === "draft") { mTitle = "Master in bozza: da completare"; mDesc = `<a class="tlink" data-goedit="${esc(m.g.id)}">Completalo in Tipologie</a>`; }
+  else if (!db.items.some(i => i.groupId === m.g.id)) { mCls = "ne"; mTitle = "Assieme master non ancora definito"; mDesc = `<a class="tlink" data-goedit="${esc(m.g.id)}">Definiscilo in Tipologie</a>`; }
+  else { mCls = "er"; mTitle = "Nessun master per questi parametri"; mDesc = `<a class="tlink" data-goedit="${esc(m.g.id)}">Aggiungilo in Tipologie</a>`; }
   const mPop = prevStates.__m && prevStates.__m !== mCls ? "pop" : ""; prevStates.__m = mCls;
   const nGap = R.res.filter(hiddenGap).length, notReady = R.total - R.ready - nGap;
   $("#hero").innerHTML = `
@@ -1540,24 +1751,25 @@ function renderResult() {
         <div class="mdesc">${mDesc}</div></div></div>
     <div class="hprog"><div class="hnum"><b>${R.ready}</b><span> / ${R.total} tipologie pronte</span></div>
       <div class="progress ${pct < 100 ? "part" : ""}" role="progressbar" aria-valuemin="0" aria-valuemax="${R.total}" aria-valuenow="${R.ready}" aria-label="Tipologie pronte"><i style="width:${oldW}"></i></div>
-      <div class="hsub">${notReady ? `<button type="button" class="warn hbtn" data-issues-toggle aria-expanded="${issuesOpen}" title="Mostra o nascondi il dettaglio di cosa è da risolvere">${notReady} da risolvere</button>` : '<span class="ok">Tutto pronto</span>'}${nGap ? ` <span class="mut">· ${nGap} con dati da inserire (nascoste)</span>` : ""}</div></div>`;
+      ${R.explore ? `<div class="hsub explore" role="note"><b>Esplorazione</b>: ${plural(db.params.filter(p => cfg.sel[p.id] === ANY).length, "parametro su «Qualsiasi»", "parametri su «Qualsiasi»")}: ${plural([R.m, ...R.res].filter(r => r?.state === "variants").length, "tipologia mostra", "tipologie mostrano")} tutte le varianti (contate come pronte, ma non è una configurazione univoca)</div>` : ""}
+      <div class="hsub">${notReady ? `<button type="button" class="warn hbtn" data-issues-toggle aria-expanded="${issuesOpen}" title="Mostra o nascondi il dettaglio di cosa è da risolvere">${notReady} da risolvere</button>` : (R.explore ? '<span class="ok">Nessun problema nelle varianti</span>' : '<span class="ok">Tutto pronto</span>')}${nGap ? ` <span class="mut">· ${nGap} con dati da inserire (nascoste)</span>` : ""}</div></div>`;
   requestAnimationFrame(() => requestAnimationFrame(() => { const i = $("#hero .progress>i"); if (i) i.style.width = pct + "%"; }));
 
   // ---- barra problemi (stesso conteggio dell'hero), divisa in: scelte da fare qui / dati da inserire nel database
   const started = Object.keys(cfg.sel).length > 0;
   const rOf = g => (m && m.g === g) ? m : (R.res.find(r => r.g === g) || {});
   const issues = R.issues.filter(i => !hiddenGap(rOf(i.g)));
-  const isChoice = r => r.state === "missing" || r.state === "choose" || (isBaseReady(r) && (r.acc || []).some(x => x.state === "choose" || x.state === "missing"));
+  const isChoice = r => r.state === "missing" || (isBaseReady(r) && (r.acc || []).some(x => x.state === "choose" || x.state === "missing"));
   const iCh = issues.filter(i => isChoice(rOf(i.g))), iDb = issues.filter(i => !isChoice(rOf(i.g)));
-  const iLinks = arr => arr.map(i => `<a data-goto="${i.g.id}" href="javascript:void 0">${esc(i.g.name)}</a>`).join('<span class="sep" aria-hidden="true">·</span>');
+  const iLinks = arr => arr.map(i => `<a data-goto="${esc(i.g.id)}" href="javascript:void 0">${esc(i.g.name)}</a>`).join('<span class="sep" aria-hidden="true">·</span>');
   $("#issues").innerHTML = !started ? "" : issues.length
     ? `<div class="issuebar" role="region" aria-label="Da risolvere">
         <div class="ibh"><span class="ibn">${issues.length}</span><b>da risolvere</b><span class="mut">${iCh.length ? plural(iCh.length, "scelta da fare", "scelte da fare") : ""}${iCh.length && iDb.length ? " · " : ""}${iDb.length ? plural(iDb.length, "dato da inserire nel database", "dati da inserire nel database") : ""}</span></div>
         ${iCh.length ? `<div class="ibr"><span class="ibk wa">Scelte da fare</span><div class="ibl">${iLinks(iCh)}</div></div>` : ""}
         ${iDb.length ? `<div class="ibr"><span class="ibk db">Dati da inserire</span><div class="ibl">${iLinks(iDb)}</div></div>` : ""}
         <details><summary>Dettagli</summary><ul>${issues.map(i => `<li><b>${esc(i.g.name)}</b>: ${i.missing.length
-          ? "manca " + i.missing.map(p => `<a data-param="${p}" href="javascript:void 0">${esc(P(p)?.name)}</a>`).join(", ") : esc(i.text)}</li>`).join("")}</ul></details></div>`
-    : `<div class="issuebar okbar"><span class="st ok" aria-hidden="true">✓</span>${nGap ? `Nessuna scelta da fare <span class="mut">· ${nGap} ${nGap === 1 ? "tipologia" : "tipologie"} con dati ancora da inserire, nascoste</span>` : "Configurazione completa: master, interscambi e codici definiti."}</div>`;
+          ? "manca " + i.missing.map(p => `<a data-param="${esc(p)}" href="javascript:void 0">${esc(P(p)?.name)}</a>`).join(", ") : esc(i.text)}</li>`).join("")}</ul></details></div>`
+    : `<div class="issuebar okbar"><span class="st ok" aria-hidden="true">✓</span>${nGap ? `Nessuna scelta da fare <span class="mut">· ${nGap} ${nGap === 1 ? "tipologia" : "tipologie"} con dati ancora da inserire, nascoste</span>` : (R.explore ? "Esplorazione: nessun problema nelle varianti mostrate. Per una configurazione univoca scegli un valore al posto di «Qualsiasi»." : "Configurazione completa: master, interscambi e codici definiti.")}</div>`;
   if (!issues.length) issuesOpen = false;
   $("#issues").classList.toggle("hide", !!issues.length && !issuesOpen);
   if (!started) {
@@ -1570,7 +1782,7 @@ function renderResult() {
 
   // ---- schede v8: macrogruppo → sotto-parte → interscambio → codici → accessori
   // stato: verde = pronta · ambra = scelta da fare qui · rosso/contorno = dato mancante nel database · grigio = neutro
-  const LBL = {ok: ["ok", "Pronta"], empty: ["ne", "Opzionale"], missing: ["wa", "Manca parametro"], choose: ["wa", "Scegli alternativa"], draft: ["db", "In bozza"], none: ["er", "Manca codice"]};
+  const LBL = {ok: ["ok", "Pronta"], empty: ["ne", "Opzionale"], missing: ["wa", "Manca parametro"], choose: ["wa", "Scegli alternativa"], draft: ["db", "In bozza"], none: ["er", "Manca codice"], conflict: ["er", "Conflitto"], variants: ["ok", "Varianti"]};
   let nOpen = 0;
   const cardInfo = [];
   const lrow = (k, v, cls = "") => `<div class="lrow ${cls}"><span class="lk">${k}</span><div class="lv">${v}</div></div>`;
@@ -1585,30 +1797,44 @@ function renderResult() {
     const pop = prevStates[g.id] && prevStates[g.id] !== cls ? "pop" : ""; prevStates[g.id] = cls;
     const tip = ready ? (r.state === "empty" ? "Tipologia opzionale: nessun codice per questa combinazione" : gap ? "Nel database manca ancora il codice o l'interscambio (non segnalato)" : needsInter(g) ? "Master, interscambio e codici definiti" : "Codici definiti (interscambio non previsto)") : issueText(r);
     const deps = g.params.map(pid => cfg.sel[pid]
-      ? `<span>${esc(P(pid)?.name)} <b>${esc(cfg.sel[pid])}</b></span>`
-      : `<button type="button" class="un" data-param="${pid}" title="Da impostare nei parametri">${esc(P(pid)?.name)}?</button>`).join(' <span class="sep" aria-hidden="true">·</span> ') || '<span>Non dipende da parametri</span>';
+      ? `<span>${esc(P(pid)?.name)} <b${cfg.sel[pid] === ANY ? ' class="anyv"' : ""}>${esc(selLabel(cfg.sel[pid]))}</b></span>`
+      : `<button type="button" class="un" data-param="${esc(pid)}" title="Da impostare nei parametri">${esc(P(pid)?.name)}?</button>`).join(' <span class="sep" aria-hidden="true">·</span> ') || '<span>Non dipende da parametri</span>';
     let inter = "", body = "";
-    if ((r.state === "ok" || r.state === "choose") && needsInter(g) && !(gap && !r.inter.length)) {
+    if ((r.state === "ok" || r.state === "conflict") && needsInter(g) && !(gap && !r.inter.length)) {
       const x = r.inter.length === 1 ? r.inter[0] : null;
       if (x) keys.add("x" + x.id);
       // v11: interscambio non più in riga, ma icona nell'intestazione con anteprima al passaggio del mouse
       const st = x ? "ok" : r.inter.length ? "er" : "miss";
       const lab = x ? `Interscambio: ${x.code}` : r.inter.length ? "Interscambio ambiguo" : "Interscambio mancante";
-      inter = `<button type="button" class="xbtn ${st} ${x ? fresh("x" + x.id) : ""}" data-xg="${g.id}" data-xs="${st}" ${x ? `data-xi="${x.id}"` : ""} aria-label="${esc(lab)}">${IC.asm}</button>`;
+      inter = `<button type="button" class="xbtn ${st} ${x ? fresh("x" + x.id) : ""}" data-xg="${esc(g.id)}" data-xs="${st}" ${x ? `data-xi="${esc(x.id)}"` : ""} aria-label="${esc(lab)}">${IC.asm}</button>`;
     }
-    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="mut" style="text-align:right;white-space:nowrap">×${esc(i.qty ?? 1)}</td>`;
+    // nessuna colonna quantità nelle schede: il configuratore individua i gruppi, non gestisce distinte
+    // (la cella ×N sottraeva spazio alla descrizione e la mandava a capo)
+    const row = (i, strong) => `<td class="code" ${strong ? 'style="font-weight:600"' : ""} title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td>`;
+    // esplorazione: righe raggruppate per variante (valore dei parametri su «Qualsiasi»)
+    const variantTable = (rows, vk, pfx, isX) => { let last = null;
+      return `<table class="ctab vtab"><tbody>${rows.map(i => [vk(i), i]).sort((a, b) => a[0].localeCompare(b[0], "it", {numeric: true})).map(([v, i]) => { keys.add(pfx + i.id);
+        const h = v !== last ? `<tr class="vgrp"><td colspan="2">${esc(v)}</td></tr>` : ""; last = v;
+        return `${h}<tr class="${fresh(pfx + i.id)}"><td class="code" title="${esc(i.code)}">${isX ? IC.asm + " " : ""}${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td></tr>`; }).join("")}</tbody></table>`; };
     const note = (c, t) => `<div class="note ${c}">${t}</div>`;
     if (r.state === "missing") body = ""; // i parametri mancanti sono già evidenziati (cliccabili) nella riga attributi
     else if (r.state === "none" && gap) body = lrow("Codici", note("ne", "Codice non ancora inserito."));
-    else if (r.state === "none") body = lrow("Codici", note("er", `Nessun codice per questa combinazione · <a class="tlink" data-goedit="${g.id}" href="javascript:void 0">aggiungilo in Tipologie</a>`));
-    else if (r.state === "draft") body = lrow("Codici", note("wa", `${plural(r.pending.length, "riga in bozza o da revisionare potrebbe", "righe in bozza o da revisionare potrebbero")} valere qui (${r.pending.map(x => `<span class="code">${esc(x.code || "senza codice")}</span>`).slice(0, 4).join(", ")}${r.pending.length > 4 ? "…" : ""}) · <a class="tlink" data-goedit="${g.id}" href="javascript:void 0">Completale</a>`));
+    else if (r.state === "none") body = lrow("Codici", note("er", `Nessun codice per questa combinazione · <a class="tlink" data-goedit="${esc(g.id)}" href="javascript:void 0">aggiungilo in Tipologie</a>`));
+    else if (r.state === "draft") body = lrow("Codici", note("wa", `${plural(r.pending.length, "riga in bozza o da revisionare potrebbe", "righe in bozza o da revisionare potrebbero")} valere qui (${r.pending.map(x => `<span class="code">${esc(x.code || "senza codice")}</span>`).slice(0, 4).join(", ")}${r.pending.length > 4 ? "…" : ""}) · <a class="tlink" data-goedit="${esc(g.id)}" href="javascript:void 0">Completale</a>`));
     else if (r.state === "empty") body = lrow("Codici", note("ne", "Nessun codice (tipologia opzionale)."));
-    else if (g.mode === "one" && r.cands.length > 1) body = lrow("Codici", `${r.state === "choose" ? note("wa", "Scegli un'alternativa:") : ""}<table class="ctab"><tbody>${r.cands.map(i => { keys.add("i" + i.id); return `
-        <tr class="${fresh("i" + i.id)} pick" data-pick="${g.id}" data-i="${i.id}"><td class="rad"><input type="radio" name="ch${g.id}" ${r.items[0]?.id === i.id ? "checked" : ""} aria-label="Scegli ${esc(i.code)}"></td>${row(i)}</tr>`; }).join("")}</tbody></table>`);
+    else if (r.state === "conflict") body = lrow("Codici", note("er", `<b>Conflitto</b>: ${r.conflict.length > 1 && (g.mode === "one" || g.kind === "master") && !dupRows(r.conflict).length
+        ? `${r.conflict.length} righe valgono per questa combinazione, ne serve una sola`
+        : "righe duplicate (stesso codice e condizioni)"} · <a class="tlink" data-goedit="${esc(g.id)}" href="javascript:void 0">Correggi in Tipologie</a>`)
+        // tipologia «tutti i codici»: si vedono anche le righe valide, le duplicate sono evidenziate
+        + `<table class="ctab"><tbody>${(g.mode === "all" && g.kind !== "master" ? r.cands : r.conflict).map(i => { keys.add("i" + i.id); const c = r.conflict.includes(i);
+          return `<tr class="${fresh("i" + i.id)} ${c ? "cfl" : ""}" ${c ? 'title="Riga in conflitto"' : ""}>${row(i)}</tr>`; }).join("")}</tbody></table>`);
+    else if (r.state === "variants") body = (needsInter(g) ? lrow("Interscambi", r.inter.length ? variantTable(r.inter, r.vk, "x", true) : note("ne", "Nessun interscambio definito.")) : "")
+        + lrow("Codici", r.items.length ? variantTable(r.items, r.vk, "i") : note("ne", "Nessun codice."))
+        + (r.pending?.length ? note("wa", `${plural(r.pending.length, "riga in bozza o da revisionare esclusa", "righe in bozza o da revisionare escluse")} · <a class="tlink" data-goedit="${esc(g.id)}" href="javascript:void 0">Completale</a>`) : "");
     else body = lrow(r.items.length === 1 ? "Codice" : "Codici", `<table class="ctab"><tbody>${r.items.map(i => { keys.add("i" + i.id); return `<tr class="${fresh("i" + i.id)}">${row(i, true)}</tr>`; }).join("")}</tbody></table>`);
     const accs = r.acc.length ? r.acc.map(x => accHtml(x, keys, fresh)).join("") : "";
     const inner = body + accs;
-    return `<div class="card gcard ${animateCards ? "enter" : ""} ${onlyOpen && ready ? "hide" : ""}" data-gid="${g.id}" style="view-transition-name:g-${g.id};${animateCards ? `animation-delay:${Math.min(k * 25, 200)}ms` : ""}">
+    return `<div class="card gcard ${animateCards ? "enter" : ""} ${onlyOpen && ready ? "hide" : ""}" data-gid="${esc(g.id)}" style="view-transition-name:g-${g.id};${animateCards ? `animation-delay:${Math.min(k * 25, 200)}ms` : ""}">
       <div class="gh"><div class="ght"><h3>${esc(g.name)}</h3><div class="gdeps">${deps}</div></div>${inter}<span class="schip ${cls} ${pop}" title="${esc(tip)}"><i aria-hidden="true"></i>${lbl}</span></div>
       ${inner ? `<div class="gbody">${inner}</div>` : ""}</div>`;
   });
@@ -1619,7 +1845,7 @@ function renderResult() {
     if (!mc) { htmlC += cardsHtml[k++]; continue; }
     let j = k; while (j < cardsHtml.length && macroOf(cardInfo[j].g) === mc) j++;
     const sub = cardInfo.slice(k, j), nr = sub.filter(x => x.ready).length, all = nr === sub.length;
-    htmlC += `<section class="card mcard ${all ? "done" : ""} ${onlyOpen && all ? "hide" : ""}" data-mid="${mc.id}" aria-label="Macrogruppo ${esc(mc.name)}">
+    htmlC += `<section class="card mcard ${all ? "done" : ""} ${onlyOpen && all ? "hide" : ""}" data-mid="${esc(mc.id)}" aria-label="Macrogruppo ${esc(mc.name)}">
       <div class="mh"><span class="mic" aria-hidden="true">${IC.asm}</span><div class="mht"><div class="mhn"><h3>${esc(mc.name)}</h3>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}</div></div>
         <div class="mprog" title="Tipologie pronte nel macrogruppo"><span><b>${nr}</b>/${sub.length} pronte</span><span class="progress ${all ? "" : "part"}"><i style="width:${Math.round(nr / sub.length * 100)}%"></i></span></div></div>
       ${cardsHtml.slice(k, j).join("")}</section>`;
@@ -1636,18 +1862,22 @@ function renderResult() {
   $("#cfgBom").innerHTML = `<div class="scroll"><table class="bomt"><thead><tr><th style="width:40px">Liv.</th><th>Codice</th><th>Descrizione</th><th>Tipo</th><th>Tipologia</th><th>Quantità</th></tr></thead><tbody>${
     R.lines.map(l => { const gname = l.lvl <= 1 && l.type !== "NON RISOLTO" ? "" : (l.group !== prevG ? esc(l.group) : ""); if (l.lvl > 1 || l.type === "NON RISOLTO") prevG = l.group; if (l.type === "Macrogruppo") prevG = null;
       const acc = l.type === "Accessorio" || (l.unres && l.acc);
-      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + (l.code ? codeLink(rowByCode(l.code), l.code) : "")}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}</td><td class="mut">${gname}</td><td style="text-align:right">${esc(l.qty ?? "")}</td></tr>`; }).join("")}</tbody></table></div>`;
+      return `<tr class="l${l.lvl} ${l.unres ? "unres" : ""} ${acc ? "acc" : ""}"><td><span class="lvl">${l.lvl}</span></td><td class="code">${l.unres ? '<span class="tag wa">da risolvere</span>' : (l.type === "Macrogruppo" || l.type === "Interscambio" ? IC.asm + " " : acc ? IC.plug + " " : "") + (l.code ? codeLink(rowByCode(l.code), l.code) : "")}</td><td>${esc(l.desc)}</td><td>${acc ? `<span class="tag xa">Accessorio</span>${l.acc ? `<div class="mut">${esc(l.acc)}</div>` : ""}` : l.unres ? '<span class="mut">Non risolto</span>' : `<span class="ty">${TY[l.type] || esc(l.type)}</span>`}${l.variant ? `<div class="mut vlab">${esc(l.variant)}</div>` : ""}</td><td class="mut">${gname}</td><td style="text-align:right">${esc(l.qty ?? "")}</td></tr>`; }).join("")}</tbody></table></div>`;
 
   prevKeys = keys; animateCards = false;
 }
 function accHtml(x, keys, fresh) {
   const a = x.a, v = cfg.sel[a.id] && a.values.includes(cfg.sel[a.id]) ? cfg.sel[a.id] : "";
-  const seg = `<div class="seg sm ${!v && a.required ? "unset req" : ""}" data-accsel="${a.id}" role="group" aria-label="Opzione accessorio ${esc(a.name)}">${a.required ? "" : `<button data-v="" class="none ${v ? "" : "on"}">Nessuno</button>`}${a.values.map(o => `<button data-v="${esc(o)}" class="${v === o ? "on" : ""}">${esc(o)}</button>`).join("")}</div>`;
+  const seg = `<div class="seg sm ${!v && a.required ? "unset req" : ""}" data-accsel="${esc(a.id)}" role="group" aria-label="Opzione accessorio ${esc(a.name)}">${a.required ? "" : `<button data-v="" class="none ${v ? "" : "on"}">Nessuno</button>`}${a.values.map(o => `<button data-v="${esc(o)}" class="${v === o ? "on" : ""}">${esc(o)}</button>`).join("")}</div>`;
   let body = "";
-  if (x.state === "ok") body = `<table class="ctab"><tbody>${x.items.map(i => { keys.add("a" + i.id); return `<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td><td class="mut" style="text-align:right;white-space:nowrap">×${esc(i.qty ?? 1)}</td></tr>`; }).join("")}</tbody></table>`;
-  else if (x.state === "missing") body = `<div class="note wa">Scegli ${x.missing.map(p => `<a class="tlink" data-param="${p}" href="javascript:void 0"><b>${esc(P(p)?.name)}</b></a>`).join(", ")} nei parametri.</div>`;
-  else if (x.state === "draft") body = `<div class="note wa">Righe dell'accessorio in bozza · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Completale in Tipologie</a></div>`;
-  else if (x.state === "none") body = `<div class="note er">Nessun codice per «${esc(v)}» · <a class="tlink" data-goedit="${a.groupId}" href="javascript:void 0">Aggiungilo in Tipologie</a></div>`;
+  if (x.state === "ok") { let last = null;
+    body = `<table class="ctab"><tbody>${(x.vk ? [...x.items].sort((p, q) => x.vk(p).localeCompare(x.vk(q), "it", {numeric: true})) : x.items).map(i => { keys.add("a" + i.id);
+      const v = x.vk ? x.vk(i) : null, h = v != null && v !== last ? `<tr class="vgrp"><td colspan="2">${esc(v)}</td></tr>` : ""; last = v;
+      return `${h}<tr class="${fresh("a" + i.id)}"><td class="code" style="font-weight:600" title="${esc(i.code)}">${codeLink(i)}</td><td class="ds" title="${esc(i.desc)}">${esc(i.desc)}</td></tr>`; }).join("")}</tbody></table>`; }
+  else if (x.state === "conflict") body = `<div class="note er"><b>Conflitto</b>: righe duplicate (${x.conflict.map(i => `<span class="code">${esc(i.code)}</span>`).join(", ")}) · <a class="tlink" data-goedit="${esc(a.groupId)}" href="javascript:void 0">Correggi in Tipologie</a></div>`;
+  else if (x.state === "missing") body = `<div class="note wa">Scegli ${x.missing.map(p => `<a class="tlink" data-param="${esc(p)}" href="javascript:void 0"><b>${esc(P(p)?.name)}</b></a>`).join(", ")} nei parametri.</div>`;
+  else if (x.state === "draft") body = `<div class="note wa">Righe dell'accessorio in bozza · <a class="tlink" data-goedit="${esc(a.groupId)}" href="javascript:void 0">Completale in Tipologie</a></div>`;
+  else if (x.state === "none") body = `<div class="note er">Nessun codice per «${esc(v)}» · <a class="tlink" data-goedit="${esc(a.groupId)}" href="javascript:void 0">Aggiungilo in Tipologie</a></div>`;
   else if (x.state === "choose") body = `<div class="note wa">Accessorio obbligatorio: scegli un'opzione.</div>`;
   return `<div class="accblk ${x.state === "off" ? "off" : ""}">
     <div class="acch"><span class="acctag">${IC.plug}Accessorio</span><span class="an">${esc(a.name)}${a.required ? ' <small>obbligatorio</small>' : ""}</span>${seg}</div>
@@ -1692,7 +1922,7 @@ $("#cfgInputs").addEventListener("click", e => {
 });
 $("#cfgInputs").addEventListener("change", e => { const t = e.target; if (t.dataset.p) setParam(t.dataset.p, t.value, t); });
 function focusParam(pid) {
-  const f = $(`.pfield[data-pf="${pid}"]`); if (!f) return;
+  const f = $(`.pfield[data-pf="${esc(pid)}"]`); if (!f) return;
   const sec = f.closest(".psec"); if (sec?.classList.contains("closed")) sec.querySelector("[data-sech]").click();
   f.scrollIntoView({behavior: "smooth", block: "center"});
   f.classList.add("hit"); setTimeout(() => f.classList.remove("hit"), 1100);
@@ -1705,8 +1935,8 @@ function onConfLinks(e) {
   if (d.mpick) { cfg.choice[master().id] = d.mpick; persistDraft(); return withTransition(renderResult); }
   if (d.goto) {
     if (viewMode !== "cards") setView("cards");
-    let c = $(`.gcard[data-gid="${d.goto}"]`); if (!c) return;
-    if (c.classList.contains("hide")) { $("#fltSeg [data-f=all]").click(); c = $(`.gcard[data-gid="${d.goto}"]`); }
+    let c = $(`.gcard[data-gid="${esc(d.goto)}"]`); if (!c) return;
+    if (c.classList.contains("hide")) { $("#fltSeg [data-f=all]").click(); c = $(`.gcard[data-gid="${esc(d.goto)}"]`); }
     c.scrollIntoView({behavior: "smooth", block: "center"});
     c.classList.add("hl"); setTimeout(() => c.classList.remove("hl"), 1400);
   }
@@ -1752,11 +1982,14 @@ async function guardExport(fn) {
 }
 function bomTable(sep, lines = resolveAll(cfg.sel, cfg.choice).lines, name = cfg.name, sel = cfg.sel) {
   const num = n => sep === ";" ? String(n).replace(".", ",") : String(n);
-  const head = [...db.params, ...db.acc].filter(p => sel[p.id]).map(p => [db.acc.includes(p) ? `Accessorio ${G(p.groupId)?.name} · ${p.name}` : p.name, sel[p.id]]);
-  const rows = [["Configurazione", name], ...head, [], ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione", "Quantità"], ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc, num(l.qty ?? "")])];
+  const head = [...db.params, ...db.acc].filter(p => sel[p.id]).map(p => [db.acc.includes(p) ? `Accessorio ${G(p.groupId)?.name} · ${p.name}` : p.name, selLabel(sel[p.id])]);
+  const vr = lines.some(l => l.variant);           // colonna Variante solo in esplorazione: il tracciato abituale non cambia
+  const rows = [["Configurazione", name], ...head, ...(vr ? [["Nota", "Esplorazione: elenco di tutte le varianti, non una distinta univoca"]] : []), [],
+    ["Livello", "Tipo", "Tipologia", "Accessorio", "Codice", "Descrizione", "Quantità", ...(vr ? ["Variante"] : [])],
+    ...lines.map(l => [l.lvl, l.type, l.group, l.acc || "", l.code, l.desc, num(l.qty ?? ""), ...(vr ? [l.variant || ""] : [])])];
   return rows.map(r => r.map(x => csvCell(x, sep)).join(sep)).join("\r\n") + "\r\n";
 }
-const defName = () => { const v = db.params.filter(p => cfg.sel[p.id]).map(p => cfg.sel[p.id]); return ["distinta", machineSlug(), ...v].filter(Boolean).join("_"); };
+const defName = () => { const v = db.params.filter(p => cfg.sel[p.id] && cfg.sel[p.id] !== ANY).map(p => cfg.sel[p.id]); return ["distinta", machineSlug(), ...v].filter(Boolean).join("_"); };
 $("#btnCopy").onclick = () => guardExport(() => navigator.clipboard.writeText(bomTable("\t")).then(() => toast("Distinta copiata: incollala in Excel"), () => toast("Copia non consentita dal browser")));
 $("#btnCsvBom").onclick = () => guardExport(() => download(defName() + ".csv", "﻿" + bomTable(";"), "text/csv"));
 $("#btnPrint").onclick = () => guardExport(() => { const v = viewMode; setView("bom"); setTimeout(() => { print(); setView(v); }, 60); });
@@ -1768,27 +2001,27 @@ function renderParams() {
     const ps = db.params.filter(p => p.sectionId === s.id), others = db.sections.filter(x => x.id !== s.id);
     return `<div class="section-card">
       <div class="cardhead">
-        <input class="ghost h3" data-secname="${s.id}" value="${esc(s.name)}" style="flex:1;max-width:420px" title="Rinomina sezione">
-        <div class="acts" style="opacity:1"><button class="ib" data-secup="${si}" title="Sposta su">${IC.up}</button><button class="ib del" data-secdel="${s.id}" title="Elimina sezione">${IC.del}</button></div>
+        <input class="ghost h3" data-secname="${esc(s.id)}" value="${esc(s.name)}" style="flex:1;max-width:420px" title="Rinomina sezione">
+        <div class="acts" style="opacity:1"><button class="ib" data-secup="${si}" title="Sposta su">${IC.up}</button><button class="ib del" data-secdel="${esc(s.id)}" title="Elimina sezione">${IC.del}</button></div>
       </div>
       <div class="scroll"><table class="mx"><thead><tr><th style="width:220px">Parametro</th><th>Valori</th><th style="width:220px">Usato da</th><th style="width:140px"></th></tr></thead><tbody>
       ${ps.map(p => {
         const used = reqBy(p.id);
         return `<tr>
-        <td><input class="ghost" data-pn="${p.id}" value="${esc(p.name)}" style="width:100%;font-weight:500"></td>
-        <td><div class="vlist" data-vl="${p.id}">${p.values.map(v => `<span class="vchip" draggable="true" data-v="${esc(v)}"><span class="grip" title="Trascina per riordinare">⋮⋮</span><span class="vl" title="Doppio clic per rinominare">${esc(v)}</span><button class="vx" title="Rimuovi ${esc(v)}">×</button></span>`).join("")}
-          <input class="vadd" data-vadd="${p.id}" placeholder="+ valore"></div></td>
+        <td><input class="ghost" data-pn="${esc(p.id)}" value="${esc(p.name)}" style="width:100%;font-weight:500"></td>
+        <td><div class="vlist" data-vl="${esc(p.id)}">${p.values.map(v => `<span class="vchip" draggable="true" data-v="${esc(v)}"><span class="grip" title="Trascina per riordinare">⋮⋮</span><span class="vl" title="Doppio clic per rinominare">${esc(v)}</span><button class="vx" title="Rimuovi ${esc(v)}">×</button></span>`).join("")}
+          <input class="vadd" data-vadd="${esc(p.id)}" placeholder="+ valore"></div></td>
         <td>${used.slice(0, used.length > 4 ? 3 : 4).map(g => `<span class="tag">${esc(g.name)}</span>`).join("")}${used.length > 4 ? `<span class="tag tagmore" tabindex="0" title="${esc(used.slice(3).map(g => g.name).join(", "))}">+${used.length - 3} altre</span>` : ""}${used.length ? "" : '<span class="mut">non usato</span>'}</td>
-        <td><div class="acts"><button class="ib" data-pup="${p.id}" title="Sposta su">${IC.up}</button>
-          ${others.length ? `<select data-pmove="${p.id}" title="Sposta in un'altra sezione" style="height:30px;width:86px;font-size:12px;padding:0 6px"><option value="">Sposta…</option>${others.map(x => `<option value="${x.id}">${esc(x.name)}</option>`).join("")}</select>` : ""}
-          <button class="ib del" data-pdel="${p.id}" title="Elimina parametro">${IC.del}</button></div></td>
+        <td><div class="acts"><button class="ib" data-pup="${esc(p.id)}" title="Sposta su">${IC.up}</button>
+          ${others.length ? `<select data-pmove="${esc(p.id)}" title="Sposta in un'altra sezione" style="height:30px;width:86px;font-size:12px;padding:0 6px"><option value="">Sposta…</option>${others.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join("")}</select>` : ""}
+          <button class="ib del" data-pdel="${esc(p.id)}" title="Elimina parametro">${IC.del}</button></div></td>
       </tr>`;
       }).join("") || '<tr><td colspan="4" class="empty">Nessun parametro in questa sezione.</td></tr>'}
       </tbody></table></div>
       <div class="addrow">
-        <input data-newpn="${s.id}" placeholder="Nuovo parametro" style="width:220px">
-        <input data-newpv="${s.id}" placeholder="Valori separati da virgola, es. 400, 600, 800" style="flex:1">
-        <button class="b s" data-padd="${s.id}">+ Aggiungi</button>
+        <input data-newpn="${esc(s.id)}" placeholder="Nuovo parametro" style="width:220px">
+        <input data-newpv="${esc(s.id)}" placeholder="Valori separati da virgola, es. 400, 600, 800" style="flex:1">
+        <button class="b s" data-padd="${esc(s.id)}">+ Aggiungi</button>
       </div></div>`;
   }).join("") || '<div class="card empty">Nessuna sezione. Creane una qui sotto.</div>';
 }
@@ -1800,7 +2033,7 @@ function addValues(p, text) {
     if (dup) { toast(`Esiste già «${dup}» in ${p.name}`); continue; }
     p.values.push(v); added++;
   }
-  if (added) { save(); rerender(); toast(`${plural(added, "valore aggiunto", "valori aggiunti")} a ${p.name}`); $(`[data-vadd="${p.id}"]`)?.focus(); }
+  if (added) { save(); rerender(); toast(`${plural(added, "valore aggiunto", "valori aggiunti")} a ${p.name}`); $(`[data-vadd="${esc(p.id)}"]`)?.focus(); }
 }
 function impactPreview(mutate, rows) {
   const original = db, ids = new Set(rows.map(r => byId(db.acc, r.groupId)?.groupId || r.groupId));
@@ -1850,7 +2083,7 @@ async function removeValue(p, v) {
     action = r.action;
   }
   const snap = snapshot();
-  const chip = $(`[data-vl="${p.id}"] .vchip[data-v="${CSS.escape(v)}"]`); chip?.classList.add("gone");
+  const chip = $(`[data-vl="${esc(p.id)}"] .vchip[data-v="${CSS.escape(v)}"]`); chip?.classList.add("gone");
   if (action === "del") delRows(using);
   else if (action === "all") using.forEach(x => delete x.cond[p.id]);
   else if (action === "rev") using.forEach(x => { x.cond[p.id] = Q; x.review = true; });
@@ -1874,7 +2107,7 @@ ps.addEventListener("change", e => {
 document.addEventListener("keydown", e => {
   const d = e.target.dataset || {};
   if (e.key === "Enter" && d.vadd) { e.preventDefault(); addValues(P(d.vadd), e.target.value); }
-  if (e.key === "Enter" && (d.newpn || d.newpv)) $(`[data-padd="${d.newpn || d.newpv}"]`).click();
+  if (e.key === "Enter" && (d.newpn || d.newpv)) $(`[data-padd="${esc(d.newpn || d.newpv)}"]`).click();
   if (e.target.classList.contains("vren")) {
     if (e.key === "Enter") e.target.blur();
     if (e.key === "Escape") { e.target.dataset.cancel = "1"; e.target.blur(); }
@@ -1904,9 +2137,9 @@ document.addEventListener("click", e => {
 ps.addEventListener("click", async e => {
   const d = e.target.dataset;
   if (d.padd) {
-    const inN = $(`[data-newpn="${d.padd}"]`), n = inN.value.trim(); if (!n) return inN.focus();
+    const inN = $(`[data-newpn="${esc(d.padd)}"]`), n = inN.value.trim(); if (!n) return inN.focus();
     if (db.params.some(p => p.name.toLowerCase() === n.toLowerCase())) return toast("Parametro già esistente");
-    db.params.push({id: uid(), sectionId: d.padd, name: n, values: parseVals($(`[data-newpv="${d.padd}"]`).value)});
+    db.params.push({id: uid(), sectionId: d.padd, name: n, values: parseVals($(`[data-newpv="${esc(d.padd)}"]`).value)});
     save(); renderParams(); toast(`Parametro «${n}» aggiunto`);
   }
   if (d.pup) {
@@ -1945,7 +2178,7 @@ function renderGroups() {
     const h0 = groupHealth(g), n = db.items.filter(i => i.groupId === g.id).length;
     const h = showMiss ? h0 : (() => { const k = h0.n - h0.uncov; return {...h0, n: k, badge: h0.ambig ? "er" : k ? "wa" : "ok", title: h0.title.split(" · ").filter(t => !/scoperte|accessori/.test(t)).join(" · ") || "Nessuna bozza"}; })();
     const badge = `<span class="hb ${h.badge}" title="${esc(h.title)}">${h.badge === "ok" ? "✓" : h.badge === "er" ? "≠" : h.n}</span>`;
-    return `<div class="gitem ${g.kind === "master" ? "master" : ""} ${g.id === curG ? "on" : ""}" data-sel="${g.id}" title="${esc(h.title)}">
+    return `<div class="gitem ${g.kind === "master" ? "master" : ""} ${g.id === curG ? "on" : ""}" data-sel="${esc(g.id)}" title="${esc(h.title)}">
       ${g.kind === "master" ? `<span style="color:var(--ac)">${IC.star}</span>` : ""}
       <span style="flex:1">${esc(g.name)}</span><span class="n">${n}</span>${badge}
       ${g.kind === "master" ? "" : `<span class="acts"><button class="ib" data-gup="${k}" title="Sposta su" style="width:24px;height:24px">${IC.up}</button></span>`}</div>`;
@@ -1954,43 +2187,45 @@ function renderGroups() {
   const og = orderedGroups(); let lastM, html = "";
   og.forEach((g, k) => {
     const mc = macroOf(g);
-    if (mc !== lastM) html += mc ? `<div class="mhead" data-medit="${mc.id}" title="Clic per rinominare il macrogruppo o cambiarne il codice"><b>${esc(mc.name)}</b>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}</div>` : (lastM ? `<div class="mhead nom">Senza macrogruppo</div>` : "");
+    if (mc !== lastM) html += mc ? `<div class="mhead" data-medit="${esc(mc.id)}" title="Clic per rinominare il macrogruppo o cambiarne il codice"><b>${esc(mc.name)}</b>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}</div>` : (lastM ? `<div class="mhead nom">Senza macrogruppo</div>` : "");
     lastM = mc; html += item(g, k);
   });
   // macrogruppi ancora vuoti: visibili, così si possono rinominare/eliminare e si capisce che esistono
-  db.macros.filter(mc => !og.some(g => g.macroId === mc.id)).forEach(mc => { html += `<div class="mhead" data-medit="${mc.id}" title="Macrogruppo vuoto: assegnagli le tipologie dal menu «Macrogruppo» dell'editor"><b>${esc(mc.name)}</b>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}<span class="code">· vuoto</span></div>`; });
+  db.macros.filter(mc => !og.some(g => g.macroId === mc.id)).forEach(mc => { html += `<div class="mhead" data-medit="${esc(mc.id)}" title="Macrogruppo vuoto: assegnagli le tipologie dal menu «Macrogruppo» dell'editor"><b>${esc(mc.name)}</b>${mc.code ? `<span class="code">${esc(mc.code)}</span>` : ""}<span class="code">· vuoto</span></div>`; });
   $("#groupList").innerHTML = (m ? item(m, -1) : "") + (html || '<div class="empty">Nessuna tipologia.</div>');
   renderGroupEditor();
 }
 function attrCell(obj, pid, kind) {
   const p = P(pid), v = obj.cond[pid];
-  if (p.values.length > 4) return `<select class="sm ${v === Q ? "q" : ""}" data-k="${kind}" data-o="${obj.id}" data-cp="${pid}">
+  if (p.values.length > 4) return `<select class="sm ${v === Q ? "q" : ""}" data-k="${kind}" data-o="${esc(obj.id)}" data-cp="${esc(pid)}">
     <option value="" ${v == null ? "selected" : ""}>— tutti</option>${v === Q ? `<option value="${Q}" selected>? da definire</option>` : ""}${p.values.map(x => `<option ${v === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`;
-  return `<div class="seg sm" data-k="${kind}" data-o="${obj.id}" data-cp="${pid}"><button data-v="" class="none ${v == null ? "on" : ""}" title="Non usato: vale per ogni valore">—</button>${
+  return `<div class="seg sm" data-k="${kind}" data-o="${esc(obj.id)}" data-cp="${esc(pid)}"><button data-v="" class="none ${v == null ? "on" : ""}" title="Non usato: vale per ogni valore">—</button>${
     v === Q ? `<button data-v="${Q}" class="q on" title="Da definire">?</button>` : ""}${
     p.values.map(x => `<button data-v="${esc(x)}" class="${v === x ? "on" : ""}">${esc(x)}</button>`).join("")}</div>`;
 }
 function coverageHtml(g, arr, kind, label, accId = "") {
-  const kid = kind + accId, acA = accId ? ` data-acc="${accId}"` : "";
+  const kid = kind + accId, acA = accId ? ` data-acc="${esc(accId)}"` : "";
   const cv = coverage(g, arr), own = arr.filter(x => x.groupId === g.id), drafts = own.filter(isDraft).length;
   const dr = drafts ? ` <span>· ${plural(drafts, "riga in bozza", "righe in bozza")}</span>` : "";
-  if (cv.missing === null) return `<div class="callout ne">${cv.total} combinazioni: troppe per il controllo di copertura.${dr}</div>`;
+  if (cv.missing === null) return `<div class="callout wa"><b>Copertura non calcolata</b>: ${cv.total} combinazioni sono troppe per il controllo (limite 3.000). Scoperte e conflitti non sono verificati.${dr}</div>`;
+  const uniq = kind === "x" || (kind === "i" && (g.mode === "one" || g.kind === "master"));   // qui ogni combinazione vuole una sola riga
+  const multiTxt = n => `${plural(n, "combinazione ha", "combinazioni hanno")} più di un${kind === "x" ? " interscambio valido" : " codice valido"}: ne serve uno solo (conflitto).`;
   if (!showMiss && cv.missing !== null) {                  // nascosto: restano solo bozze e ambiguità
-    const mu = kind === "x" && cv.multi.length ? `<div class="callout er">${plural(cv.multi.length, "combinazione ha", "combinazioni hanno")} più di un interscambio valido: ne serve uno solo.</div>` : "";
+    const mu = uniq && cv.multi.length ? `<div class="callout er">${multiTxt(cv.multi.length)}</div>` : "";
     return (drafts ? `<div class="callout wa">${plural(drafts, "riga in bozza", "righe in bozza")}</div>` : "") + mu;
   }
-  const multi = kind === "x" && cv.multi.length ? `<div class="callout er" style="margin-top:6px">${plural(cv.multi.length, "combinazione ha", "combinazioni hanno")} più di un interscambio valido: ne serve uno solo.</div>` : "";
+  const multi = uniq && cv.multi.length ? `<div class="callout er" style="margin-top:6px">${multiTxt(cv.multi.length)}</div>` : "";
   if (!g.params.length) return (cv.missing.length ? `<div class="callout wa">Nessun ${label} valido.${dr}</div>` : drafts ? `<div class="callout wa">${dr}</div>` : "") + multi;
   if (!cv.missing.length) return `<div class="callout ${drafts ? "wa" : "ok"}">${drafts ? "" : "✓ "}Tutte le ${cv.total} combinazioni hanno un ${label}.${dr}</div>` + multi;
   const n = cv.missing.length;
   return `<div class="callout wa flex"><span style="flex:1"><b>${n}</b> ${n === 1 ? "combinazione" : "combinazioni"} su ${cv.total} senza ${label} valido.${dr}</span>
-    <button class="b s" data-showmiss="${kid}">Mostra</button><button class="b s" data-gen="${kind}"${acA}>Crea righe mancanti</button></div>
-    <div class="hide" id="miss-${kid}" style="margin:8px 0 0">${cv.missing.map(c => `<div>${g.params.map(pid => `<span class="tag"><em>${esc(P(pid).name)}</em><b>${esc(c[pid])}</b></span>`).join("")}</div>`).join("")}</div>` + multi;
+    <button class="b s" data-showmiss="${esc(kid)}">Mostra</button><button class="b s" data-gen="${kind}"${acA}>Crea righe mancanti</button></div>
+    <div class="hide" id="miss-${esc(kid)}" style="margin:8px 0 0">${cv.missing.map(c => `<div>${g.params.map(pid => `<span class="tag"><em>${esc(P(pid).name)}</em><b>${esc(c[pid])}</b></span>`).join("")}</div>`).join("")}</div>` + multi;
 }
 // riga discreta sotto il codice: compare solo se la riga ha un codice precedente
 function histBtn(i, kind) {
   const n = i.prev?.length || 0;
-  return `<button type="button" class="phist" data-hist="${i.id}" data-k="${kind}" ${n ? 'data-has-history aria-describedby="xpop" aria-label="Versioni precedenti: anteprima al passaggio del mouse, clic per gestire lo storico"' : 'title="Visualizza le versioni precedenti o registra una versione nello storico"'}>${IC.hist}<span>Versioni precedenti${n ? ` (${n})` : ""}</span></button>`;
+  return `<button type="button" class="phist" data-hist="${esc(i.id)}" data-k="${kind}" ${n ? 'data-has-history aria-describedby="xpop" aria-label="Versioni precedenti: anteprima al passaggio del mouse, clic per gestire lo storico"' : 'title="Visualizza le versioni precedenti o registra una versione nello storico"'}>${IC.hist}<span>Versioni precedenti${n ? ` (${n})` : ""}</span></button>`;
 }
 async function codeHistory(kind, id) {
   const row = byId(listOf(kind), id); if (!row) return;
@@ -2070,12 +2305,12 @@ function rowsHtml(g, arr, kind) {
   const cls = "cx", ta = (f, v, ph) => `<textarea class="ghost wrapta" rows="1" data-k="${f === "note" ? "i" : kind}" data-f="${f}" data-i="__ID__" title="${esc(v)}" placeholder="${ph}">${esc(v)}</textarea>`;
   const resize = (column, label) => `<button type="button" class="col-resize" data-column="${column}" role="separator" aria-orientation="vertical" aria-label="Larghezza colonna ${label}" title="Trascina per regolare · Frecce per spostare · Doppio clic o Home per ripristinare le larghezze"></button>`;
   const head = `<div class="chead"><span class="c-code">Codice${resize("code", "Codice")}</span><span class="c-desc">Descrizione${g.params.length ? resize("desc", "Descrizione") : ""}</span>${g.params.length ? `<span class="c-attrs">Attributi</span>` : ""}<span class="c-act"></span></div>`;
-  return `<div class="clist ${cls} ${g.params.length ? "" : "noattr"}" data-rowkind="${kind}" data-rowgroup="${g.id}">${head}
-    ${list.map(i => `<div class="crow ${i.review ? "review" : ""} ${i.id === flashId ? "flash" : ""} ${i.id === flashOk ? "flashok" : ""}" data-row="${i.id}">
-      <div class="c-code"><button type="button" class="rowgrip" draggable="true" title="Trascina per riordinare · Alt + freccia su/giù da tastiera" aria-label="Riordina ${esc(i.code || 'codice')}">⋮⋮</button><input class="ghost code ${String(i.code).trim() ? "" : "draftcode"}" data-k="${kind}" data-f="code" data-i="${i.id}" value="${esc(i.code)}" title="${esc(i.code)}" placeholder="Codice da inserire">${mark(i) ? `<div class="cmark">${mark(i)}</div>` : ""}${histBtn(i, kind)}</div>
-      <div class="c-desc">${ta("desc", i.desc, "Descrizione").replace("__ID__", i.id)}${isItem ? `<label class="qtyedit">Quantità <input type="number" min="0" step="any" data-k="${kind}" data-f="qty" data-i="${i.id}" value="${esc(i.qty ?? 1)}" aria-label="Quantità ${esc(i.code)}"></label>` : ""}</div>
+  return `<div class="clist ${cls} ${g.params.length ? "" : "noattr"}" data-rowkind="${kind}" data-rowgroup="${esc(g.id)}">${head}
+    ${list.map(i => `<div class="crow ${i.review ? "review" : ""} ${i.id === flashId ? "flash" : ""} ${i.id === flashOk ? "flashok" : ""}" data-row="${esc(i.id)}">
+      <div class="c-code"><button type="button" class="rowgrip" draggable="true" title="Trascina per riordinare · Alt + freccia su/giù da tastiera" aria-label="Riordina ${esc(i.code || 'codice')}">⋮⋮</button><input class="ghost code ${String(i.code).trim() ? "" : "draftcode"}" data-k="${kind}" data-f="code" data-i="${esc(i.id)}" value="${esc(i.code)}" title="${esc(i.code)}" placeholder="Codice da inserire">${mark(i) ? `<div class="cmark">${mark(i)}</div>` : ""}${histBtn(i, kind)}</div>
+      <div class="c-desc">${ta("desc", i.desc, "Descrizione").replace("__ID__", i.id)}${isItem ? `<label class="qtyedit">Quantità <input type="number" min="0" step="any" data-k="${kind}" data-f="qty" data-i="${esc(i.id)}" value="${esc(i.qty ?? 1)}" aria-label="Quantità ${esc(i.code)}"></label>` : ""}</div>
       ${g.params.length ? `<div class="c-attrs">${g.params.map(pid => `<span class="at"><span class="al">${esc(P(pid)?.name)}</span>${attrCell(i, pid, kind)}</span>`).join("")}</div>` : ""}
-      <div class="c-act"><div class="acts">${i.review ? `<button class="ib" data-ok="${i.id}" data-k="${kind}" title="Segna come revisionata">${IC.check}</button>` : ""}<button class="ib ${i.link ? "lk-on" : ""}" data-wl="${i.id}" data-k="${kind}" title="${i.link ? "Link Windchill impostato: clic per modificarlo" : "Aggiungi il link Windchill di questo codice"}">${IC.link}</button><button class="ib" data-dup="${i.id}" data-k="${kind}" title="Duplica (codice da inserire)">${IC.dup}</button><button class="ib del" data-del="${i.id}" data-k="${kind}" title="Elimina">${IC.del}</button></div></div>
+      <div class="c-act"><div class="acts">${i.review ? `<button class="ib" data-ok="${esc(i.id)}" data-k="${kind}" title="Segna come revisionata">${IC.check}</button>` : ""}<button class="ib ${i.link ? "lk-on" : ""}" data-wl="${esc(i.id)}" data-k="${kind}" title="${i.link ? "Link Windchill impostato: clic per modificarlo" : "Aggiungi il link Windchill di questo codice"}">${IC.link}</button><button class="ib" data-dup="${esc(i.id)}" data-k="${kind}" title="Duplica (codice da inserire)">${IC.dup}</button><button class="ib del" data-del="${esc(i.id)}" data-k="${kind}" title="Elimina">${IC.del}</button></div></div>
     </div>`).join("") || `<div class="empty" style="padding:14px">${onlyDraft || q ? "Nessuna riga corrisponde al filtro." : "Nessuna riga."}</div>`}</div>`;
 }
 function accEditorHtml(g) {
@@ -2083,20 +2318,20 @@ function accEditorHtml(g) {
   return `<div class="card">
     <div class="subhead"><h3>Accessori</h3><div class="row"><input id="newAcc" placeholder="Nuovo accessorio, es. Sollevamento" style="width:260px"><button class="b s" id="btnAccAdd">+ Accessorio</button></div></div>
     ${accs.length ? "" : '<p class="hint" style="margin-top:0">Nessun accessorio per questa tipologia. Un accessorio ha le sue opzioni (es. Manuale / Pneumatico) e i suoi codici; nel configuratore si sceglie nella scheda della tipologia.</p>'}
-    ${accs.map(a => { const ps = accPseudo(a); return `<div class="acccard" data-accid="${a.id}">
+    ${accs.map(a => { const ps = accPseudo(a); return `<div class="acccard" data-accid="${esc(a.id)}">
       <div class="cardhead" style="margin-bottom:8px">
-        <input class="ghost h3" data-accname="${a.id}" value="${esc(a.name)}" title="Rinomina accessorio" style="flex:1;max-width:360px">
-        <div class="row"><label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)" title="Se obbligatorio, nel configuratore non c'è l'opzione “Nessuno”"><input type="checkbox" data-accreq="${a.id}" ${a.required ? "checked" : ""}> Obbligatorio</label>
-          <button class="ib del" data-accdel="${a.id}" title="Elimina accessorio">${IC.del}</button></div>
+        <input class="ghost h3" data-accname="${esc(a.id)}" value="${esc(a.name)}" title="Rinomina accessorio" style="flex:1;max-width:360px">
+        <div class="row"><label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)" title="Se obbligatorio, nel configuratore non c'è l'opzione “Nessuno”"><input type="checkbox" data-accreq="${esc(a.id)}" ${a.required ? "checked" : ""}> Obbligatorio</label>
+          <button class="ib del" data-accdel="${esc(a.id)}" title="Elimina accessorio">${IC.del}</button></div>
       </div>
       <div class="accgrid">
         <span class="mut">Opzioni</span>
-        <div class="vlist" data-vl="${a.id}">${a.values.map(v => `<span class="vchip" draggable="true" data-v="${esc(v)}"><span class="grip" title="Trascina per riordinare">⋮⋮</span><span class="vl" title="Doppio clic per rinominare">${esc(v)}</span><button class="vx" title="Rimuovi ${esc(v)}">×</button></span>`).join("")}
-          <input class="vadd" data-vadd="${a.id}" placeholder="+ opzione"></div>
+        <div class="vlist" data-vl="${esc(a.id)}">${a.values.map(v => `<span class="vchip" draggable="true" data-v="${esc(v)}"><span class="grip" title="Trascina per riordinare">⋮⋮</span><span class="vl" title="Doppio clic per rinominare">${esc(v)}</span><button class="vx" title="Rimuovi ${esc(v)}">×</button></span>`).join("")}
+          <input class="vadd" data-vadd="${esc(a.id)}" placeholder="+ opzione"></div>
         <span class="mut">Dipende anche da</span>
-        <div>${db.params.map(p => `<span class="chip ${a.params.includes(p.id) ? "on" : ""}" data-accp="${p.id}" data-acc="${a.id}">${a.params.includes(p.id) ? "✓ " : "+ "}${esc(p.name)}</span>`).join("")}</div>
+        <div>${db.params.map(p => `<span class="chip ${a.params.includes(p.id) ? "on" : ""}" data-accp="${esc(p.id)}" data-acc="${esc(a.id)}">${a.params.includes(p.id) ? "✓ " : "+ "}${esc(p.name)}</span>`).join("")}</div>
       </div>
-      <div class="subhead" style="margin:12px 0 8px"><span class="eyebrow">Codici accessorio</span><button class="b s" data-add="a" data-acc="${a.id}">+ Codice accessorio</button></div>
+      <div class="subhead" style="margin:12px 0 8px"><span class="eyebrow">Codici accessorio</span><button class="b s" data-add="a" data-acc="${esc(a.id)}">+ Codice accessorio</button></div>
       ${a.values.length ? rowsHtml(ps, db.accItems, "a") : '<div class="callout ne">Aggiungi prima le opzioni dell\'accessorio.</div>'}
       ${a.values.length ? `<div style="margin-top:8px">${coverageHtml(ps, db.accItems, "a", "codice", a.id)}</div>` : ""}
     </div>`; }).join("")}
@@ -2112,7 +2347,7 @@ function renderGroupEditor() {
     <div class="cardhead" style="align-items:flex-start">
       <div style="flex:1">${isM ? `<div class="eyebrow" style="color:var(--ac)">Assieme master Creo</div>` : ""}<input class="ghost title" id="gName" value="${esc(g.name)}" title="Rinomina" style="width:100%;max-width:420px"></div>
       ${isM ? "" : `<div class="row">
-        <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)">Macrogruppo <select id="gMacro"><option value="">— nessuno</option>${db.macros.map(mc => `<option value="${mc.id}" ${g.macroId === mc.id ? "selected" : ""}>${esc(mc.name)}</option>`).join("")}<option value="__new">+ nuovo…</option></select><button type="button" class="b s" id="gMacroNew" title="Crea un nuovo macrogruppo e metti qui questa tipologia">+ Nuovo</button></label>
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)">Macrogruppo <select id="gMacro"><option value="">— nessuno</option>${db.macros.map(mc => `<option value="${esc(mc.id)}" ${g.macroId === mc.id ? "selected" : ""}>${esc(mc.name)}</option>`).join("")}<option value="__new">+ nuovo…</option></select><button type="button" class="b s" id="gMacroNew" title="Crea un nuovo macrogruppo e metti qui questa tipologia">+ Nuovo</button></label>
         <select id="gMode" title="Cosa fare se più codici corrispondono ai parametri"><option value="all" ${g.mode === "all" ? "selected" : ""}>Più codici validi: inseriscili tutti</option><option value="one" ${g.mode === "one" ? "selected" : ""}>Più codici validi: ne scelgo uno</option></select>
         <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)"><input type="checkbox" id="gReq" ${g.required ? "checked" : ""}> Obbligatoria</label>
         <label style="display:flex;gap:6px;align-items:center;font-size:13px;color:var(--tx-2)" title="Se tolto, la tipologia non richiede un assieme di interscambio: nel configuratore non ne viene segnalata l'assenza"><input type="checkbox" id="gInter" ${g.noInter ? "" : "checked"}> Interscambio previsto</label></div>`}
@@ -2120,7 +2355,7 @@ function renderGroupEditor() {
     <div class="eyebrow" style="margin-bottom:8px">Attributi della tipologia</div>
     ${db.sections.map(s => {
       const pp = db.params.filter(p => p.sectionId === s.id);
-      return pp.length ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px"><span class="mut" style="width:120px">${esc(s.name)}</span><span>${pp.map(p => `<span class="chip ${g.params.includes(p.id) ? "on" : ""}" data-gp="${p.id}">${g.params.includes(p.id) ? "✓ " : "+ "}${esc(p.name)}</span>`).join("")}</span></div>` : "";
+      return pp.length ? `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px"><span class="mut" style="width:120px">${esc(s.name)}</span><span>${pp.map(p => `<span class="chip ${g.params.includes(p.id) ? "on" : ""}" data-gp="${esc(p.id)}">${g.params.includes(p.id) ? "✓ " : "+ "}${esc(p.name)}</span>`).join("")}</span></div>` : "";
     }).join("")}
     <p class="hint" style="margin-top:6px">Ogni codice usa un sottoinsieme di questi attributi, con un solo valore per attributo. <b>—</b> = non usato (vale per tutti) · <b>?</b> = da definire (riga in bozza).</p>
   </div>
@@ -2337,12 +2572,12 @@ ge.addEventListener("click", async e => {
     const rec = {id: uid(), groupId: d.acc || g.id, code: "", desc: "", cond: {}};
     if (d.add !== "x") Object.assign(rec, {qty: 1, note: ""});
     listOf(d.add).push(rec); gFilter = ""; onlyDraft = false; flashId = rec.id; save(); refreshGroups();
-    ge.querySelector(`input[data-i="${rec.id}"][data-f="code"]`)?.focus();
+    ge.querySelector(`input[data-i="${esc(rec.id)}"][data-f="code"]`)?.focus();
   }
   if (d.dup) {
     const L = listOf(d.k), s = byId(L, d.dup), c = {...structuredClone(s), id: uid(), code: "", review: false}; delete c.link; delete c.prev;
     L.splice(L.indexOf(s) + 1, 0, c); flashId = c.id; save(); refreshGroups();
-    ge.querySelector(`input[data-i="${c.id}"][data-f="code"]`)?.focus();
+    ge.querySelector(`input[data-i="${esc(c.id)}"][data-f="code"]`)?.focus();
   }
   if (d.wl) {
     const it = byId(listOf(d.k), d.wl);
@@ -2390,7 +2625,9 @@ function download(name, content, type) {
   a.download = name.replace(/[\\/:*?"<>|]/g, "_"); a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
-function csvCell(v, sep) { v = String(v ?? ""); return /["\r\n]/.test(v) || v.includes(sep) ? `"${v.replace(/"/g, '""')}"` : v; }
+// testo che Excel interpreterebbe come formula (= + - @, tab, a capo iniziale): neutralizzato con un apostrofo.
+// I numeri veri (es. -1,5 o 2) restano numeri.
+function csvCell(v, sep) { if (typeof v !== "number") { v = String(v ?? ""); if (/^[=+\-@\t\r]/.test(v) && !/^[-+]?\d+([.,]\d+)?$/.test(v)) v = "'" + v; } v = String(v ?? ""); return /["\r\n]/.test(v) || v.includes(sep) ? `"${v.replace(/"/g, '""')}"` : v; }
 function parseCsv(text) {
   text = text.replace(/^﻿/, "");
   const first = text.split(/\r?\n/)[0];
@@ -2405,7 +2642,8 @@ function parseCsv(text) {
     else cell += ch;
   }
   if (cell || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter(r => r.some(c => c.trim()));
+  // apostrofo aggiunto all'esportazione contro le formule: rileggendo il file torna il testo originale
+  return rows.filter(r => r.some(c => c.trim())).map(r => r.map(c => /^'[=+\-@\t\r]/.test(c) ? c.slice(1) : c));
 }
 const showMsg = (html, cls) => { $("#csvMsg").innerHTML = `<div class="callout ${cls}">${html}</div>`; };
 $("#btnJsonExp").onclick = () => download(`${machineSlug() || "configuratore"}_${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(db, null, 2), "application/json");
@@ -2413,10 +2651,13 @@ $("#btnJsonImp").onclick = () => $("#fJson").click();
 $("#btnCsvImp").onclick = () => $("#fCsv").click();
 $("#fJson").onchange = async e => {
   const f = e.target.files[0]; e.target.value = ""; if (!f) return;
-  let d;
-  try { d = JSON.parse(await f.text()); if (!Array.isArray(d.items) || !Array.isArray(d.groups) || !Array.isArray(d.params)) throw new Error("formato non valido"); }
-  catch (err) { return ask({title: "Import JSON non riuscito", body: `<p>${esc(err.message)}</p>`, actions: [{label: "OK", value: null, default: true}]}); }
-  const r = await ask({title: "Sostituire l'intero database?", body: `<p>Il file contiene ${d.groups.length} tipologie, ${d.items.length} codici. I dati attuali verranno sostituiti.</p>`,
+  let d, rep;
+  try { d = JSON.parse(await f.text()); }
+  catch (err) { return ask({title: "Import JSON non riuscito", body: `<p>Il file non è un JSON leggibile: ${esc(err.message)}</p>`, actions: [{label: "OK", value: null, default: true}]}); }
+  rep = validateDb(d);
+  if (!rep.errors.length && !Array.isArray(d.items) && !Array.isArray(d.groups) && !Array.isArray(d.params)) rep.errors.push("il file non contiene parametri, tipologie né codici");
+  if (rep.errors.length) return ask({title: "Import JSON non riuscito", body: dbProblemHtml(rep) + `<p class="mut">Il database attuale non è stato modificato.</p>`, actions: [{label: "OK", value: null, default: true}]});
+  const r = await ask({title: "Sostituire l'intero database?", body: `<p>Il file contiene ${(d.groups || []).length} tipologie, ${(d.items || []).length} codici. I dati attuali verranno sostituiti.</p>${rep.warnings.length ? dbProblemHtml(rep) : ""}`,
     actions: [{label: "Annulla", value: null, default: true}, {label: "Sostituisci", value: "ok", kind: "d"}]});
   if (r.action !== "ok") return;
   const snap = snapshot();
@@ -2447,10 +2688,16 @@ function planCsv(text) {
   if (iG < 0 || iC < 0) throw new Error("servono almeno le colonne «tipologia» e «codice»");
   const fixed = [iG, iT, iC, iD, iQ, iN];
   const pcols = head.map((h, k) => ({name: h, k})).filter(c => c.name && !fixed.includes(c.k));
-  const anomalies = new Map(), recs = [];
+  const anomalies = new Map(), recs = [], errors = [];
   const known = name => db.params.find(x => x.name.toLowerCase() === name.toLowerCase());
-  for (const r of rows.slice(1)) {
+  for (const [n, r] of rows.slice(1).entries()) {
     const gname = (r[iG] || "").trim(); if (!gname) continue;
+    let qty = 1;                                     // cella vuota = 1; zero, negativi e testi non numerici sono errori di riga
+    if (iQ >= 0 && String(r[iQ] ?? "").trim()) {
+      const raw = String(r[iQ]).trim(), q = Number(raw.replace(",", "."));
+      if (!Number.isFinite(q) || q <= 0) { errors.push({line: n + 2, msg: `quantità «${raw}» non valida (deve essere un numero maggiore di zero)`, code: (r[iC] || "").trim()}); continue; }
+      qty = q;
+    }
     const cells = pcols.map(pc => (r[pc.k] || "").split("|").map(s => s.trim()).filter(Boolean));
     pcols.forEach((pc, j) => cells[j].forEach(v => {
       if (v === Q) return;
@@ -2461,9 +2708,9 @@ function planCsv(text) {
       anomalies.set(key, {param: pc.name, value: v, near: near || null, choice: near ? "map" : "new", newParam: !p});
     }));
     recs.push({gname, isX: iT >= 0 && /interscamb/i.test(r[iT] || ""), code: (r[iC] || "").trim(), desc: iD >= 0 ? (r[iD] || "").trim() : "",
-      qty: iQ >= 0 ? (parseFloat((r[iQ] || "1").replace(",", ".")) || 1) : 1, note: iN >= 0 ? (r[iN] || "").trim() : "", cells});
+      qty, note: iN >= 0 ? (r[iN] || "").trim() : "", cells});
   }
-  return {pcols, recs, anomalies: [...anomalies.values()]};
+  return {pcols, recs, errors, anomalies: [...anomalies.values()]};
 }
 function applyPlan(d, plan) {
   const out = {add: 0, upd: 0, dup: 0, drafts: 0, newGroups: new Set(), newParams: new Set()};
@@ -2496,7 +2743,10 @@ function applyPlan(d, plan) {
       if (seen.has(k)) { out.dup++; continue; } seen.add(k);
       if (!row.code) out.drafts++;
       const ex = L.find(i => i.groupId === g.id && i.code.toLowerCase() === row.code.toLowerCase() && sameObj(i.cond, row.cond));
-      if (ex) { Object.assign(ex, {...row, id: ex.id, review: false}); out.upd++; } else { L.push(row); out.add++; }
+      // l'aggiornamento non cancella lo stato «da revisionare» né lo storico dei codici della riga esistente
+      if (ex) { const keep = {review: ex.review, prev: ex.prev}; Object.assign(ex, {...row, id: ex.id});
+        for (const [k, v] of Object.entries(keep)) if (v === undefined) delete ex[k]; else ex[k] = v; out.upd++; }
+      else { L.push(row); out.add++; }
     }
   }
   return out;
@@ -2514,14 +2764,15 @@ $("#fCsv").onchange = async e => {
     plan.anomalies.map((a, k) => `<tr><td>${esc(a.param)}${a.newParam ? ' <span class="tag">nuovo</span>' : ""}</td><td class="code">${esc(a.value)}</td><td>${a.near
       ? `<select data-an="${k}" class="sm"><option value="map" selected>Usa «${esc(a.near)}» (esistente)</option><option value="new">Crea nuovo valore «${esc(a.value)}»</option></select>`
       : `<span class="mut">nuovo valore: verrà creato</span>`}</td></tr>`).join("")}</tbody></table></div>` : `<p class="ok">Nessun valore sconosciuto.</p>`;
-  const p = ask({title: `Anteprima import: ${f.name}`, wide: true, body: `<div id="impCounters">${counters()}</div>${anomTable}`,
+  const errTable = plan.errors.length ? `<div class="callout er" style="margin:8px 0"><b>${plural(plan.errors.length, "riga verrà scartata", "righe verranno scartate")}</b> (i dati esistenti non vengono toccati):<ul style="margin:4px 0 0">${plan.errors.slice(0, 30).map(e => `<li>Riga ${e.line}${e.code ? ` (<span class="code">${esc(e.code)}</span>)` : ""}: ${esc(e.msg)}</li>`).join("")}${plan.errors.length > 30 ? "<li>…</li>" : ""}</ul></div>` : "";
+  const p = ask({title: `Anteprima import: ${f.name}`, wide: true, body: `<div id="impCounters">${counters()}</div>${errTable}${anomTable}`,
     actions: [{label: "Annulla", value: null}, {label: "Importa", value: "ok", kind: "p", default: true}]});
   $("#dlg").onchange = ev => { const k = ev.target.dataset.an; if (k != null) { plan.anomalies[k].choice = ev.target.value; $("#impCounters").innerHTML = counters(); } };
   const r = await p;
   if (r.action !== "ok") return;
   const snap = snapshot();
   const o = applyPlan(db, plan); db = normalize(db); save();
-  showMsg(`✓ Import completato: <b>${o.add}</b> nuove, <b>${o.upd}</b> aggiornate${o.drafts ? `, ${o.drafts} in bozza` : ""}${o.dup ? `, ${o.dup} duplicate ignorate` : ""}.`, o.drafts || o.dup ? "wa" : "ok");
+  showMsg(`✓ Import completato: <b>${o.add}</b> nuove, <b>${o.upd}</b> aggiornate${o.drafts ? `, ${o.drafts} in bozza` : ""}${o.dup ? `, ${o.dup} duplicate ignorate` : ""}${plan.errors.length ? `, ${plan.errors.length} scartate per quantità non valida` : ""}.`, o.drafts || o.dup || plan.errors.length ? "wa" : "ok");
   toast("CSV importato", () => { restore(snap); $("#csvMsg").innerHTML = ""; });
 };
 
@@ -2551,7 +2802,7 @@ $("#wcTplTest").onclick = () => {
   open(v.replace(/\{codice\}/gi, encodeURIComponent(c)), "_blank", "noopener");
 };
 function rerender() { titleUi(); rerender0(); }
-function rerender0() { ({conf: renderConf, params: renderParams, groups: renderGroups, data: wcTplUi, graph: () => window.renderGraph && renderGraph()})[curTab](); }
+function rerender0() { ({conf: renderConf, params: renderParams, groups: renderGroups, data: wcTplUi, graph: () => window.renderGraph && renderGraph(), requests: () => window.renderRequests && renderRequests()})[curTab](); }
 function show(t) {
   curTab = t;
   $$("main > section").forEach(s => s.classList.toggle("hide", s.id !== "t-" + t));
@@ -2561,7 +2812,7 @@ function show(t) {
   rerender();
   scrollTo(0, 0);
 }
-$("#nav").onclick = e => { if (e.target.dataset.t) show(e.target.dataset.t); };
+$("#nav").onclick = e => { const b = e.target.closest("[data-t]"); if (b) show(b.dataset.t); };
 show("conf");
 for (const id of ["chkMiss", "chkMissC"]) $("#" + id).addEventListener("change", e => {
   showMiss = e.target.checked; try { localStorage.setItem("cf_showmiss", showMiss ? "1" : "0"); } catch {}
@@ -2714,11 +2965,12 @@ const FS = (() => {
     const S = {
       ok: ["ok", lastAt ? `Salvato su ${FN} alle ${hhmm(lastAt)}` : `Collegato a ${FN}`],
       none: ["wa", "Solo nel browser"], prompt: ["wa", "Cartella da riconnettere"], unsupported: ["wa", "Solo nel browser"],
-      error: ["er", "Errore salvataggio su file"], conflict: ["er", "File modificato altrove"]}[state];
+      error: ["er", "Errore salvataggio su file"], conflict: ["er", "File modificato altrove"], invalid: ["er", `${FN} non valido`]}[state];
     $("#autoSave").checked = autoSave; $("#btnSaveJson").classList.toggle("hide", autoSave);
     $("#btnSaveJson").textContent = dir ? "Salva nel file" : "Salva JSON";
     const statusText = dirty() && ["ok", "none", "unsupported"].includes(state) ? (dir ? `Nel browser · ${FN} da aggiornare` : "Nel browser · JSON da scaricare") : !dir && lastDownloadAt ? `JSON scaricato alle ${hhmm(lastDownloadAt)} · copia nel browser` : S[1];
     ss.className = "savestate fs-" + (dirty() && state === "ok" ? "wa" : S[0]); ss.querySelector("span").textContent = statusText;
+    if (storageError) { ss.className = "savestate fs-er"; ss.querySelector("span").textContent = state === "ok" && !dirty() ? `Salvato su ${FN} · memoria browser piena` : "Modifiche solo in memoria"; }
     ss.title = state === "ok" ? `Cartella: ${dir.name} · ${autoSave ? "salvataggio automatico" : "salvataggio manuale"} in ${FN}` : "Clic per gestire il salvataggio su file";
     const msg = {
       none: isEmptyDb() ? `<b>Nuovo configuratore.</b> Collega la cartella di questo file (<b>${esc(INST_DIR)}</b>): se contiene un database lo apro, altrimenti creo <span class="code">${NEW_FN}</span> vuoto e inizi a inserire i dati. <button class="b p s" data-fs="pick">Collega cartella…</button>`
@@ -2726,8 +2978,11 @@ const FS = (() => {
       prompt: `Per salvare le modifiche su <b>${FN}</b> riconnetti la cartella <b>${name}</b> (il browser lo chiede a ogni apertura). <button class="b p s" data-fs="grant">Riconnetti</button>`,
       unsupported: `Questo browser non può salvare su file: apri la pagina con <b>Chrome</b> o <b>Edge</b>. Intanto le modifiche restano solo nel browser.`,
       error: `Non riesco a scrivere <b>${FN}</b> nella cartella <b>${name}</b>. Le modifiche sono comunque nel browser. <button class="b s" data-fs="retry">Riprova</button> <button class="b s" data-fs="pick">Scegli un'altra cartella…</button>`,
-      conflict: `<b>${FN}</b> è stato modificato da un'altra parte dopo che l'hai aperto. <button class="b s" data-fs="reload">Ricarica dal file</button> <button class="b dz s" data-fs="force">Sovrascrivi il file</button>`}[state];
-    bn.innerHTML = msg ? `<div class="fsb fs-${S[0]}"><span>${msg}</span></div>` : ""; bn.classList.toggle("hide", !msg);
+      conflict: `<b>${FN}</b> è stato modificato da un'altra parte dopo che l'hai aperto. <button class="b s" data-fs="reload">Ricarica dal file</button> <button class="b dz s" data-fs="force">Sovrascrivi il file</button>`,
+      invalid: `<b>${FN}</b> nella cartella <b>${name}</b> non è un database valido e non è stato aperto né modificato. Le modifiche restano nel browser. <button class="b s" data-fs="reload">Riprova a leggerlo</button> <button class="b dz s" data-fs="force">Sovrascrivi con i dati del browser</button>`}[state];
+    const smsg = storageError ? `<b>La memoria del browser non accetta altri dati</b> (${esc(storageError)}). ${state === "ok" ? `Le modifiche vengono comunque scritte in <b>${FN}</b>${autoSave ? "" : " quando premi «Salva nel file»"}.` : "Le ultime modifiche esistono solo in questa pagina: <b>non chiuderla</b> prima di aver esportato il JSON."} <button class="b s" data-fs="export">Esporta JSON</button>` : "";
+    const all = [smsg && `<div class="fsb fs-er"><span>${smsg}</span></div>`, msg && `<div class="fsb fs-${S[0]}"><span>${msg}</span></div>`].filter(Boolean).join("");
+    bn.innerHTML = all; bn.classList.toggle("hide", !all);
     const c = $("#fsCard");
     if (c) c.innerHTML = state === "unsupported" ? `<p class="mut" style="margin:0">Salvataggio su file non disponibile in questo browser: usa Chrome o Edge.</p>`
       : `<div class="fsrow"><span class="fsdot fs-${S[0]}"></span><div style="flex:1;min-width:0">${dir ? `Cartella <b>${name}</b> · file <span class="code">${FN}</span> · backup giornalieri in <span class="code">${BK}/</span> (ultimi ${KEEP})` : "Nessuna cartella collegata"}<div class="mut">${esc(statusText)}</div></div>
@@ -2736,8 +2991,12 @@ const FS = (() => {
 
   // ---- lettura / scrittura ----
   async function readFile() {
-    try { const fh = await dir.getFileHandle(FN); const f = await fh.getFile(); return {f, data: JSON.parse(await f.text())}; }
-    catch (e) { if (e.name === "NotFoundError") return null; throw e; }
+    let f, data;
+    try { const fh = await dir.getFileHandle(FN); f = await fh.getFile(); data = JSON.parse(await f.text()); }
+    catch (e) { if (e.name === "NotFoundError") return null; if (e instanceof SyntaxError) throw Object.assign(new Error(`${FN} non è un JSON leggibile: ${e.message}`), {name: "InvalidDb", rep: {errors: [esc(e.message)], warnings: []}}); throw e; }
+    const rep = validateDb(data);           // un file danneggiato non sostituisce mai il database del browser
+    if (rep.errors.length) throw Object.assign(new Error(`${FN} non è valido`), {name: "InvalidDb", rep});
+    return {f, data, rep};
   }
   function adopt(data, mod) {           // il file diventa il database corrente (senza riscriverlo)
     discardPendingIteration();
@@ -2767,11 +3026,16 @@ const FS = (() => {
     const ss = $("#saveState"); ss.classList.remove("pulse"); void ss.offsetWidth; ss.classList.add("pulse");
   }
   const run = (fn) => (chain = chain.then(fn).catch(e => {
+    if (e.name === "InvalidDb") {          // il file resta intatto; il browser continua con la sua copia, senza scrivere sul file
+      state = "invalid"; ui();
+      ask({title: `Impossibile aprire ${FN}`, body: dbProblemHtml(e.rep) + `<p class="mut">Il file non è stato modificato. Il configuratore continua con i dati del browser e non scrive sul file finché non scegli.</p>`, actions: [{label: "OK", value: null, default: true}]});
+      return;
+    }
     state = e.name === "NotAllowedError" || e.name === "SecurityError" ? "prompt" : "error"; ui();
     if (state === "error") toast("Salvataggio su file non riuscito: " + e.message);
   }));
   function schedule() {
-    if (quiet) return;
+    if (quiet || window.TabLock?.readonly) return;
     dirty(true);
     if (!autoSave) { clearTimeout(timer); pending = false; ui(); return; }
     if (state !== "ok") { if (state !== "conflict" && !isEmptyDb()) dirty(true); ui(); return; }
@@ -2801,6 +3065,8 @@ const FS = (() => {
     dir = h; state = "ok"; await chooseFN(h);
     requestBackupFlush();
     const r = await readFile();
+    // scheda in consultazione (un'altra scheda modifica): legge soltanto, il file lo gestisce la scheda che modifica
+    if (window.TabLock?.readonly) { if (r) { lastMod = r.f.lastModified; lastAt = new Date(r.f.lastModified); } dirty(false); ui(); return; }
     if (!r) { if (autoSave) await write(true); else { dirty(true); ui(); } if (picked) toast(autoSave ? `Creato ${FN} nella cartella «${h.name}»: puoi iniziare a inserire i dati` : `Cartella collegata: premi Salva JSON per creare ${FN}`); return; }
     // database del browser vuoto (copia nuova o primo avvio): il file nella cartella vince sempre, senza domande
     if (isEmptyDb()) { adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); if (picked) toast(`Caricato ${FN} dalla cartella «${h.name}»`); return; }
@@ -2839,7 +3105,7 @@ const FS = (() => {
     catch (e) { toast("Permesso non concesso: " + e.message); }
   }
   async function check() {               // al ritorno sulla pagina: il file è cambiato da un'altra parte?
-    if (state !== "ok" || pending || dirty() || $("#dlg").open) return;
+    if (state !== "ok" || pending || dirty() || $("#dlg").open || window.TabLock?.readonly) return;
     await run(async () => {
       const r = await readFile(); if (!r || r.f.lastModified === lastMod) return;
       adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); ui(); toast(`${FN} è cambiato: database ricaricato dal file`);
@@ -2848,6 +3114,7 @@ const FS = (() => {
   async function act(k) {
     if (k === "pick") return pick();
     if (k === "grant") return grant();
+    if (k === "export") return download(`${machineSlug() || "configuratore"}_${today()}.json`, JSON.stringify(db, null, 2), "application/json");
     if (k === "retry") { state = "ok"; return run(() => write(false)); }
     if (k === "force") { const r = await ask({title: `Sovrascrivere ${FN}?`, body: "<p>Le modifiche fatte altrove sul file andranno perse (resta la copia di backup di oggi).</p>", actions: [{label: "Annulla", value: null, default: true}, {label: "Sovrascrivi", value: "ok", kind: "d"}]}); if (r.action === "ok") return run(() => write(true)); return; }
     if (k === "reload") return run(async () => { const r = await readFile(); if (r) { adopt(r.data, r.f.lastModified); lastAt = new Date(r.f.lastModified); } state = "ok"; ui(); toast("Database ricaricato dal file"); });
@@ -2870,7 +3137,7 @@ const FS = (() => {
       const old = await hLegacy();
       if (old && old.name === INST_DIR) {
         h = old; await hSet(h);
-        try { const d = JSON.parse(localStorage.getItem(LEGACY.db)); if (d && isEmptyDb()) { db = normalize(d); localStorage.setItem(KEY, JSON.stringify(db)); dirty(false); rerender(); } } catch {}
+        try { const d = JSON.parse(localStorage.getItem(LEGACY.db)); if (d && isEmptyDb() && !validateDb(d).errors.length) { db = normalize(d); localStorage.setItem(KEY, JSON.stringify(db)); dirty(false); rerender(); } } catch {}
         try { const c = localStorage.getItem(LEGACY.draft); if (c && !localStorage.getItem(KEY_DRAFT)) localStorage.setItem(KEY_DRAFT, c); } catch {}
       }
     }
@@ -2881,10 +3148,460 @@ const FS = (() => {
   }
   return {init, schedule, ui, noteDatabaseChange, finishIteration,
     get backupInfo() { return {every: backupState.every, count: backupState.count, queued: backupState.queue.length, lastName: backupState.lastName, error: backupError, busy: backupBusy}; },
-    get backupsIdle() { return backupChain; }, get state() { return state; }};
+    get backupsIdle() { return backupChain; }, get state() { return state; },
+    // cartella scrivibile (per file accessori come richieste.json), altrimenti null
+    get dir() { return dir && !["none", "prompt", "unsupported"].includes(state) ? dir : null; }};
 })();
 { const _save = save; save = function () { _save(); FS.schedule(); }; }
+{ const _ui = FS.ui; FS.ui = function () { _ui(); window.Requests?.fsChanged(); }; }
 FS.init();
+</script>
+<script>
+/* =================== UNA SOLA SCHEDA IN MODIFICA ===================
+   Due schede dello stesso HTML condividono la memoria del browser: senza coordinamento si sovrascrivono.
+   La scheda che modifica tiene un «lucchetto» in localStorage (rinnovato ogni 5 s); le altre si aprono
+   in consultazione, ricevono gli aggiornamenti e possono prendere il controllo con un clic. */
+const TabLock = (() => {
+  const K = "cf_lock@" + INST, ME = uid() + Date.now().toString(36), BEAT = 5000, STALE = 75000;   // STALE ampio: i timer delle schede in background rallentano fino a 1/min
+  let readonly = false, lastRefuse = 0;
+  const read = () => { try { return JSON.parse(localStorage.getItem(K)) || null; } catch { return null; } };
+  const write = () => { try { localStorage.setItem(K, JSON.stringify({tab: ME, t: Date.now()})); } catch {} };
+  const other = l => l && l.tab !== ME && Date.now() - l.t < STALE;
+  const editing = () => document.activeElement?.matches?.("main input,main textarea,main select,main [contenteditable]");
+  function reloadDb() {
+    try {
+      const d = JSON.parse(localStorage.getItem(KEY)); if (!d || validateDb(d).errors.length) return;
+      if (JSON.stringify(normalize(structuredClone(d))) === JSON.stringify(db)) return;
+      db = normalize(d); window.EditHistory?.reset(); prevKeys = null; rerender();
+    } catch {}
+  }
+  function banner() {
+    let b = $("#tabBanner");
+    if (!b) { b = document.createElement("div"); b.id = "tabBanner"; b.className = "noprint"; $("#fsBanner").after(b); }
+    b.innerHTML = readonly ? `<div class="fsb fs-wa"><span><b>Configuratore aperto in modifica in un'altra scheda.</b> Qui puoi consultare e scegliere i parametri; i dati si aggiornano da soli. <button class="b p s" id="tabTake">Modifica in questa scheda</button></span></div>` : "";
+    b.classList.toggle("hide", !readonly);
+    $("#tabTake")?.addEventListener("click", take);
+  }
+  function setRO(v) {
+    if (readonly === v) return;
+    readonly = v; banner();
+    const em = $("#editMode");
+    if (v) { em.dataset.lockPrev = em.checked ? "1" : "0"; if (em.checked) { em.checked = false; em.dispatchEvent(new Event("change")); } em.disabled = true; em.title = "Il configuratore è in modifica in un'altra scheda"; }
+    else { em.disabled = false; em.title = ""; if (em.dataset.lockPrev === "1" && !em.checked) { em.checked = true; em.dispatchEvent(new Event("change")); } delete em.dataset.lockPrev; }
+    window.EditHistory?.ui?.();
+  }
+  function take() { reloadDb(); write(); setRO(false); toast("Ora modifichi in questa scheda; l'altra passa in consultazione"); }
+  function release() { if (!readonly && read()?.tab === ME) try { localStorage.removeItem(K); } catch {} }
+  function beat() {
+    const l = read();
+    if (!readonly) { if (other(l)) setRO(true); else write(); }
+    else if (!other(l)) { reloadDb(); write(); setRO(false); toast("L'altra scheda è stata chiusa: puoi modificare qui"); }
+  }
+  addEventListener("storage", e => {
+    if (e.key === K) {
+      if (!readonly && other(read())) { document.activeElement?.blur?.(); setRO(true); }   // il campo in modifica si salva prima di cedere
+      // lucchetto liberato: si attende un attimo, perché una scheda che si sta solo ricaricando (F5) lo riprende subito
+      else if (readonly && !other(read())) setTimeout(beat, 1500);
+    } else if (e.key === KEY && e.newValue) {
+      if (readonly || !editing()) reloadDb();
+      else document.activeElement.addEventListener("blur", () => setTimeout(reloadDb, 0), {once: true});
+    }
+  });
+  addEventListener("pagehide", release);
+  setInterval(beat, BEAT);
+  if (other(read())) setRO(true); else write();          // subito: il collegamento alla cartella deve già sapere se questa scheda può scrivere
+  return {
+    get readonly() { return readonly; },
+    refuse() {
+      reloadDb();
+      if (Date.now() - lastRefuse > 3000) { lastRefuse = Date.now(); toast("Sola lettura: il configuratore è in modifica in un'altra scheda"); }
+    }, take,
+  };
+})();
+window.TabLock = TabLock;        // const non diventa proprietà di window: gli script precedenti lo cercano lì
+
+/* =================== RICHIESTE DI NUOVI CODICI ===================
+   File separato «richieste.json» nella cartella collegata (anche di rete): il database dei codici non cambia
+   forma, quindi resta leggibile da tutte le versioni del configuratore. Senza cartella le richieste restano
+   in questo browser e vengono unite al file al primo collegamento. Ogni scrittura rilegge il file e unisce per id. */
+const Requests = (() => {
+  const FN = "richieste.json", K_LOCAL = "cf_requests@" + INST, K_NAME = "cf_req_name";
+  const PRI = {alta: ["Alta", "er", 0], media: ["Media", "wa", 1], bassa: ["Bassa", "ne", 2]};
+  const ST = {aperta: ["Aperta", "wa"], inserita: ["Inserita", "ok"], rifiutata: ["Rifiutata", "ne"]};
+  let list = [], source = "local", error = "", busy = Promise.resolve(), filter = "aperta", lastDir = null, draftPri = "media";
+  const myName = () => { try { return localStorage.getItem(K_NAME) || ""; } catch { return ""; } };
+  const setName = n => { try { localStorage.setItem(K_NAME, n); } catch {} };
+  const localGet = () => { try { const d = JSON.parse(localStorage.getItem(K_LOCAL)); return Array.isArray(d?.requests) ? d.requests : []; } catch { return []; } };
+  const localSet = L => { try { L.length ? localStorage.setItem(K_LOCAL, JSON.stringify({version: 1, requests: L})) : localStorage.removeItem(K_LOCAL); } catch (e) { error = "Memoria del browser piena: " + e.message; } };
+  const valid = r => r && typeof r === "object" && typeof r.id === "string" && SAFE_ID.test(r.id);
+  // unione per id: vince la versione aggiornata più di recente; i campi sconosciuti restano
+  const merge = (a, b) => { const m = new Map(a.filter(valid).map(r => [r.id, r]));
+    for (const r of b.filter(valid)) { const x = m.get(r.id); if (!x || String(r.updated || r.date || "") >= String(x.updated || x.date || "")) m.set(r.id, r); }
+    return [...m.values()]; };
+  async function readFile(d) {
+    try { const f = await (await d.getFileHandle(FN)).getFile(); const t = await f.text(); if (!t.trim()) return {extra: {}, requests: []};
+      const j = JSON.parse(t); if (!j || typeof j !== "object" || (j.requests != null && !Array.isArray(j.requests))) throw new Error(`${FN} non ha il formato atteso`);
+      return {extra: j, requests: j.requests || []}; }
+    catch (e) { if (e.name === "NotFoundError") return {extra: {}, requests: []}; throw e; }
+  }
+  async function writeFile(d, extra, L) {
+    const w = await (await d.getFileHandle(FN, {create: true})).createWritable();
+    await w.write(JSON.stringify({...extra, version: 1, requests: L}, null, 1)); await w.close();
+  }
+  // tutte le operazioni passano di qui, in coda: rilettura → modifica → scrittura
+  const op = fn => (busy = busy.then(async () => {
+    const d = FS.dir; error = "";
+    try {
+      if (d) {
+        const cur = await readFile(d), loc = localGet();
+        let L = merge(cur.requests, loc);
+        const changed = fn ? fn(L) : null; if (Array.isArray(changed)) L = changed;
+        if (fn || loc.length) { await writeFile(d, cur.extra, L); localSet([]); }
+        list = L; source = "file";
+      } else {
+        let L = localGet(); const changed = fn ? fn(L) : null; if (Array.isArray(changed)) L = changed;
+        if (fn) localSet(L); list = L; source = "local";
+      }
+    } catch (e) {
+      // file illeggibile o non scrivibile: non si sovrascrive e la modifica non va persa, resta nel browser fino alla prossima scrittura riuscita
+      error = `${d ? FN : "memoria del browser"} non utilizzabile (${e.message})`;
+      if (fn) { let L = structuredClone(list); const ch = fn(L); if (Array.isArray(ch)) L = ch; localSet(merge(localGet(), L)); list = L;
+        error += ". La modifica è salvata in questo browser e verrà unita al file appena sarà di nuovo leggibile."; }
+      else { const loc = localGet(); list = d ? merge(list, loc) : loc;
+        if (d && loc.length) error += `. ${plural(loc.length, "richiesta è salvata", "richieste sono salvate")} in questo browser e ${loc.length === 1 ? "verrà unita" : "verranno unite"} al file appena sarà di nuovo leggibile.`; }
+    }
+    render(); navCount();
+  }));
+  const fsChanged = () => { const d = FS.dir; if (d !== lastDir) { lastDir = d; op(); } };
+  const openN = () => list.filter(r => (r.status || "aperta") === "aperta").length;
+  function navCount() { const b = $('#nav [data-t="requests"]'); if (!b) return; const n = openN(); b.innerHTML = `Richieste${n ? ` <span class="navn">${n}</span>` : ""}`; }
+  const gname = r => G(r.groupId)?.name || r.groupName || "";
+  const fmtTs = s => { const d = new Date(s); return isNaN(d) ? "" : d.toLocaleString("it-IT", {day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit"}); };
+  const exists = code => { const c = String(code || "").trim().toLowerCase(); return c ? allRows().filter(r => String(r.code).trim().toLowerCase() === c) : []; };
+  function formHtml() {
+    const gs = db.groups.map(g => `<option value="${esc(g.id)}">${esc(g.name)}</option>`).join("");
+    return `<form id="reqForm" class="card reqform" autocomplete="off">
+      <div class="cardhead"><h2>Nuova richiesta</h2></div>
+      <div class="reqgrid">
+        <label>Richiedente<input name="by" required maxlength="80" value="${esc(myName())}" placeholder="Nome e cognome"></label>
+        <label>Tipologia<select name="groupId"><option value="">— non so / nuova tipologia —</option>${gs}</select></label>
+        <label>Codice da inserire<input name="code" maxlength="80" placeholder="es. 8194492 (se già noto)"></label>
+        <label>Descrizione<input name="desc" maxlength="200" placeholder="cosa deve identificare"></label>
+        <div class="reqpri"><span>Priorità</span><div class="seg" id="reqPri" role="radiogroup" aria-label="Priorità">${Object.entries(PRI).map(([k, [l]]) => `<button type="button" role="radio" data-pri="${k}" aria-checked="${k === draftPri}" class="${k === draftPri ? "on" : ""}">${l}</button>`).join("")}</div></div>
+        <label class="wide">Motivazione<textarea name="reason" required rows="3" maxlength="2000" placeholder="Perché serve, per quale commessa o configurazione"></textarea></label>
+        <label class="chk wide"><input type="checkbox" name="withSel"> Allega i parametri scelti ora nel configuratore</label>
+      </div>
+      <div id="reqWarn" class="mut"></div>
+      <div class="row" style="justify-content:flex-end"><button class="b p" type="submit">Invia richiesta</button></div>
+    </form>`;
+  }
+  function itemHtml(r) {
+    const [pl, pc] = PRI[r.priority] || PRI.media, st = r.status || "aperta", [sl, sc] = ST[st] || ST.aperta;
+    const cond = Object.entries(r.cond || {}).map(([pid, v]) => `<span class="tag"><em>${esc(P(pid)?.name || pid)}</em><b>${esc(v)}</b></span>`).join("");
+    const ex = exists(r.code), canEdit = $("#editMode").checked && !TabLock.readonly;
+    return `<article class="card reqitem st-${esc(st)}" data-req="${esc(r.id)}">
+      <div class="reqh"><span class="tag pri ${pc}">${pl}</span><span class="tag ${sc}">${sl}</span>
+        <b class="code">${esc(r.code || "codice da definire")}</b><span class="mut">${esc(gname(r) || "tipologia da definire")}</span>
+        <span class="mut reqmeta">${esc(r.by || "?")} · ${esc(fmtTs(r.date))}</span></div>
+      ${r.desc ? `<div>${esc(r.desc)}</div>` : ""}
+      <div class="reqreason">${esc(r.reason || "")}</div>
+      ${cond ? `<div class="reqcond">${cond}</div>` : ""}
+      ${ex.length && st === "aperta" ? `<div class="note wa">Il codice esiste già nel database (${ex.slice(0, 3).map(x => esc(G(x.groupId)?.name || byId(db.acc, x.groupId)?.name || "?")).join(", ")}).</div>` : ""}
+      ${st !== "aperta" ? `<div class="mut">${esc(sl)} da <b>${esc(r.handledBy || "?")}</b> il ${esc(fmtTs(r.handledDate))}${r.note ? ` · ${esc(r.note)}` : ""}</div>` : ""}
+      <div class="row reqacts">${st === "aperta"
+        ? `${r.groupId && G(r.groupId) && r.code ? `<button class="b s" data-ra="row" ${canEdit ? "" : "disabled title=\"Attiva «Modifica dati» per creare la riga\""}>Crea riga in Tipologie</button>` : ""}<button class="b s p" data-ra="done">Segna inserita</button><button class="b s dz" data-ra="reject">Rifiuta</button>`
+        : `<button class="b s" data-ra="reopen">Riapri</button>`}</div></article>`;
+  }
+  function render() {
+    const host = $("#reqHost"); if (!host || curTab !== "requests") return;
+    const keep = host.querySelector("#reqForm") ? Object.fromEntries(new FormData(host.querySelector("#reqForm"))) : null;
+    const shown = list.filter(r => filter === "tutte" || (r.status || "aperta") === filter)
+      .sort((a, b) => ((PRI[a.priority] || PRI.media)[2] - (PRI[b.priority] || PRI.media)[2]) || String(b.date).localeCompare(String(a.date)));
+    const cnt = k => list.filter(r => k === "tutte" || (r.status || "aperta") === k).length;
+    $("#reqSrc").innerHTML = error ? `<span class="warn">Errore: ${esc(error)}</span> <button class="b s" id="reqRetry">Riprova</button>`
+      : source === "file" ? `Archivio condiviso: <span class="code">${esc(FS.dir?.name || "")}/${FN}</span> · visibile a chi apre il configuratore dalla stessa cartella`
+      : `Nessuna cartella collegata: le richieste restano <b>solo in questo browser</b> e saranno unite a <span class="code">${FN}</span> quando colleghi la cartella.`;
+    host.innerHTML = formHtml() + `<div class="reqbar"><div class="seg" id="reqFlt">${[["aperta", "Aperte"], ["inserita", "Inserite"], ["rifiutata", "Rifiutate"], ["tutte", "Tutte"]].map(([k, l]) => `<button data-rf="${k}" class="${filter === k ? "on" : ""}">${l}<span class="n">${cnt(k)}</span></button>`).join("")}</div></div>
+      <div class="reqlist">${shown.map(itemHtml).join("") || `<div class="card empty">Nessuna richiesta ${filter === "tutte" ? "" : (ST[filter]?.[0] || "").toLowerCase()}.</div>`}</div>`;
+    if (keep) { const f = host.querySelector("#reqForm"); for (const [k, v] of Object.entries(keep)) { const el = f.elements[k]; if (!el) continue; if (el.type === "checkbox") el.checked = v === "on"; else el.value = v; } warn(); }
+  }
+  function warn() {
+    const f = $("#reqForm"); if (!f) return;
+    const ex = exists(f.elements.code.value);
+    $("#reqWarn").innerHTML = ex.length ? `<div class="note wa">Il codice è già presente nel database (${ex.slice(0, 3).map(x => esc(G(x.groupId)?.name || byId(db.acc, x.groupId)?.name || "?")).join(", ")}).</div>` : "";
+  }
+  async function handle(id, status) {
+    const r = list.find(x => x.id === id); if (!r) return;
+    const res = status === "aperta" ? {action: "ok", value: ""} : await ask({title: status === "inserita" ? "Segna come inserita" : "Rifiuta la richiesta",
+      body: `<p><b>${esc(r.code || "codice da definire")}</b> · ${esc(gname(r))}</p><p class="mut">Il tuo nome viene registrato con la decisione.</p><label style="display:block;margin-top:8px">Nota ${status === "rifiutata" ? "(motivo del rifiuto)" : "(facoltativa)"}<input id="reqNote" style="width:100%;margin-top:4px"></label>`,
+      input: {value: myName(), placeholder: "Il tuo nome"},
+      actions: [{label: "Annulla", value: null}, {label: status === "inserita" ? "Segna inserita" : "Rifiuta", value: "ok", kind: status === "inserita" ? "p" : "d", default: true}]});
+    if (res.action !== "ok") return;
+    if (status !== "aperta" && !res.value) { toast("Serve il nome di chi gestisce la richiesta"); return; }
+    const note = status === "aperta" ? "" : (document.getElementById("reqNote")?.value || "").trim();
+    if (res.value) setName(res.value);
+    const now = new Date().toISOString();
+    op(L => { const x = L.find(y => y.id === id); if (!x) return;
+      Object.assign(x, {status, updated: now});
+      if (status === "aperta") { delete x.handledBy; delete x.handledDate; delete x.note; }
+      else Object.assign(x, {handledBy: res.value, handledDate: now, ...(note ? {note} : {})}); });
+  }
+  function createRow(id) {
+    const r = list.find(x => x.id === id), g = r && G(r.groupId); if (!g) return;
+    if (!$("#editMode").checked || TabLock.readonly) { toast("Attiva «Modifica dati» per creare la riga"); return; }
+    const cond = Object.fromEntries(Object.entries(r.cond || {}).filter(([pid]) => g.params.includes(pid)));
+    const row = {id: uid(), groupId: g.id, code: String(r.code).trim(), desc: r.desc || "", qty: 1, note: `Richiesta di ${r.by || "?"} del ${fmtTs(r.date)}`, cond, review: true};
+    db.items.push(row); save();
+    toast("Riga creata in bozza (da revisionare): completala in Tipologie");
+    curG = g.id; flashId = row.id; show("groups");
+  }
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#t-requests")) return;
+    const pb = e.target.closest("[data-pri]");
+    if (pb) { draftPri = pb.dataset.pri; $$("#reqPri button").forEach(b => { const on = b === pb; b.classList.toggle("on", on); b.setAttribute("aria-checked", on); }); return; }
+    const rf = e.target.closest("[data-rf]"); if (rf) { filter = rf.dataset.rf; return render(); }
+    if (e.target.id === "reqRetry") return op();
+    const ra = e.target.closest("[data-ra]"); if (!ra) return;
+    const id = ra.closest("[data-req]").dataset.req;
+    ({row: () => createRow(id), done: () => handle(id, "inserita"), reject: () => handle(id, "rifiutata"), reopen: () => handle(id, "aperta")})[ra.dataset.ra]();
+  });
+  document.addEventListener("input", e => { if (e.target.closest?.("#reqForm") && e.target.name === "code") warn(); });
+  document.addEventListener("submit", e => {
+    const f = e.target; if (f.id !== "reqForm") return; e.preventDefault();
+    const v = Object.fromEntries(new FormData(f)), by = v.by.trim(), reason = v.reason.trim();
+    if (!by || !reason) { f.reportValidity(); return; }
+    if (!v.code.trim() && !v.desc.trim()) { toast("Indica almeno il codice o una descrizione"); f.elements.code.focus(); return; }
+    setName(by);
+    const g = G(v.groupId), now = new Date().toISOString();
+    const cond = v.withSel && g ? Object.fromEntries(g.params.filter(pid => cfg.sel[pid] && cfg.sel[pid] !== ANY).map(pid => [pid, cfg.sel[pid]])) : {};
+    const req = {id: "q" + uid(), date: now, updated: now, by, groupId: g ? g.id : "", groupName: g ? g.name : "", code: v.code.trim(), desc: v.desc.trim(), cond, priority: draftPri, reason, status: "aperta"};
+    f.reset(); draftPri = "media";
+    op(L => { L.push(req); }).then(() => toast(error ? `Richiesta salvata solo in questo browser: ${FN} non è utilizzabile` : source === "file" ? "Richiesta inviata" : "Richiesta salvata in questo browser (nessuna cartella collegata)"));
+  });
+  addEventListener("focus", () => { if (curTab === "requests") op(); });
+  return {render: () => { render(); op(); }, fsChanged, navCount, get list() { return list; }, refresh: op};
+})();
+window.Requests = Requests;      // usato dal salvataggio su file per riallineare richieste.json al collegamento della cartella
+window.renderRequests = Requests.render;
+Requests.refresh();
+</script>
+<script>
+/* =================== GRAFO — VISTA RETE (stile grafo di conoscenza) ===================
+   Nodi: macrogruppi, tipologie, parametri, interscambi, codici, accessori. Legami: appartenenza al macrogruppo,
+   dipendenza della tipologia dai parametri, righe della tipologia. Simulazione a forze su canvas, con griglia
+   spaziale per la repulsione (resta fluida anche con molte centinaia di nodi). Solo lettura: non tocca il database. */
+const NetGraph = (() => {
+  const wrap = $("#grNet"), cv = $("#grNetCv"), ctx = cv.getContext("2d"), side = $("#grNetSide");
+  let mode = (() => { try { return localStorage.getItem("cf_graph_mode") || "net"; } catch { return "net"; } })();
+  let nodes = [], links = [], byId = new Map(), adj = new Map(), sig = "";
+  let cam = {x: 0, y: 0, k: 1}, alpha = 0, raf = 0, hover = null, sel = null, drag = null, pan = null, q = "", dpr = 1, W = 0, H = 0;
+  const show = {param: true, code: false, x: true, acc: true};
+  const R = {mac: 13, grp: 9, par: 7, x: 5, code: 3.6, acc: 5};
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  let C = {};
+  const readColors = () => { C = {mac: css("--net-mac"), grp: css("--net-grp"), par: css("--net-par"), x: css("--net-x"), code: css("--net-code"), acc: css("--net-acc"),
+    tx: css("--tx") || "#222", mut: css("--mut") || "#888", bd: css("--bd") || "#ccc", ok: css("--ok") || "#2a9d4b", wa: css("--wa-ln") || css("--wa") || "#d9a400", er: css("--er") || "#d33", bg: css("--surface") || "#fff"}; };
+  function build() {
+    const N = [], L = [], add = (id, kind, label, extra = {}) => { const n = {id, kind, label, r: R[kind], ...extra}; N.push(n); return n; };
+    const link = (a, b, kind) => L.push({s: a, t: b, kind});
+    for (const m of db.macros) add("m:" + m.id, "mac", m.name, {ref: m});
+    for (const g of db.groups) {
+      const h = groupHealth(g);
+      add("g:" + g.id, "grp", g.name, {ref: g, st: h.badge, title: h.title});
+      if (g.macroId && db.macros.some(m => m.id === g.macroId)) link("m:" + g.macroId, "g:" + g.id, "mac");
+      if (show.param) for (const pid of g.params) if (P(pid)) link("g:" + g.id, "p:" + pid, "dep");
+      if (show.code) for (const i of db.items.filter(i => i.groupId === g.id)) { add("i:" + i.id, "code", i.code || "codice da inserire", {ref: i, draft: isDraft(i)}); link("g:" + g.id, "i:" + i.id, "row"); }
+      if (show.x && needsInter(g)) for (const x of db.inter.filter(i => i.groupId === g.id)) { add("x:" + x.id, "x", x.code || "interscambio da inserire", {ref: x, draft: isDraft(x)}); link("g:" + g.id, "x:" + x.id, "row"); }
+      if (show.acc) for (const a of accsOf(g)) { add("a:" + a.id, "acc", a.name, {ref: a}); link("g:" + g.id, "a:" + a.id, "acc");
+        if (show.param) for (const pid of a.params) if (P(pid)) link("a:" + a.id, "p:" + pid, "dep"); }
+    }
+    if (show.param) { const used = new Set(L.filter(l => l.kind === "dep").map(l => l.t)); for (const p of db.params) if (used.has("p:" + p.id)) add("p:" + p.id, "par", p.name, {ref: p}); }
+    // posizioni conservate tra una ricostruzione e l'altra: la rete non «salta» a ogni modifica
+    const old = byId; byId = new Map(N.map(n => [n.id, n]));
+    N.forEach((n, k) => { const o = old.get(n.id); if (o) { n.x = o.x; n.y = o.y; n.vx = 0; n.vy = 0; n.fixed = o.fixed; }
+      else { const a = k * 2.399963, rr = 30 * Math.sqrt(k + 1); n.x = Math.cos(a) * rr; n.y = Math.sin(a) * rr; n.vx = n.vy = 0; } });
+    links = L.filter(l => byId.has(l.s) && byId.has(l.t)).map(l => ({...l, a: byId.get(l.s), b: byId.get(l.t)}));
+    adj = new Map(N.map(n => [n.id, new Set()]));
+    for (const l of links) { adj.get(l.s).add(l.t); adj.get(l.t).add(l.s); }
+    for (const n of N) { n.deg = adj.get(n.id).size; if (n.kind === "par" || n.kind === "mac") n.r = R[n.kind] + Math.min(10, Math.sqrt(n.deg) * 1.6); }
+    nodes = N; sel = sel && byId.get(sel.id) || null; hover = null;
+  }
+  // ---- simulazione ----
+  function tick() {
+    const n = nodes.length, cell = 120, cut2 = cell * cell * 2.25, grid = new Map(), key = (x, y) => (x + 32768) * 65536 + (y + 32768);
+    for (const a of nodes) { const cx = Math.floor(a.x / cell), cy = Math.floor(a.y / cell); a.cx = cx; a.cy = cy; const k = key(cx, cy); (grid.get(k) || grid.set(k, []).get(k)).push(a); }
+    const rep = 1800 * alpha;
+    // repulsione solo tra celle adiacenti, ogni coppia una volta sola
+    for (const a of nodes) for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+      const L = grid.get(key(a.cx + dx, a.cy + dy)); if (!L) continue;
+      for (const b of L) { if (b.id <= a.id) continue; let x = a.x - b.x, y = a.y - b.y, d2 = x * x + y * y;
+        if (d2 > cut2) continue;
+        if (d2 < 0.01) { x = Math.random() - .5; y = Math.random() - .5; d2 = .5; }
+        const d = Math.sqrt(d2), f = rep / d2, fx = x / d * f, fy = y / d * f;
+        a.vx += fx; a.vy += fy; b.vx -= fx; b.vy -= fy; }
+    }
+    for (const l of links) {
+      const a = l.a, b = l.b, x = b.x - a.x, y = b.y - a.y, d = Math.sqrt(x * x + y * y) || 1;
+      const rest = l.kind === "row" ? 34 : l.kind === "mac" ? 70 : l.kind === "acc" ? 40 : 95, k = (l.kind === "dep" ? .025 : .06) * alpha;
+      const f = (d - rest) * k, fx = x / d * f, fy = y / d * f;
+      const wa = b.deg / (a.deg + b.deg), wb = 1 - wa;
+      a.vx += fx * wa; a.vy += fy * wa; b.vx -= fx * wb; b.vy -= fy * wb;
+    }
+    for (const a of nodes) {
+      a.vx -= a.x * .004 * alpha; a.vy -= a.y * .004 * alpha;                // gravità verso il centro
+      if (a === drag?.n || a.fixed) { a.vx = a.vy = 0; continue; }
+      a.vx *= .6; a.vy *= .6; a.x += Math.max(-30, Math.min(30, a.vx)); a.y += Math.max(-30, Math.min(30, a.vy));
+    }
+    alpha *= n > 600 ? .985 : .978;
+  }
+  function loop() {
+    raf = 0; if (mode !== "net" || curTab !== "graph") return;
+    if (alpha > .02) { tick(); if (alpha > .02) raf = requestAnimationFrame(loop); }
+    draw();
+  }
+  // simulazione anticipata con tetto di tempo: la rete compare già ordinata senza bloccare la pagina
+  const presim = ms => { const t = performance.now(); for (let k = 0; k < 300 && alpha > .02 && performance.now() - t < ms; k++) tick(); };
+  const kick = (a = .6) => { alpha = Math.max(alpha, a); if (!raf) raf = requestAnimationFrame(loop); };
+  const redraw = () => { if (!raf) raf = requestAnimationFrame(loop); };
+  // ---- disegno ----
+  const toScreen = (x, y) => [(x - cam.x) * cam.k + W / 2, (y - cam.y) * cam.k + H / 2];
+  const toWorld = (sx, sy) => [(sx - W / 2) / cam.k + cam.x, (sy - H / 2) / cam.k + cam.y];
+  const matchQ = n => q && n.label.toLowerCase().includes(q);
+  function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.scale(cam.k, cam.k); ctx.translate(-cam.x, -cam.y);
+    const focus = hover || sel, near = focus ? adj.get(focus.id) : null, health = $("#grNetHealth").checked;
+    const lit = n => !focus || n === focus || near.has(n.id);
+    for (const l of links) {
+      const on = focus && (l.a === focus || l.b === focus);
+      ctx.globalAlpha = focus ? (on ? .95 : .06) : (l.kind === "dep" ? .28 : .4);
+      ctx.strokeStyle = on ? C[l.a === focus ? l.b.kind : l.a.kind] || C.mut : C.mut;
+      ctx.lineWidth = (on ? 1.8 : l.kind === "dep" ? .7 : 1) / Math.max(.6, cam.k);
+      if (l.kind === "dep" && !on) ctx.setLineDash([4 / cam.k, 3 / cam.k]); else ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(l.a.x, l.a.y); ctx.lineTo(l.b.x, l.b.y); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    for (const n of nodes) {
+      ctx.globalAlpha = lit(n) ? 1 : .12;
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = n.draft ? C.bg : C[n.kind]; ctx.fill();
+      if (n.draft) { ctx.strokeStyle = C[n.kind]; ctx.lineWidth = 1.5 / cam.k; ctx.setLineDash([2 / cam.k, 2 / cam.k]); ctx.stroke(); ctx.setLineDash([]); }
+      if (health && n.kind === "grp" && n.st !== "ok") { ctx.strokeStyle = n.st === "er" ? C.er : C.wa; ctx.lineWidth = 3 / Math.max(.7, cam.k); ctx.stroke(); }
+      if (matchQ(n) || n === sel) { ctx.strokeStyle = C.tx; ctx.lineWidth = 2 / cam.k; ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 4 / cam.k, 0, Math.PI * 2); ctx.stroke(); }
+    }
+    // etichette: sempre per macrogruppi/tipologie/parametri quando lo zoom lo consente, per tutti i nodi evidenziati
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (const n of nodes) {
+      const big = n.kind === "mac" || n.kind === "grp" || n.kind === "par";
+      const showL = (focus && lit(n)) || matchQ(n) || (big && cam.k > .55) || cam.k > 1.6;
+      if (!showL) continue;
+      ctx.globalAlpha = lit(n) ? 1 : .15;
+      const fs = (n.kind === "mac" ? 13 : n.kind === "code" ? 10 : 11.5) / Math.max(.75, Math.min(cam.k, 1.6));
+      ctx.font = `${n.kind === "mac" || n === focus ? "600 " : ""}${fs}px system-ui,sans-serif`;
+      const t = n.label.length > 34 ? n.label.slice(0, 33) + "…" : n.label;
+      ctx.lineWidth = 3 / cam.k; ctx.strokeStyle = C.bg; ctx.strokeText(t, n.x, n.y + n.r + 3 / cam.k);
+      ctx.fillStyle = C.tx; ctx.fillText(t, n.x, n.y + n.r + 3 / cam.k);
+    }
+    ctx.restore(); ctx.globalAlpha = 1;
+  }
+  // ---- interazione ----
+  const pick = (sx, sy) => { const [x, y] = toWorld(sx, sy); let best = null, bd = Infinity;
+    for (const n of nodes) { const d = Math.hypot(n.x - x, n.y - y); if (d < Math.max(n.r + 3, 8 / cam.k) && d < bd) { best = n; bd = d; } } return best; };
+  const pos = e => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  cv.addEventListener("pointerdown", e => {
+    cv.setPointerCapture(e.pointerId); const [sx, sy] = pos(e), n = pick(sx, sy);
+    if (n) { drag = {n, moved: false, sx, sy}; } else pan = {sx, sy, cx: cam.x, cy: cam.y, moved: false};
+    cv.classList.add("drag");
+  });
+  cv.addEventListener("pointermove", e => {
+    const [sx, sy] = pos(e);
+    if (drag) { if (Math.hypot(sx - drag.sx, sy - drag.sy) > 3) drag.moved = true; if (drag.moved) { const [x, y] = toWorld(sx, sy); drag.n.x = x; drag.n.y = y; drag.n.fixed = true; kick(.25); } return; }
+    if (pan) { if (Math.hypot(sx - pan.sx, sy - pan.sy) > 3) pan.moved = true; cam.x = pan.cx - (sx - pan.sx) / cam.k; cam.y = pan.cy - (sy - pan.sy) / cam.k; redraw(); return; }
+    const n = pick(sx, sy); if (n !== hover) { hover = n; cv.style.cursor = n ? "pointer" : ""; cv.title = n ? `${n.label}${n.title ? " — " + n.title : ""}` : ""; redraw(); }
+  });
+  const up = () => {
+    if (drag && !drag.moved) select(drag.n);
+    if (pan && !pan.moved) select(null);
+    drag = pan = null; cv.classList.remove("drag");
+  };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("pointerleave", () => { if (hover && !drag) { hover = null; redraw(); } });
+  cv.addEventListener("dblclick", e => { const n = pick(...pos(e)); if (!n) return;
+    if (n.kind === "grp") { curG = n.ref.id; show("groups"); }
+    else if (["code", "x"].includes(n.kind)) { curG = n.ref.groupId; flashId = n.ref.id; show("groups"); }
+    else if (n.kind === "acc") { curG = n.ref.groupId; show("groups"); }
+    else if (n.kind === "par") show("params");
+    else n.fixed = false; });
+  cv.addEventListener("wheel", e => { e.preventDefault(); const [sx, sy] = pos(e), [wx, wy] = toWorld(sx, sy);
+    cam.k = Math.max(.15, Math.min(5, cam.k * Math.exp(-e.deltaY * .0015))); const [nx, ny] = toWorld(sx, sy); cam.x += wx - nx; cam.y += wy - ny; redraw(); }, {passive: false});
+  cv.addEventListener("keydown", e => {
+    if (e.key === "Escape") { select(null); return; }
+    if (e.key === "+" || e.key === "=") { cam.k = Math.min(5, cam.k * 1.2); redraw(); }
+    if (e.key === "-") { cam.k = Math.max(.15, cam.k / 1.2); redraw(); }
+    if (e.key === "0") fit();
+    const st = 40 / cam.k, mv = {ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, -st], ArrowDown: [0, st]}[e.key];
+    if (mv) { e.preventDefault(); cam.x += mv[0]; cam.y += mv[1]; redraw(); }
+  });
+  const KIND = {mac: "Macrogruppo", grp: "Tipologia", par: "Parametro", x: "Interscambio", code: "Codice", acc: "Accessorio"};
+  function select(n) {
+    sel = n; redraw();
+    if (!n) { side.classList.add("hide"); return; }
+    const nb = [...adj.get(n.id)].map(id => byId.get(id)).sort((a, b) => a.kind.localeCompare(b.kind) || a.label.localeCompare(b.label, "it"));
+    const groups = {}; for (const m of nb) (groups[m.kind] ||= []).push(m);
+    const extra = n.kind === "grp" ? `<div class="mut">${esc(n.title)}</div>` : n.kind === "par" ? `<div class="mut">Valori: ${esc(n.ref.values.join(", "))}</div>`
+      : (n.kind === "code" || n.kind === "x") ? `<div>${esc(n.ref.desc || "")}</div><div class="mut">${Object.entries(n.ref.cond).map(([p, v]) => `${esc(P(p)?.name || "?")}: ${esc(v)}`).join(" · ") || "vale per tutte le combinazioni"}</div>` : "";
+    side.innerHTML = `<button class="ib sm netclose" data-netclose aria-label="Chiudi il pannello dei legami" title="Chiudi (Esc)">×</button><h3>${esc(n.label)}</h3><div class="mut">${KIND[n.kind]} · ${plural(nb.length, "legame", "legami")}</div>${extra}
+      ${Object.entries(groups).map(([k, L]) => `<div style="margin-top:8px"><b>${KIND[k]}</b> <span class="mut">(${L.length})</span><ul>${L.slice(0, 60).map(m => `<li><button class="lnk" data-netgo="${esc(m.id)}">${esc(m.label)}</button></li>`).join("")}${L.length > 60 ? "<li class='mut'>…</li>" : ""}</ul></div>`).join("")}
+      <div class="row" style="gap:6px;margin-top:6px">${["grp", "code", "x", "acc"].includes(n.kind) ? `<button class="b s" data-netedit="${esc(n.id)}">Apri in Tipologie</button>` : ""}${n.fixed ? `<button class="b s" data-netfree="${esc(n.id)}">Sblocca posizione</button>` : ""}</div>`;
+    side.classList.remove("hide");
+  }
+  side.addEventListener("click", e => {
+    if (e.target.closest("[data-netclose]")) { select(null); cv.focus(); return; }
+    const go = e.target.closest("[data-netgo]"); if (go) { const n = byId.get(go.dataset.netgo); if (n) { select(n); cam.x = n.x; cam.y = n.y; redraw(); } return; }
+    const ed = e.target.closest("[data-netedit]"); if (ed) { const n = byId.get(ed.dataset.netedit); if (n) { curG = n.kind === "grp" ? n.ref.id : n.ref.groupId; if (n.kind !== "grp" && n.kind !== "acc") flashId = n.ref.id; show("groups"); } return; }
+    const fr = e.target.closest("[data-netfree]"); if (fr) { const n = byId.get(fr.dataset.netfree); if (n) { n.fixed = false; kick(.3); select(n); } }
+  });
+  function fit() {
+    if (!nodes.length) return;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const n of nodes) { x0 = Math.min(x0, n.x); y0 = Math.min(y0, n.y); x1 = Math.max(x1, n.x); y1 = Math.max(y1, n.y); }
+    cam.x = (x0 + x1) / 2; cam.y = (y0 + y1) / 2; cam.k = Math.max(.15, Math.min(2, Math.min(W / (x1 - x0 + 120), H / (y1 - y0 + 120)))); redraw();
+  }
+  $("#grNetFit").addEventListener("click", fit);
+  $("#grNetQ").addEventListener("input", e => { q = e.target.value.trim().toLowerCase();
+    const hits = q ? nodes.filter(matchQ) : []; if (hits.length === 1) { cam.x = hits[0].x; cam.y = hits[0].y; } redraw(); });
+  $("#grNetQ").addEventListener("keydown", e => { if (e.key !== "Enter") return; const h = nodes.find(matchQ); if (h) { select(h); cam.x = h.x; cam.y = h.y; cam.k = Math.max(cam.k, 1.2); redraw(); } });
+  wrap.addEventListener("change", e => { const f = e.target.dataset.nf; if (f) { show[f] = e.target.checked; sig = ""; render(); alpha = .8; presim(160); fit(); kick(.2); /* i nodi nuovi restano nell'inquadratura */ } else if (e.target.id === "grNetHealth") redraw(); });
+  function resize() {
+    const r = cv.getBoundingClientRect(); dpr = window.devicePixelRatio || 1; W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); redraw();
+  }
+  new ResizeObserver(() => { if (mode === "net" && curTab === "graph") resize(); }).observe(wrap);
+  function setMode(m) {
+    mode = m; try { localStorage.setItem("cf_graph_mode", m); } catch {}
+    $$("#grMode button").forEach(b => { const on = b.dataset.gm === m; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    wrap.classList.toggle("hide", m !== "net"); $("#t-graph").classList.toggle("netmode", m === "net");
+    if (m === "net") render(); else window.renderGraph?.();
+  }
+  $("#grMode").addEventListener("click", e => { const b = e.target.closest("[data-gm]"); if (b) setMode(b.dataset.gm); });
+  function render() {
+    if (mode !== "net" || curTab !== "graph") return;
+    readColors(); resize();
+    const s = [window.__dbRev || 0, db.items.length, db.inter.length, db.groups.length, db.params.length, db.acc.length, JSON.stringify(show)].join("|");
+    if (s !== sig) { const first = !nodes.length; sig = s; build(); kick(first ? 1 : .5);
+      if (first) { presim(250); fit(); } }
+    if (sel) select(byId.get(sel.id) || null); else redraw();
+  }
+  // all'ingresso nella scheda Grafo: applica la vista scelta
+  // la vista Albero è definita in uno script successivo: l'aggancio avviene a pagina caricata
+  let _rg = null;
+  addEventListener("DOMContentLoaded", () => { _rg = window.renderGraph; window.renderGraph = netRender; if (curTab === "graph") netRender(); });
+  const netRender = () => { $("#t-graph").classList.toggle("netmode", mode === "net"); wrap.classList.toggle("hide", mode !== "net");
+    $$("#grMode button").forEach(b => { const on = b.dataset.gm === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+    if (mode === "net") render(); else _rg?.(); };
+  new MutationObserver(() => { readColors(); redraw(); }).observe(document.documentElement, {attributes: true, attributeFilter: ["data-theme", "class"]});
+  return {render, setMode, get nodes() { return nodes; }, get links() { return links; }};
+})();
 </script>
 
 <div id="xpop" role="tooltip" aria-hidden="true"></div>
@@ -2898,7 +3615,7 @@ FS.init();
       return `<div class="xh">Codici precedenti</div>${prev.slice(0, 5).map(p => `<div style="margin:6px 0"><div class="xc code">${esc(p.code)}</div>${fmtDate(p.date) ? `<div class="xd">${fmtDate(p.date)}</div>` : ""}</div>`).join("")}${prev.length > 5 ? `<div class="xd">Altre ${prev.length - 5} versioni nello storico</div>` : ""}<div class="xa">Clicca su «Versioni precedenti» per aprire lo storico.</div>`;
     }
     const g = db.groups.find(x => x.id === b.dataset.xg); if (!g) return "";
-    const ed = `<a class="tlink" data-goedit="${g.id}" href="javascript:void 0">`;
+    const ed = `<a class="tlink" data-goedit="${esc(g.id)}" href="javascript:void 0">`;
     if (b.dataset.xs === "ok") {
       const x = db.inter.find(i => i.id === b.dataset.xi); if (!x) return "";
       return `<div class="xh">Assieme di interscambio</div><div class="xc code">${esc(x.code)}</div>${x.desc ? `<div class="xd">${esc(x.desc)}</div>` : ""}
@@ -3053,10 +3770,10 @@ FS.init();
       if (r.inter.length === 1) used.add("x:" + r.inter[0].id);
       (r.acc || []).forEach(x => { if (x.state !== "off") used.add("a:" + x.a.id); x.items.forEach(i => used.add("c:" + i.id)); });
       let st = isReady(r) ? "ok" : r.state === "none" ? "db" : "wa";
-      if (r.state === "ok" && needsInter(r.g) && r.inter.length > 1) st = "er";
+      if ((r.state === "ok" && needsInter(r.g) && r.inter.length > 1) || r.state === "conflict") st = "er";
       gstate[r.g.id] = started ? st : "ne";
       reason[r.g.id] = r.state === "missing" ? "manca " + r.missing.map(p => P(p)?.name).join(", ")
-        : r.items.length ? "" : r.state === "draft" ? "righe in bozza da completare" : "nessun codice per i parametri attuali";
+        : r.state === "conflict" ? issueText(r) : r.items.length ? "" : r.state === "draft" ? "righe in bozza da completare" : "nessun codice per i parametri attuali";
     }
 
     const byGroup = (arr, k) => { const m = new Map(); for (const r of arr) { const a = m.get(r[k]) || []; a.push(r); m.set(r[k], a); } return m; };
@@ -3071,6 +3788,7 @@ FS.init();
       if (h.ri < 1) b.push(Math.floor(100 * h.ri) + "%");
       if (h.rx < 1) b.push("ASM " + Math.floor(100 * h.rx) + "%");
       if (h.ambig) b.push("≠ASM"); else if (h.cov >= 1 && h.accN) b.push("acc.");
+      if (h.unk) b.push("n.c.");
       if (h.drafts) b.push("✎" + h.drafts);
       return b.join(" ") || "100%";
     };
@@ -3273,7 +3991,7 @@ FS.init();
     const L = T.L, mode = L.startsWith("p:") ? "par" : L;
     $$("#grLensSeg button").forEach(b => { const on = b.dataset.lens === mode; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
     const cb = $('#grLensSeg [data-lens="cfg"]'); cb.disabled = !T.started; cb.title = T.started ? "Parti usate dalla configurazione impostata nel Configuratore" : "Imposta prima dei parametri nel Configuratore";
-    const s = $("#grLensPar"), opts = db.params.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    const s = $("#grLensPar"), opts = db.params.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join("");
     if (s.dataset.sig !== opts) { s.innerHTML = opts; s.dataset.sig = opts; }
     s.classList.toggle("hide", mode !== "par"); if (T.pid) s.value = T.pid;
     // riepilogo in una frase
@@ -3323,7 +4041,7 @@ FS.init();
   function interList(g) {
     if (!needsInter(g)) return "";
     const xs = db.inter.filter(x => x.groupId === g.id);
-    return `<div class="sec2">Interscambi (.ASM)</div><ul>${xs.map(x => `<li><a class="tlink code" data-gsel="x:${x.id}" href="javascript:void 0">${esc(x.code || "da inserire")}</a> <span class="mut">${Object.entries(x.cond).map(([p, v]) => esc(P(p)?.name) + " " + esc(v)).join(" · ") || "tutte le combinazioni"}</span></li>`).join("") || "<li class='warn'>nessun interscambio</li>"}</ul>`;
+    return `<div class="sec2">Interscambi (.ASM)</div><ul>${xs.map(x => `<li><a class="tlink code" data-gsel="x:${esc(x.id)}" href="javascript:void 0">${esc(x.code || "da inserire")}</a> <span class="mut">${Object.entries(x.cond).map(([p, v]) => esc(P(p)?.name) + " " + esc(v)).join(" · ") || "tutte le combinazioni"}</span></li>`).join("") || "<li class='warn'>nessun interscambio</li>"}</ul>`;
   }
   function matrixHtml(ownerId, params, rows, pfx, mode) {
     if (!params.length) return "";
@@ -3346,13 +4064,13 @@ FS.init();
           const dr = drafts.some(r => partialMatch(r, sel));
           return `<td class="gap${dr ? " dr" : ""}" aria-label="${dr ? "in bozza" : "manca"}">${dr ? "✎" : "—"}</td>`;
         }
-        return `<td class="${m.length > 1 && mode !== "all" ? "multi" : ""}">${m.map(r => `<a class="mc code" data-gsel="${pfx}${r.id}" href="javascript:void 0" title="${esc(r.desc)}">${esc(r.code)}</a>`).join("")}</td>`;
+        return `<td class="${m.length > 1 && mode !== "all" ? "multi" : ""}">${m.map(r => `<a class="mc code" data-gsel="${pfx}${esc(r.id)}" href="javascript:void 0" title="${esc(r.desc)}">${esc(r.code)}</a>`).join("")}</td>`;
       });
       return {rowGap, html: `<tr><th scope="row">${others.map(p => esc(c[p])).join(" · ") || "—"}</th>${cells.join("")}</tr>`};
     });
     const showAll = matAll.has(ownerId) || body.length <= 40, list = showAll ? body : body.filter(b => b.rowGap);
     return `<div class="sec2">Matrice combinazioni</div>
-      <label class="mpiv">Colonne: <select data-mpiv="${esc(ownerId)}">${ps.map(p => `<option value="${p.id}"${p.id === piv ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select>
+      <label class="mpiv">Colonne: <select data-mpiv="${esc(ownerId)}">${ps.map(p => `<option value="${esc(p.id)}"${p.id === piv ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select>
       <span class="mut">${gaps ? `${gaps} vuote` : "nessuna vuota"}</span></label>
       <div class="mwrap"><table class="mtab"><caption class="sr-only">Codici per combinazione: righe ${others.map(p => P(p).name).join(", ") || "nessun altro parametro"}, colonne ${esc(P(piv).name)}</caption>
       <thead><tr><th scope="col">${others.map(p => esc(P(p).name)).join(" · ") || ""}</th>${pv.map(v => `<th scope="col">${esc(v)}</th>`).join("")}</tr></thead>
@@ -3374,7 +4092,7 @@ FS.init();
     if (sig === sideSig) return; sideSig = sig;
     const reasonTxt = dimReason(n);
     const cfgTag = T.started ? (inCfg(n) ? '<span class="tag alt">✓ nella configurazione</span>' : reasonTxt ? `<span class="tag" title="Motivo">non usato: ${esc(reasonTxt)}</span>` : "") : "";
-    const cond = r => Object.entries(r.cond).map(([pid, v]) => `<li>${esc(P(pid)?.name || "?")}: <b>${esc(v)}</b>${cfg.sel[pid] ? (cfg.sel[pid] === v ? ' <span class="ok" aria-label="corrisponde">✓</span>' : ` <span class="warn">≠ scelto ${esc(cfg.sel[pid])}</span>`) : ""}</li>`).join("") || "<li class='mut'>vale per tutte le combinazioni</li>";
+    const cond = r => Object.entries(r.cond).map(([pid, v]) => `<li>${esc(P(pid)?.name || "?")}: <b>${esc(v)}</b>${cfg.sel[pid] ? (cfg.sel[pid] === v || cfg.sel[pid] === ANY ? ' <span class="ok" aria-label="corrisponde">✓</span>' : ` <span class="warn">≠ scelto ${esc(cfg.sel[pid])}</span>`) : ""}</li>`).join("") || "<li class='mut'>vale per tutte le combinazioni</li>";
     const close = `<button class="ib gx" data-gclose title="Chiudi (Esc)" aria-label="Chiudi dettagli">×</button>`;
     const branch = n.children.length ? `<button class="b s" data-gexp="${esc(n.id)}">${expanded.has(n.id) ? "Chiudi ramo" : "Apri ramo"}</button><button class="b s" data-gall="${esc(n.id)}">Apri tutto il ramo</button>` : "";
     let head = "", body = "", wide = false;
@@ -3393,7 +4111,7 @@ FS.init();
         <div style="margin-top:4px">${T.started && r ? (isReady(r) ? '<span class="tag alt">✓ pronta</span>' : `<span class="tag wa">${esc(issueText(r))}</span>`) : ""} <span class="tag ${h0.badge === "ok" ? "" : "wa"}">${esc(covTitle(healthOf(g)))}</span></div>`;
       const mat = matrixHtml(g.id, g.params, rows, "i:", n.kind === "mst" ? "one" : g.mode) + (n.kind === "grp" ? interList(g) : ""); wide = g.params.length > 1;
       body = `<div class="kv"><span>Codici</span><span>${rows.length}</span>${n.kind === "grp" ? `<span>Interscambi</span><span>${needsInter(g) ? nx : "non previsto"}</span><span>Accessori</span><span>${accsOf(g).map(a => esc(a.name)).join(", ") || "—"}</span><span>Più codici validi</span><span>${g.mode === "one" ? "se ne sceglie uno" : "inseriti tutti"}</span><span>Obbligatoria</span><span>${g.required ? "sì" : "no"}</span>` : ""}</div>
-        <div class="sec2">Attributi</div><ul>${g.params.map(pid => { const p = P(pid); return `<li>${esc(p?.name)}: <span class="mut">${(p?.values || []).map(esc).join(", ")}</span>${cfg.sel[pid] ? ` → <b>${esc(cfg.sel[pid])}</b>` : ""}</li>`; }).join("") || "<li class='mut'>nessuno</li>"}</ul>
+        <div class="sec2">Attributi</div><ul>${g.params.map(pid => { const p = P(pid); return `<li>${esc(p?.name)}: <span class="mut">${(p?.values || []).map(esc).join(", ")}</span>${cfg.sel[pid] ? ` → <b>${esc(selLabel(cfg.sel[pid]))}</b>` : ""}</li>`; }).join("") || "<li class='mut'>nessuno</li>"}</ul>
         ${r && r.items.length ? `<div class="sec2">Codici con i parametri attuali</div><ul>${r.items.map(i => `<li>${codeLink(i)} <span class="mut">${esc(i.desc)}</span></li>`).join("")}</ul>` : ""}
         ${mat}
         <div class="acts2"><button class="b s" data-gedit="${esc(g.id)}">Modifica in Tipologie</button>${branch}</div>`;
@@ -3674,12 +4392,16 @@ FS.init();
   const DEF = 360, MIN = 260, KEY_W = "cf_sidebar_w";
   const max = () => Math.max(MIN, Math.min(640, Math.round(conf.getBoundingClientRect().width * 0.5)));
   const clamp = w => Math.max(MIN, Math.min(max(), Math.round(w)));
+  // pref = larghezza scelta dall'utente; su uno schermo stretto si riduce solo la larghezza mostrata,
+  // così tornando a uno schermo largo il pannello riprende la sua misura (prima restava al minimo)
+  let pref = DEF;
   const set = (w, save) => {
+    if (save) pref = clamp(w);
     w = clamp(w); conf.style.setProperty("--sbw", w + "px"); h.setAttribute("aria-valuenow", w); h.setAttribute("aria-valuemax", max());
     if (save) try { w === DEF ? localStorage.removeItem(KEY_W) : localStorage.setItem(KEY_W, w); } catch {}
   };
-  let w0 = DEF; try { w0 = +localStorage.getItem(KEY_W) || DEF; } catch {}
-  set(w0);
+  try { pref = +localStorage.getItem(KEY_W) || DEF; } catch {}
+  set(pref);
   h.addEventListener("pointerdown", e => {
     e.preventDefault(); h.setPointerCapture(e.pointerId); h.classList.add("drag"); document.body.classList.add("rszing");
     const x0 = e.clientX, wi = document.querySelector(".conf>.inputs").getBoundingClientRect().width;
@@ -3694,7 +4416,7 @@ FS.init();
     else if (e.key === "ArrowRight") { e.preventDefault(); set(cur + st, true); }
     else if (e.key === "Home") { e.preventDefault(); set(DEF, true); }
   });
-  addEventListener("resize", () => set(parseFloat(conf.style.getPropertyValue("--sbw")) || DEF));
+  addEventListener("resize", () => set(pref));
 })();
 </script>
 <script>
@@ -3818,7 +4540,7 @@ FS.init();
       if (![row.code, row.desc, g.name, a?.name].join(" ").toLowerCase().includes(query) && !old.length) continue;
       hits.push({kind, row, g, a, old});
     }
-    result.innerHTML = `<span class="mut">${hits.length} risultati${hits.length > 50 ? " · primi 50 visualizzati" : ""}</span>` + hits.slice(0, 50).map(h => `<button type="button" class="b searchhit" data-search-row="${h.row.id}" data-search-kind="${h.kind}" data-search-group="${h.g.id}"><span class="code">${esc(h.row.code || "Codice da inserire")}</span> · ${esc(h.row.desc)}<small>${esc(h.g.name)}${h.a ? " · Accessorio " + esc(h.a.name) : h.kind === "x" ? " · Interscambio" : ""}${h.old.length ? " · Nello storico: " + h.old.map(p => esc(p.code)).join(", ") : ""}</small></button>`).join("");
+    result.innerHTML = `<span class="mut">${hits.length} risultati${hits.length > 50 ? " · primi 50 visualizzati" : ""}</span>` + hits.slice(0, 50).map(h => `<button type="button" class="b searchhit" data-search-row="${esc(h.row.id)}" data-search-kind="${h.kind}" data-search-group="${esc(h.g.id)}"><span class="code">${esc(h.row.code || "Codice da inserire")}</span> · ${esc(h.row.desc)}<small>${esc(h.g.name)}${h.a ? " · Accessorio " + esc(h.a.name) : h.kind === "x" ? " · Interscambio" : ""}${h.old.length ? " · Nello storico: " + h.old.map(p => esc(p.code)).join(", ") : ""}</small></button>`).join("");
   };
   input.addEventListener("input", render); window.refreshGlobalSearch = render;
   result.addEventListener("click", e => {
